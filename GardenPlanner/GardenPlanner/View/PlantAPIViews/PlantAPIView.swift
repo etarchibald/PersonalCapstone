@@ -1,3 +1,10 @@
+//
+//  PlantAPIView.swift
+//  GardenPlanner
+//
+//  Created by Ethan Archibald on 2/22/24.
+//
+
 import SwiftUI
 
 struct PlantAPIView: View {
@@ -18,7 +25,7 @@ struct PlantAPIView: View {
                 ScrollView {
                     ForEach(plantsViewModel.plants) { plant in
                         NavigationLink {
-                            PlantDetailView()
+                            ContentView()
                         } label: {
                             PlantCellView(plant: plant)
                         }

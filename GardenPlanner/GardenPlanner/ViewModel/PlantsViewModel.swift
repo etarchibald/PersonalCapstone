@@ -22,4 +22,6 @@ class PlantsViewModel: ObservableObject {
         guard let downloadedPlants: PlantArray = await WebService().downloadData(fromURL: urlComponents.url!) else { return }
         plants = downloadedPlants.arrayOfPlants
     }
+    
+    
 }
