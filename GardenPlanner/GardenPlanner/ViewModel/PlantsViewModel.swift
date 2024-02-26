@@ -12,6 +12,7 @@ class PlantsViewModel: ObservableObject {
     var token = "qwVZcXbvzEqOE0qjuBSavumezdVboTXipVKGkLMr-a0"
     
     @Published var plants = [Plant]()
+    @Published var plantDetail = PlantDetail(id: 0, commonName: "", scientificName: "", imageURL: "", vegetable: false, mainSpecies: MainSpecies(edible: false, plantImages: PlantImages(fruitImages: [], flowerImages: [], habitImages: []), flower: Flower(color: []), growth: Growth(), specifications: Specifications()))
     
     func fetchPlants(using searchTerm: String) async {
         var urlComponents = URLComponents(string: "https://trefle.io/api/v1/plants/search")!
@@ -23,5 +24,12 @@ class PlantsViewModel: ObservableObject {
         plants = downloadedPlants.arrayOfPlants
     }
     
-    
+    func fetchPlantDetail(using plantId: Int) async {
+        var urlComponents = URLComponents(string: "https://trefle.io/api/v1/plants/\(plantId)")!
+        let tokenQueryItem = URLQueryItem(name: "token", value: token)
+        urlComponents.queryItems = [tokenQueryItem]
+        print(urlComponents.url!)
+        guard let downlaedPlantDetails: AllPlantDetails = await WebService().downloadData(fromURL: urlComponents.url!) else { return }
+        plantDetail = downlaedPlantDetails.allPlantDetails
+    }
 }

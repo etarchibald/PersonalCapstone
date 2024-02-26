@@ -18,7 +18,7 @@ struct PlantAPIView: View {
                 ScrollView {
                     ForEach(plantsViewModel.plants) { plant in
                         NavigationLink {
-                            PlantDetailView()
+                            PlantDetailView(plantid: plant.id)
                         } label: {
                             PlantCellView(plant: plant)
                         }

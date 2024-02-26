@@ -7,12 +7,20 @@
 
 import Foundation
 
+struct AllPlantDetails: Codable {
+    var allPlantDetails: PlantDetail
+    
+    enum CodingKeys: String, CodingKey {
+        case allPlantDetails = "data"
+    }
+}
+
 struct PlantDetail: Codable {
     var id: Int
-    var commonName: String
-    var scientificName: String
-    var imageURL: String
-    var vegetable: Bool
+    var commonName: String?
+    var scientificName: String?
+    var imageURL: String?
+    var vegetable: Bool?
     var mainSpecies: MainSpecies
     
     enum CodingKeys: String, CodingKey {
@@ -26,25 +34,27 @@ struct PlantDetail: Codable {
 }
 
 struct MainSpecies: Codable {
-    var ediblePart: String?
-    var edible: Bool
+    var ediblePart: [String]?
+    var edible: Bool?
     var plantImages: PlantImages
     var flower: Flower
     var growth: Growth
-//    var specifications: Specifications
+    var specifications: Specifications
     
     enum CodingKeys: String, CodingKey {
         case ediblePart = "edible_part"
         case edible = "edible"
         case plantImages = "images"
         case flower = "flower"
+        case growth = "growth"
+        case specifications = "specifications"
     }
 }
 
 struct PlantImages: Codable {
-    var fruitImages: [APIImage]
-    var flowerImages: [APIImage]
-    var habitImages: [APIImage]
+    var fruitImages: [APIImage]?
+    var flowerImages: [APIImage]?
+    var habitImages: [APIImage]?
     var otherImages: [APIImage]?
     
     enum CodingKeys: String, CodingKey {
@@ -55,7 +65,7 @@ struct PlantImages: Codable {
     }
 }
 
-struct APIImage: Codable {
+struct APIImage: Codable, Hashable {
     var imageURL: String
     
     enum CodingKeys: String, CodingKey {
@@ -64,7 +74,7 @@ struct APIImage: Codable {
 }
 
 struct Flower: Codable {
-    var color: [String]
+    var color: [String]?
     
     enum CodingKeys: CodingKey {
         case color
@@ -73,10 +83,10 @@ struct Flower: Codable {
 
 struct Growth: Codable {
     var description: String?
-    var light: String?
-    var growthMonths: String?
-    var bloomMonths: String?
-    var fruitMonths: String?
+    var light: Int?
+    var growthMonths: [String]?
+    var bloomMonths: [String]?
+    var fruitMonths: [String]?
     
     enum CodingKeys: String, CodingKey {
         case description = "description"
@@ -87,6 +97,12 @@ struct Growth: Codable {
     }
 }
 
-//struct Specifications: Codable {
-//    
-//}
+struct Specifications: Codable {
+    var growthHabit: String?
+    var growthRate: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case growthHabit = "growth_habit"
+        case growthRate = "growth_rate"
+    }
+}
