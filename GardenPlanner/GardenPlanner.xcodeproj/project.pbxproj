@@ -15,6 +15,7 @@
 		4A2F9F2F2B890171004B9014 /* PlantAPIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F9F2E2B890171004B9014 /* PlantAPIView.swift */; };
 		4A2F9F312B8901B1004B9014 /* PlantDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F9F302B8901B1004B9014 /* PlantDetailView.swift */; };
 		4A2F9F332B890216004B9014 /* PlantDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F9F322B890216004B9014 /* PlantDetail.swift */; };
+		4A2F9F352B8D46B6004B9014 /* PlantPictureScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F9F342B8D46B6004B9014 /* PlantPictureScrollView.swift */; };
 		4A547E292B8796D400F4798D /* GardenPlannerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A547E282B8796D400F4798D /* GardenPlannerApp.swift */; };
 		4A547E2B2B8796D400F4798D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A547E2A2B8796D400F4798D /* ContentView.swift */; };
 		4A547E2D2B8796D500F4798D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A547E2C2B8796D500F4798D /* Assets.xcassets */; };
@@ -30,6 +31,7 @@
 		4A2F9F2E2B890171004B9014 /* PlantAPIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantAPIView.swift; sourceTree = "<group>"; };
 		4A2F9F302B8901B1004B9014 /* PlantDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantDetailView.swift; sourceTree = "<group>"; };
 		4A2F9F322B890216004B9014 /* PlantDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantDetail.swift; sourceTree = "<group>"; };
+		4A2F9F342B8D46B6004B9014 /* PlantPictureScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantPictureScrollView.swift; sourceTree = "<group>"; };
 		4A547E252B8796D400F4798D /* GardenPlanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GardenPlanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A547E282B8796D400F4798D /* GardenPlannerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GardenPlannerApp.swift; sourceTree = "<group>"; };
 		4A547E2A2B8796D400F4798D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -54,6 +56,7 @@
 				4A2F9F2E2B890171004B9014 /* PlantAPIView.swift */,
 				4A2F9F2B2B87FE81004B9014 /* PlantCellView.swift */,
 				4A2F9F302B8901B1004B9014 /* PlantDetailView.swift */,
+				4A2F9F342B8D46B6004B9014 /* PlantPictureScrollView.swift */,
 				4A547E2A2B8796D400F4798D /* ContentView.swift */,
 			);
 			path = View;
@@ -194,6 +197,7 @@
 				4A547E292B8796D400F4798D /* GardenPlannerApp.swift in Sources */,
 				4A2F9F292B87AC62004B9014 /* PlantsViewModel.swift in Sources */,
 				4A2F9F332B890216004B9014 /* PlantDetail.swift in Sources */,
+				4A2F9F352B8D46B6004B9014 /* PlantPictureScrollView.swift in Sources */,
 				4A2F9F2C2B87FE81004B9014 /* PlantCellView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

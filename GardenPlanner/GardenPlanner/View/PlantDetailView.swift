@@ -17,7 +17,7 @@ struct PlantDetailView: View {
     }
     
     var body: some View {
-        var plant = plantViewModel.plantDetail
+        let plant = plantViewModel.plantDetail
         
         VStack {
             ScrollView {
@@ -33,7 +33,7 @@ struct PlantDetailView: View {
                 Text(plant.mainSpecies.edible ?? false ? "Edible" : "NOT Edible")
                 
                 HStack {
-                    Text("Flower Colors:")
+                    plant.mainSpecies.flower.color.map { _ in Text("Flower Color(s):") }
                     ForEach(plant.mainSpecies.flower.color ?? [], id: \.self) { color in
                         Text(color)
                     }
@@ -63,6 +63,21 @@ struct PlantDetailView: View {
                 VStack {
                     Text(plant.mainSpecies.specifications.growthHabit ?? "")
                     Text(plant.mainSpecies.specifications.growthRate ?? "")
+                }
+                
+                VStack {
+                    if let flowerImages = plant.mainSpecies.plantImages.flowerImages {
+                        PlantPictureScrollView(pictures: flowerImages)
+                    }
+                    if let fruitImages = plant.mainSpecies.plantImages.fruitImages {
+                        PlantPictureScrollView(pictures: fruitImages)
+                    }
+                    if let habitImages = plant.mainSpecies.plantImages.habitImages {
+                        PlantPictureScrollView(pictures: habitImages)
+                    }
+                    if let otherImages = plant.mainSpecies.plantImages.otherImages {
+                        PlantPictureScrollView(pictures: otherImages)
+                    }
                 }
             }
         }
