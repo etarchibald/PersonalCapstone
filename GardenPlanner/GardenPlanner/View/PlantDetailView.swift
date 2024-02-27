@@ -20,6 +20,13 @@ struct PlantDetailView: View {
         let plant = plantViewModel.plantDetail
         
         VStack {
+            NavigationLink {
+                GardenView()
+            } label: {
+                Text("Add to Garden")
+                    .foregroundStyle(.green)
+            }
+            .frame(width: 380, alignment: .trailing)
             ScrollView {
                 AsyncImage(url: URL(string: plantViewModel.plantDetail.imageURL ?? ""))
                 
@@ -67,19 +74,29 @@ struct PlantDetailView: View {
                 
                 VStack {
                     if let flowerImages = plant.mainSpecies.plantImages.flowerImages {
+                        Text("Flowers:")
                         PlantPictureScrollView(pictures: flowerImages)
+                            .padding(.leading)
                     }
                     if let fruitImages = plant.mainSpecies.plantImages.fruitImages {
+                        Text("Fruit:")
                         PlantPictureScrollView(pictures: fruitImages)
+                            .padding(.leading)
                     }
                     if let habitImages = plant.mainSpecies.plantImages.habitImages {
+                        Text("Habitat:")
                         PlantPictureScrollView(pictures: habitImages)
+                            .padding(.leading)
                     }
                     if let otherImages = plant.mainSpecies.plantImages.otherImages {
+                        Text("Other Pictures:")
                         PlantPictureScrollView(pictures: otherImages)
+                            .padding(.leading)
                     }
                 }
             }
+            .navigationTitle(plant.commonName ?? "No commonName")
+            .navigationBarTitleTextColor(Color.green)
         }
         .onAppear(perform: {
             fetchPlantDetails()
@@ -95,4 +112,13 @@ struct PlantDetailView: View {
 
 #Preview {
     PlantDetailView(plantid: 265263)
+}
+
+extension View {
+    func navigationBarTitleTextColor(_ color: Color) -> some View {
+        let uiColor = UIColor(color)
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: uiColor ]
+        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: uiColor ]
+        return self
+    }
 }

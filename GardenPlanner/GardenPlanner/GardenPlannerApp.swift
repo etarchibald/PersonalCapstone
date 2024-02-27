@@ -11,7 +11,7 @@ import SwiftUI
 struct GardenPlannerApp: App {
     var body: some Scene {
         WindowGroup {
-            PlantAPIView()
+            GardenView()
         }
     }
 }

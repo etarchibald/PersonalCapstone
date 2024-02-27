@@ -11,6 +11,8 @@ struct PlantPictureScrollView: View {
     
     var pictures: [APIImage]
     
+    @GestureState private var zoom = 1.0
+    
     var body: some View {
         ScrollView(.horizontal) {
             HStack {

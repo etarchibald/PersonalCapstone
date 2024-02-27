@@ -39,9 +39,13 @@ struct PlantCellView: View {
                 Text(plant.family)
                     .foregroundStyle(.black)
             }
-            Image(systemName: "leaf")
-                .foregroundStyle(.green)
-                .font(.largeTitle)
+//            Button {
+//                
+//            } label: {
+//                Image(systemName: "leaf")
+//                    .foregroundStyle(.green)
+//                    .font(.largeTitle)
+//            }
         }
     }
 }
