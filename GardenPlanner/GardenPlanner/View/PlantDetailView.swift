@@ -6,27 +6,27 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct PlantDetailView: View {
+    @Environment(\.modelContext) var modelContext
     @StateObject var plantViewModel = PlantsViewModel()
     
     var plantid: Int
-    
-    init(plantid: Int) {
-        self.plantid = plantid
-    }
     
     var body: some View {
         let plant = plantViewModel.plantDetail
         
         VStack {
-            NavigationLink {
-                GardenView()
+            Button {
+                let newPlant = GardenPlant(id: plantViewModel.plantDetail.id, imageURL: plantViewModel.plantDetail.imageURL ?? "image", name: plantViewModel.plantDetail.commonName ?? "Plant", notes: "")
+                modelContext.insert(newPlant)
             } label: {
                 Text("Add to Garden")
                     .foregroundStyle(.green)
             }
             .frame(width: 380, alignment: .trailing)
+            
             ScrollView {
                 AsyncImage(url: URL(string: plantViewModel.plantDetail.imageURL ?? ""))
                 

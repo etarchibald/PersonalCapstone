@@ -13,6 +13,4 @@ struct PlantArray: Codable {
     enum CodingKeys: String, CodingKey {
         case arrayOfPlants = "data"
     }
-    
-    static var dummyArrayOfPlants = [Plant(id: 0, commonName: "Apple", scientificName: "Applus fruitus", imageURL: "https://bs.plantnet.org/image/o/a42b6ba0beea54fbba5aaec0c785ac52ad3440c0", genus: "Billardiera", family: "pittosporaceae"), Plant(id: 0, commonName: "Apple", scientificName: "Applus fruitus", imageURL: "https://bs.plantnet.org/image/o/a42b6ba0beea54fbba5aaec0c785ac52ad3440c0", genus: "Billardiera", family: "pittosporaceae"), Plant(id: 0, commonName: "Apple", scientificName: "Applus fruitus", imageURL: "https://bs.plantnet.org/image/o/a42b6ba0beea54fbba5aaec0c785ac52ad3440c0", genus: "Billardiera", family: "pittosporaceae")]
 }

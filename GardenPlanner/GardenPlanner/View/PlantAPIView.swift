@@ -5,8 +5,6 @@ struct PlantAPIView: View {
     @State private var searchText = ""
     @State private var showCancelButton = false
     
-    var dummyPlants = PlantArray.dummyArrayOfPlants
-    
     var body: some View {
         
         VStack {

@@ -6,15 +6,28 @@
 //
 
 import SwiftUI
+import SwiftData
+
 
 struct GardenView: View {
+    @StateObject var plantViewModel = PlantsViewModel()
+    
+    @Query var myGarden: [GardenPlant]
+    
     var body: some View {
-        NavigationStack {
+        NavigationStack() {
             VStack {
-                
-                
-                
-                
+                VStack {
+                    ScrollView {
+                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], alignment: .center, spacing: 20, pinnedViews: [], content: {
+                            
+                            ForEach(myGarden, id: \.self) { garden in
+                                GardenPlantCellView(imageURl: garden.imageURL,name: garden.name)
+                            }
+                            
+                        })
+                    }
+                }
                 
                 Spacer()
                 NavigationLink {

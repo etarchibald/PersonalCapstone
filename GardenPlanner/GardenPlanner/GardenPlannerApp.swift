@@ -13,5 +13,6 @@ struct GardenPlannerApp: App {
         WindowGroup {
             GardenView()
         }
+        .modelContainer(for: GardenPlant.self)
     }
 }
