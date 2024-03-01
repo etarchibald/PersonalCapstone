@@ -21,8 +21,12 @@ struct GardenView: View {
                     ScrollView {
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], alignment: .center, spacing: 20, pinnedViews: [], content: {
                             
-                            ForEach(myGarden, id: \.self) { garden in
-                                GardenPlantCellView(imageURl: garden.imageURL,name: garden.name)
+                            ForEach(myGarden, id: \.self) { gardenPlant in
+                                NavigationLink {
+                                    GardenPlantDetailView(plant: gardenPlant)
+                                } label: {
+                                    GardenPlantCellView(imageURl: gardenPlant.imageURL,name: gardenPlant.name)
+                                }
                             }
                             
                         })
@@ -40,6 +44,7 @@ struct GardenView: View {
                         .clipShape(Circle())
                 }
             }
+            .navigationTitle("My Garden")
         }
     }
 }

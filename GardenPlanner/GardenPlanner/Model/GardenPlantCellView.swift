@@ -25,9 +25,9 @@ struct GardenPlantCellView: View {
                         ProgressView()
                     case .success(let image):
                         image.resizable()
-                            .aspectRatio(contentMode: .fill)
+                            .aspectRatio(contentMode: .fit)
                             .border(Color.white, width: 3)
-                            .frame(maxWidth: 130, maxHeight: 130)
+                            .frame(width: 150, height: 150)
                     case .failure:
                         Image(systemName: "leaf.fill")
                             .foregroundStyle(.white)
@@ -36,11 +36,12 @@ struct GardenPlantCellView: View {
                         EmptyView()
                     }
                 }
-                .padding(EdgeInsets(top: 20, leading: 0, bottom: 20, trailing: 0))
+                .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
                 
                 Text(name)
-                    .font(.largeTitle)
+                    .font(.title)
                     .foregroundStyle(.white)
+                    .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
             }
         }
         .frame(width: 170, height: 280)
