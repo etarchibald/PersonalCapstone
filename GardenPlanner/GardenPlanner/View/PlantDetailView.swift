@@ -10,6 +10,7 @@ import SwiftData
 
 struct PlantDetailView: View {
     @Environment(\.modelContext) var modelContext
+    @Environment(\.dismiss) var dismiss
     @StateObject var plantViewModel = PlantsViewModel()
     
     var plantid: Int
@@ -21,6 +22,7 @@ struct PlantDetailView: View {
             Button {
                 let newPlant = GardenPlant(id: plantViewModel.plantDetail.id, imageURL: plantViewModel.plantDetail.imageURL ?? "image", name: plantViewModel.plantDetail.commonName ?? "Plant", notes: "")
                 modelContext.insert(newPlant)
+                dismiss()
             } label: {
                 Text("Add to Garden")
                     .foregroundStyle(.green)

@@ -21,7 +21,9 @@ class PlantsViewModel: ObservableObject {
         urlComponents.queryItems = [searchForQueryItem, tokenQueryItem]
         
         guard let downloadedPlants: PlantArray = await WebService().downloadData(fromURL: urlComponents.url!) else { return }
-        plants = downloadedPlants.arrayOfPlants
+        DispatchQueue.main.async {
+            self.plants = downloadedPlants.arrayOfPlants
+        }
     }
     
     func fetchPlantDetail(using plantId: Int) async {
@@ -30,6 +32,8 @@ class PlantsViewModel: ObservableObject {
         urlComponents.queryItems = [tokenQueryItem]
         print(urlComponents.url!)
         guard let downlaedPlantDetails: AllPlantDetails = await WebService().downloadData(fromURL: urlComponents.url!) else { return }
-        plantDetail = downlaedPlantDetails.allPlantDetails
+        DispatchQueue.main.async {
+            self.plantDetail = downlaedPlantDetails.allPlantDetails
+        }
     }
 }

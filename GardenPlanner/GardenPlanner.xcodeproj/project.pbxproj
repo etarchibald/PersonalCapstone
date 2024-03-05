@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4A2F27FB2B923C7D00C066D6 /* GardenPlantDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F27FA2B923C7D00C066D6 /* GardenPlantDetailView.swift */; };
+		4A2F27FD2B976E5F00C066D6 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F27FC2B976E5F00C066D6 /* Colors.swift */; };
 		4A2F9F202B879F6B004B9014 /* Plant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F9F1F2B879F6B004B9014 /* Plant.swift */; };
 		4A2F9F222B87A004004B9014 /* PlantArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F9F212B87A004004B9014 /* PlantArray.swift */; };
 		4A2F9F272B87ABC4004B9014 /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A2F9F262B87ABC4004B9014 /* WebService.swift */; };
@@ -28,6 +29,7 @@
 
 /* Begin PBXFileReference section */
 		4A2F27FA2B923C7D00C066D6 /* GardenPlantDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GardenPlantDetailView.swift; sourceTree = "<group>"; };
+		4A2F27FC2B976E5F00C066D6 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Colors.swift; path = GardenPlanner/View/Colors.swift; sourceTree = SOURCE_ROOT; };
 		4A2F9F1F2B879F6B004B9014 /* Plant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plant.swift; sourceTree = "<group>"; };
 		4A2F9F212B87A004004B9014 /* PlantArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantArray.swift; sourceTree = "<group>"; };
 		4A2F9F262B87ABC4004B9014 /* WebService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebService.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 		4A2F9F1A2B879E0F004B9014 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4A2F27FC2B976E5F00C066D6 /* Colors.swift */,
 				4A2F9F1F2B879F6B004B9014 /* Plant.swift */,
 				4A2F9F322B890216004B9014 /* PlantDetail.swift */,
 				4A2F9F212B87A004004B9014 /* PlantArray.swift */,
@@ -209,6 +212,7 @@
 				4A2F27FB2B923C7D00C066D6 /* GardenPlantDetailView.swift in Sources */,
 				4A547E292B8796D400F4798D /* GardenPlannerApp.swift in Sources */,
 				4A2F9F3B2B8F7FA8004B9014 /* GardenPlantCellView.swift in Sources */,
+				4A2F27FD2B976E5F00C066D6 /* Colors.swift in Sources */,
 				4A2F9F392B8E94C1004B9014 /* GardenPlant.swift in Sources */,
 				4A2F9F372B8E4C0D004B9014 /* GardenView.swift in Sources */,
 				4A2F9F292B87AC62004B9014 /* PlantsViewModel.swift in Sources */,
