@@ -34,7 +34,7 @@ struct PlantPictureScrollView: View {
                 }
                 .padding()
             }
-            .background(Color.black)
+            .background(Color(hex: GardenColors.richBlack.rawValue))
         }
     }
 }

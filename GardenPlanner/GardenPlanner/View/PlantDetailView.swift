@@ -13,6 +13,10 @@ struct PlantDetailView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var plantViewModel = PlantsViewModel()
     
+    @State private var plantAdded = false
+    
+    @Query var gardenPlant: [GardenPlant]
+    
     var plantid: Int
     
     var body: some View {
@@ -22,15 +26,34 @@ struct PlantDetailView: View {
             Button {
                 let newPlant = GardenPlant(id: plantViewModel.plantDetail.id, imageURL: plantViewModel.plantDetail.imageURL ?? "image", name: plantViewModel.plantDetail.commonName ?? "Plant", notes: "")
                 modelContext.insert(newPlant)
-                dismiss()
+                plantAdded = true
             } label: {
-                Text("Add to Garden")
-                    .foregroundStyle(.green)
+                Text(plantAdded ? "In your garden" : "Add to garden")
+                Image(systemName: plantAdded ? "leaf.fill" : "leaf")
+                    .font(.system(size: 40))
             }
+            .foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))
             .frame(width: 380, alignment: .trailing)
             
             ScrollView {
-                AsyncImage(url: URL(string: plantViewModel.plantDetail.imageURL ?? ""))
+                AsyncImage(url: URL(string: plantViewModel.plantDetail.imageURL ?? "")) { phase in
+                    switch phase {
+                    case .empty:
+                        ProgressView()
+                    case .success(let image):
+                        image.resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .border(Color.white, width: 3)
+                            .frame(maxWidth: 130, maxHeight: 150)
+                    case .failure:
+                        Image(systemName: "tree.fill")
+                            .foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))
+                            .font(.system(size: 100))
+                            .frame(width: 200, height: 200, alignment: .center)
+                    @unknown default:
+                        EmptyView()
+                    }
+                }
                 
                 Text(plant.commonName ?? "No commonName")
                 Text(plant.scientificName ?? "scienicy plant name")
@@ -50,7 +73,7 @@ struct PlantDetailView: View {
                 
                 VStack {
                     Text("Growth Info:")
-                    plant.mainSpecies.growth.description.map { Text($0)}
+                    plant.mainSpecies.growth.description.map { Text($0) }
                     Text("How much light on 0 to 10 scale: \(plant.mainSpecies.growth.light ?? 5)")
                     HStack {
                         ForEach(plant.mainSpecies.growth.growthMonths ?? [], id: \.self) { string in
@@ -98,7 +121,7 @@ struct PlantDetailView: View {
                 }
             }
             .navigationTitle(plant.commonName ?? "No commonName")
-            .navigationBarTitleTextColor(Color.green)
+            .navigationBarTitleTextColor(Color(hex: GardenColors.plantGreen.rawValue))
         }
         .onAppear(perform: {
             fetchPlantDetails()
@@ -108,12 +131,21 @@ struct PlantDetailView: View {
     func fetchPlantDetails() {
         Task {
             await plantViewModel.fetchPlantDetail(using: plantid)
+            updateUI()
+        }
+    }
+    
+    func updateUI() {
+        for plant in gardenPlant {
+            if plant.id == plantViewModel.plantDetail.id {
+                self.plantAdded = true
+            }
         }
     }
 }
 
 #Preview {
-    PlantDetailView(plantid: 265263)
+    PlantDetailView(plantid: 266004)
 }
 
 extension View {

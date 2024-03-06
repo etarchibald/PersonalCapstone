@@ -45,14 +45,37 @@ struct GardenView: View {
                 }
                 
                 Spacer()
-                NavigationLink {
-                    PlantAPIView()
-                } label: {
-                    Image(systemName: "plus")
-                        .frame(maxWidth: 70, maxHeight: 70)
-                        .background(Color(hex: GardenColors.plantGreen.rawValue))
-                        .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                        .clipShape(Circle())
+                
+                HStack {
+                    NavigationLink {
+                        NotificationsView()
+                    } label: {
+                        Image(systemName: "bell.fill")
+                            .frame(maxWidth: 50, maxHeight: 50)
+                            .background(Color(hex: GardenColors.dirtBrown.rawValue))
+                            .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                            .clipShape(Circle())
+                    }
+                    
+                    NavigationLink {
+                        PlantAPIView()
+                    } label: {
+                        Image(systemName: "plus")
+                            .frame(maxWidth: 70, maxHeight: 70)
+                            .background(Color(hex: GardenColors.plantGreen.rawValue))
+                            .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                            .clipShape(Circle())
+                    }
+                    
+                    NavigationLink {
+                        
+                    } label: {
+                        Image(systemName: "")
+                            .frame(maxWidth: 50, maxHeight: 50)
+                            .background()
+                            .foregroundStyle(Color.clear)
+                            .clipShape(Circle())
+                    }
                 }
             }
         }

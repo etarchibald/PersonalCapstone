@@ -7,14 +7,15 @@
 
 import SwiftUI
 import SwiftData
+import UserNotifications
 
 struct GardenPlantDetailView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     
-    @State private var showingAlert = false
+    @State private var showingDeleteAlert = false
     
-    var plant: GardenPlant
+    @Bindable var plant: GardenPlant
     
     var body: some View {
         ScrollView {
@@ -35,22 +36,21 @@ struct GardenPlantDetailView: View {
                     EmptyView()
                 }
             }
-            .padding()
-                    
-//                    Button {
-//
-//                   } label: {
-//                       Image(systemName: "camera")
-//                           .frame(width: 70, height: 70)
-//                           .background(Color(hex: GardenColors.plantGreen.rawValue))
-//                           .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-//                           .clipShape(Circle())
-//                           .font(.title)
-//                   }
-//                   .padding(EdgeInsets(top: 0, leading: 300, bottom: 0, trailing: 0))
+            
+            //                    Button {
+            //
+            //                   } label: {
+            //                       Image(systemName: "camera")
+            //                           .frame(width: 70, height: 70)
+            //                           .background(Color(hex: GardenColors.plantGreen.rawValue))
+            //                           .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+            //                           .clipShape(Circle())
+            //                           .font(.title)
+            //                   }
+            //                   .padding(EdgeInsets(top: 0, leading: 300, bottom: 0, trailing: 0))
             
             ZStack {
-                RoundedRectangle(cornerRadius: 70, style: .continuous)
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
                     .fill(Color(hex: GardenColors.skyBlue.rawValue))
                 VStack {
                     Text(plant.name)
@@ -61,64 +61,54 @@ struct GardenPlantDetailView: View {
             .padding()
             
             ZStack {
-                RoundedRectangle(cornerRadius: 70, style: .continuous)
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
                     .fill(Color(hex: GardenColors.plantGreen.rawValue))
                 
                 VStack {
-                    Text("Notes")
+                    Text("Notes:")
                         .font(.largeTitle)
                         .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                }
-                .padding()
-            }
-            
-            
-            ZStack {
-                RoundedRectangle(cornerRadius: 70, style: .continuous)
-                    .fill(Color(hex: GardenColors.dirtBrown.rawValue))
-                
-                VStack {
-                    Text("Alarms")
-                        .font(.largeTitle)
-                        .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                    
+                    TextEditor(text: $plant.notes)
+                        .frame(width: 350, height: 100, alignment: .top)
+                        .background(Color(hex: GardenColors.whiteSmoke.rawValue))
                 }
                 .padding()
             }
             .padding()
-            
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    showingAlert = true
-                } label: {
-                    Image(systemName: "trash.fill")
-                        .foregroundStyle(.red)
-                }
-                .alert("Are you sure you want to delete \(plant.name)?", isPresented: $showingAlert) {
-                    Button("Delete", role: .destructive) {
-                        dismiss()
-                        modelContext.delete(plant)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showingDeleteAlert = true
+                    } label: {
+                        Image(systemName: "trash.fill")
+                            .foregroundStyle(.red)
                     }
-                    Button("Cancel", role: .cancel) { }
+                    .alert("Are you sure you want to delete \(plant.name)?", isPresented: $showingDeleteAlert) {
+                        Button("Delete", role: .destructive) {
+                            dismiss()
+                            modelContext.delete(plant)
+                        }
+                        Button("Cancel", role: .cancel) { }
+                    }
                 }
             }
         }
         
         Button {
-            
+            dismiss()
         } label: {
-            Image(systemName: "save")
+            Text("Save")
         }
     }
 }
-
-#Preview {
-    let config = ModelConfiguration(isStoredInMemoryOnly: true)
-    let container = try! ModelContainer(for: GardenPlant.self, configurations: config)
     
-    let gardenPlant = GardenPlant(id: 1, imageURL: "https://bs.plantnet.org/image/o/b4e83f95dce979319ad70321a9023400d7bf5f48", name: "Avocado", notes: "")
-    
-    return GardenPlantDetailView(plant: gardenPlant)
-        .modelContainer(container)
-}
+    #Preview {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try! ModelContainer(for: GardenPlant.self, configurations: config)
+        
+        let gardenPlant = GardenPlant(id: 1, imageURL: "https://bs.plantnet.org/image/o/b4e83f95dce979319ad70321a9023400d7bf5f48", name: "Avocado", notes: "")
+        
+        return GardenPlantDetailView(plant: gardenPlant)
+            .modelContainer(container)
+    }
