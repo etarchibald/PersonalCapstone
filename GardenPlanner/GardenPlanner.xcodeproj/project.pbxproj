@@ -26,6 +26,7 @@
 		4A547E2B2B8796D400F4798D /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A547E2A2B8796D400F4798D /* NotificationsView.swift */; };
 		4A547E2D2B8796D500F4798D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A547E2C2B8796D500F4798D /* Assets.xcassets */; };
 		4A547E302B8796D500F4798D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A547E2F2B8796D500F4798D /* Preview Assets.xcassets */; };
+		4A634AFA2B9A1AD700A683FD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A634AF92B9A1AD700A683FD /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +50,7 @@
 		4A547E2A2B8796D400F4798D /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
 		4A547E2C2B8796D500F4798D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4A547E2F2B8796D500F4798D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		4A634AF92B9A1AD700A683FD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = View/AppDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				4A547E282B8796D400F4798D /* GardenPlannerApp.swift */,
+				4A634AF92B9A1AD700A683FD /* AppDelegate.swift */,
 				4A2F9F1A2B879E0F004B9014 /* Model */,
 				4A2F9F2A2B87AC71004B9014 /* ViewModel */,
 				4A2F9F152B879C8A004B9014 /* View */,
@@ -218,6 +221,7 @@
 				4A2F27FD2B976E5F00C066D6 /* Colors.swift in Sources */,
 				4A2F9F392B8E94C1004B9014 /* GardenPlant.swift in Sources */,
 				4A2F9F372B8E4C0D004B9014 /* GardenView.swift in Sources */,
+				4A634AFA2B9A1AD700A683FD /* AppDelegate.swift in Sources */,
 				4A2F9F292B87AC62004B9014 /* PlantsViewModel.swift in Sources */,
 				4A2F9F332B890216004B9014 /* PlantDetail.swift in Sources */,
 				4A2F27FF2B98D78B00C066D6 /* Notify.swift in Sources */,

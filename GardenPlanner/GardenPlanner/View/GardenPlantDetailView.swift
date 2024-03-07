@@ -7,7 +7,6 @@
 
 import SwiftUI
 import SwiftData
-import UserNotifications
 
 struct GardenPlantDetailView: View {
     @Environment(\.dismiss) var dismiss
@@ -36,19 +35,7 @@ struct GardenPlantDetailView: View {
                     EmptyView()
                 }
             }
-            
-            //                    Button {
-            //
-            //                   } label: {
-            //                       Image(systemName: "camera")
-            //                           .frame(width: 70, height: 70)
-            //                           .background(Color(hex: GardenColors.plantGreen.rawValue))
-            //                           .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-            //                           .clipShape(Circle())
-            //                           .font(.title)
-            //                   }
-            //                   .padding(EdgeInsets(top: 0, leading: 300, bottom: 0, trailing: 0))
-            
+
             ZStack {
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
                     .fill(Color(hex: GardenColors.skyBlue.rawValue))

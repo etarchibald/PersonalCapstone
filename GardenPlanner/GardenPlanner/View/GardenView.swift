@@ -48,7 +48,7 @@ struct GardenView: View {
                 
                 HStack {
                     NavigationLink {
-                        NotificationsView()
+                        NotificationsView(reminders: [])
                     } label: {
                         Image(systemName: "bell.fill")
                             .frame(maxWidth: 50, maxHeight: 50)

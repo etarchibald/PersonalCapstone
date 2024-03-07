@@ -6,19 +6,22 @@
 //
 
 import Foundation
+import SwiftUI
 
-struct Notify { 
-    var id: Int
+// Help keep track of notifications and help the user keep track of them
+struct Notify {
+    var id: UUID
     var name: String
     var subtitle: String
     var time: Date
     var repeats: Bool
+    var howOften: RepeatingNotifications
+}
+
+enum RepeatingNotifications: String, Equatable, CaseIterable {
+    case week = "Week"
+    case month = "Month"
+    case year = "Year"
     
-    init(id: Int, name: String, subtitle: String, time: Date, repeats: Bool) {
-        self.id = id
-        self.name = name
-        self.subtitle = subtitle
-        self.time = time
-        self.repeats = repeats
-    }
+    var localizedName: LocalizedStringKey { LocalizedStringKey(rawValue) }
 }
