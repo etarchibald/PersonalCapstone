@@ -11,12 +11,14 @@ import UserNotifications
 
 struct NotificationsView: View {
     
-    var reminders: [Notify]
+    @StateObject var notifyViewModel = NotifyViewModel()
     
-    @State private var reminder = Notify(id: UUID(), name: "", subtitle: "", time: Date(), repeats: false, howOften: RepeatingNotifications.week)
+    @State var allReminders = [Notify]()
     
-    @State private var showMessage = false
-    @State private var showErrorMessage = false
+    @State var reminder = Notify(id: UUID(), name: "", subtitle: "", time: Date(), repeats: false, howOften: RepeatingNotifications.week)
+    
+    @State var showMessage = false
+    @State var showErrorMessage = false
     
     var body: some View {
         VStack {
@@ -89,7 +91,7 @@ struct NotificationsView: View {
                         }
                         
                         Button {
-                            guard !reminder.name.isEmpty, !reminder.subtitle.isEmpty else { return }
+                            guard !reminder.name.isEmpty, reminder.time == Date() else { return }
                             
                             if reminder.repeats {
                                 if reminder.howOften.rawValue == "Week" {
@@ -133,19 +135,23 @@ struct NotificationsView: View {
             .padding(EdgeInsets(top: 30, leading: 0, bottom: 50, trailing: 0))
             
             ScrollView {
-                
                 VStack {
-//                    ForEach(reminders, id: \.self) { remind in
-//                        Text(remind.name)
-//                    }
+                    ForEach(allReminders, id: \.self) { remind in
+                        NotifyCellView(allReminders: $allReminders, reminder: remind)
+                    }
                 }
             }
         }
+        .onAppear(perform: {
+            allReminders = notifyViewModel.loadFromFiles()
+            allReminders = allReminders.filter { $0.time >= Date() && !$0.repeats }
+            print(allReminders, "onAppear")
+        })
     }
 }
 
 #Preview {
-    NotificationsView(reminders: [])
+    NotificationsView()
 }
 
 extension NotificationsView {
@@ -166,6 +172,10 @@ extension NotificationsView {
                     print(error.localizedDescription)
                 } else {
                     print("Successfully scheduled")
+                    DispatchQueue.main.async {
+                        allReminders.append(reminder)
+                        notifyViewModel.saveToFiles(allReminders)
+                    }
                 }
             }
         }
@@ -186,6 +196,11 @@ extension NotificationsView {
                 print(error.localizedDescription)
             } else {
                 print("Seccessfully scheduled")
+                DispatchQueue.main.async {
+                    allReminders.append(reminder)
+                    notifyViewModel.saveToFiles(allReminders)
+                    print(allReminders)
+                }
             }
         }
     }

@@ -27,6 +27,8 @@
 		4A547E2D2B8796D500F4798D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A547E2C2B8796D500F4798D /* Assets.xcassets */; };
 		4A547E302B8796D500F4798D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A547E2F2B8796D500F4798D /* Preview Assets.xcassets */; };
 		4A634AFA2B9A1AD700A683FD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A634AF92B9A1AD700A683FD /* AppDelegate.swift */; };
+		4A634AFC2B9A7D1900A683FD /* NotifyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A634AFB2B9A7D1900A683FD /* NotifyViewModel.swift */; };
+		4A634AFE2B9B64BD00A683FD /* NotifyCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A634AFD2B9B64BD00A683FD /* NotifyCellView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +53,8 @@
 		4A547E2C2B8796D500F4798D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4A547E2F2B8796D500F4798D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		4A634AF92B9A1AD700A683FD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = View/AppDelegate.swift; sourceTree = "<group>"; };
+		4A634AFB2B9A7D1900A683FD /* NotifyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NotifyViewModel.swift; path = GardenPlanner/View/NotifyViewModel.swift; sourceTree = SOURCE_ROOT; };
+		4A634AFD2B9B64BD00A683FD /* NotifyCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyCellView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +79,7 @@
 				4A2F9F302B8901B1004B9014 /* PlantDetailView.swift */,
 				4A2F9F342B8D46B6004B9014 /* PlantPictureScrollView.swift */,
 				4A547E2A2B8796D400F4798D /* NotificationsView.swift */,
+				4A634AFD2B9B64BD00A683FD /* NotifyCellView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -97,6 +102,7 @@
 			children = (
 				4A2F9F262B87ABC4004B9014 /* WebService.swift */,
 				4A2F9F282B87AC62004B9014 /* PlantsViewModel.swift */,
+				4A634AFB2B9A7D1900A683FD /* NotifyViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -210,6 +216,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A2F9F222B87A004004B9014 /* PlantArray.swift in Sources */,
+				4A634AFC2B9A7D1900A683FD /* NotifyViewModel.swift in Sources */,
 				4A2F9F2F2B890171004B9014 /* PlantAPIView.swift in Sources */,
 				4A2F9F202B879F6B004B9014 /* Plant.swift in Sources */,
 				4A2F9F272B87ABC4004B9014 /* WebService.swift in Sources */,
@@ -223,6 +230,7 @@
 				4A2F9F372B8E4C0D004B9014 /* GardenView.swift in Sources */,
 				4A634AFA2B9A1AD700A683FD /* AppDelegate.swift in Sources */,
 				4A2F9F292B87AC62004B9014 /* PlantsViewModel.swift in Sources */,
+				4A634AFE2B9B64BD00A683FD /* NotifyCellView.swift in Sources */,
 				4A2F9F332B890216004B9014 /* PlantDetail.swift in Sources */,
 				4A2F27FF2B98D78B00C066D6 /* Notify.swift in Sources */,
 				4A2F9F352B8D46B6004B9014 /* PlantPictureScrollView.swift in Sources */,

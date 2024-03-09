@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 // Help keep track of notifications and help the user keep track of them
-struct Notify {
+struct Notify: Codable, Hashable {
     var id: UUID
     var name: String
     var subtitle: String
@@ -18,7 +18,7 @@ struct Notify {
     var howOften: RepeatingNotifications
 }
 
-enum RepeatingNotifications: String, Equatable, CaseIterable {
+enum RepeatingNotifications: String, Equatable, CaseIterable, Codable {
     case week = "Week"
     case month = "Month"
     case year = "Year"

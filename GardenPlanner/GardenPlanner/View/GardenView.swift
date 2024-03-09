@@ -48,11 +48,11 @@ struct GardenView: View {
                 
                 HStack {
                     NavigationLink {
-                        NotificationsView(reminders: [])
+                        NotificationsView()
                     } label: {
                         Image(systemName: "bell.fill")
                             .frame(maxWidth: 50, maxHeight: 50)
-                            .background(Color(hex: GardenColors.dirtBrown.rawValue))
+                            .background(Color(hex: GardenColors.skyBlue.rawValue))
                             .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                             .clipShape(Circle())
                     }
