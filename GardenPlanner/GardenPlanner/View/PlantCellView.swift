@@ -20,6 +20,7 @@ struct PlantCellView: View {
             RoundedRectangle(cornerRadius: 50, style: .continuous)
                 .fill(Color(hex: GardenColors.plantGreen.rawValue))
                 .frame(width: 380, height: 180)
+                .shadow(radius: 10)
             
             HStack {
                 AsyncImage(url: URL(string: plant.imageURL ?? "")) { phase in
@@ -30,12 +31,12 @@ struct PlantCellView: View {
                         image.resizable()
                             .aspectRatio(contentMode: .fit)
                             .border(Color.white, width: 3)
-                            .frame(maxWidth: 130, maxHeight: 150)
+                            .frame(maxWidth: 120, maxHeight: 140)
                     case .failure:
                         Image(systemName: "carrot.fill")
                             .foregroundStyle(.orange)
                             .font(.system(size: 80))
-                            .frame(maxWidth: 130, maxHeight: 150)
+                            .frame(maxWidth: 120, maxHeight: 140)
                     @unknown default:
                         EmptyView()
                     }
@@ -49,14 +50,6 @@ struct PlantCellView: View {
                         .font(.title2)
                 }
                 .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                
-                //            Button {
-                //
-                //            } label: {
-                //                Image(systemName: "leaf")
-                //                    .foregroundStyle(.green)
-                //                    .font(.largeTitle)
-                //            }
             }
         }
     }

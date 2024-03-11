@@ -62,6 +62,7 @@ struct GardenView: View {
                     } label: {
                         Image(systemName: "plus")
                             .frame(maxWidth: 70, maxHeight: 70)
+                            .font(.largeTitle)
                             .background(Color(hex: GardenColors.plantGreen.rawValue))
                             .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                             .clipShape(Circle())

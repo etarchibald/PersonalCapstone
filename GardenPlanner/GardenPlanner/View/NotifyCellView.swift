@@ -23,9 +23,7 @@ struct NotifyCellView: View {
                 .fill(Color(hex: GardenColors.skyBlue.rawValue))
             
             HStack {
-                
                 ZStack {
-                    
                     RoundedRectangle(cornerRadius: 25.0, style: .continuous)
                         .fill(Color(hex: GardenColors.whiteSmoke.rawValue))
                     

@@ -45,6 +45,7 @@ struct GardenPlantCellView: View {
             }
         }
         .frame(width: 170, height: 280)
+        .shadow(radius: 10)
     }
 }
 

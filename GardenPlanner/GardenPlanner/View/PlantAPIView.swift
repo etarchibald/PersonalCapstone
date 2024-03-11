@@ -28,6 +28,7 @@ struct PlantAPIView: View {
                 .foregroundStyle(.secondary)
                 .background(Color(.secondarySystemBackground))
                 .clipShape(.rect(cornerRadius: 10))
+                .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0))
                 
                 if showCancelButton {
                     Button("Cancel") {
@@ -35,21 +36,23 @@ struct PlantAPIView: View {
                         self.searchText = ""
                         self.showCancelButton = false
                     }
-                    .foregroundStyle(Color(.systemBlue))
+                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0))
+                    .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                 }
-                
             }
         }
         .padding(.horizontal)
+        .background(Color(hex: GardenColors.plantGreen.rawValue))
         
-        ZStack {
-            RadialGradient(stops: [
-                .init(color: Color(red: 0.1, green: 0.4, blue: 0.2), location: 0.3),
-                .init(color: Color(red: 0.0, green: 0.7, blue: 0.99), location: 0.3),
-            ], center: .top, startRadius: 600, endRadius: 100)
-                .ignoresSafeArea()
+        if plantsViewModel.plants.isEmpty {
             Spacer()
-            
+            VStack {
+                Text("Search for \(Text("Plants").foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))) to add to your garden")
+            }
+            .font(.title)
+            .multilineTextAlignment(.center)
+            .padding()
+        } else {
             ScrollView {
                 ForEach(plantsViewModel.plants) { plant in
                     NavigationLink {
@@ -61,6 +64,7 @@ struct PlantAPIView: View {
                 .padding()
             }
         }
+        Spacer()
     }
     
     func fetchPlants() {
