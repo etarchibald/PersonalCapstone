@@ -19,6 +19,11 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         
+        if launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification] != nil {
+            let center = UNUserNotificationCenter.current()
+            center.delegate = self
+        }
+        
         let center = UNUserNotificationCenter.current()
         center.delegate = self
         

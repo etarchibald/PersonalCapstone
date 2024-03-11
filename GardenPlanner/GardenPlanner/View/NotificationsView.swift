@@ -15,129 +15,145 @@ struct NotificationsView: View {
     
     @State var allReminders = [Notify]()
     
-    @State var reminder = Notify(id: UUID(), name: "", subtitle: "", time: Date(), repeats: false, howOften: RepeatingNotifications.week)
+    @State var reminder = Notify(id: UUID(), name: "", subtitle: "", time: Calendar.current.date(byAdding: .hour, value: 1, to: Date()) ?? Date(), repeats: false, howOften: RepeatingNotifications.week)
     
     @State var showMessage = false
-    @State var showErrorMessage = false
+    
+    @State private var addReminder = false
     
     var body: some View {
         VStack {
-            ZStack {
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .fill(Color(hex: GardenColors.skyBlue.rawValue))
-                
-                VStack {
-                    TextField("Title", text: $reminder.name)
-                        .padding()
-                        .background(Color(hex: GardenColors.whiteSmoke.rawValue))
-                        .clipShape(RoundedRectangle(cornerRadius: 20 ))
-                        .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
+            if addReminder {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        .fill(Color(hex: GardenColors.skyBlue.rawValue))
                     
-                    TextField("Message", text: $reminder.subtitle)
-                        .padding()
-                        .background(Color(hex: GardenColors.whiteSmoke.rawValue))
-                        .clipShape(RoundedRectangle(cornerRadius: 20 ))
-                        .padding(EdgeInsets(top: 5, leading: 10, bottom: 0, trailing: 10))
-                    
-                    DatePicker("When:", selection: $reminder.time)
-                        .padding()
-                        .background(Color(hex: GardenColors.whiteSmoke.rawValue))
-                        .clipShape(RoundedRectangle(cornerRadius: 20 ))
-                        .padding(EdgeInsets(top: 5, leading: 10, bottom: 0, trailing: 10))
-                    
-                    Toggle("Repeat", isOn: $reminder.repeats)
-                        .padding()
-                        .background(Color(hex: GardenColors.whiteSmoke.rawValue))
-                        .clipShape(RoundedRectangle(cornerRadius: 20 ))
-                        .padding(EdgeInsets(top: 5, leading: 10, bottom: 0, trailing: 10))
-                    
-                    if reminder.repeats {
-                        Picker("How often:", selection: $reminder.howOften) {
-                            ForEach(RepeatingNotifications.allCases, id: \.self) { value in
-                                Text(value.rawValue)
-                                    .tag(value)
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
-                        .multilineTextAlignment(.trailing)
-                        .padding()
-                        .background(Color(hex: GardenColors.whiteSmoke.rawValue))
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                        .padding(EdgeInsets(top: 5, leading: 10, bottom: 0, trailing: 10))
-                    }
-                    
-                    HStack {
+                    VStack {
+                        TextField("Title", text: $reminder.name)
+                            .padding()
+                            .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                            .clipShape(RoundedRectangle(cornerRadius: 20 ))
+                            .padding(EdgeInsets(top: 8, leading: 10, bottom: 0, trailing: 10))
                         
-                        Button {
-                            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
-                                if success {
-                                    showMessage = true
-                                } else if error != nil {
-                                    showErrorMessage = true
-                                }
-                            }
-                        } label: {
-                            Text("Request Permission")
+                        TextField("Message", text: $reminder.subtitle)
+                            .padding()
+                            .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                            .clipShape(RoundedRectangle(cornerRadius: 20 ))
+                            .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
+                        
+                        DatePicker("When:", selection: $reminder.time)
+                            .padding()
+                            .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                            .clipShape(RoundedRectangle(cornerRadius: 20 ))
+                            .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
+                        
+                        HStack {
+                            Toggle("Repeat", isOn: $reminder.repeats)
                                 .padding()
                                 .background(Color(hex: GardenColors.whiteSmoke.rawValue))
                                 .clipShape(RoundedRectangle(cornerRadius: 20 ))
-                                .padding(EdgeInsets(top: 5, leading: 10, bottom: 0, trailing: 10))
-                        }
-                        .alert("You're all set!", isPresented: $showMessage) {
-                            Button("Thank you", role: .none) { }
-                        }
-                        .alert("You need to allow Notifications", isPresented: $showErrorMessage) {
-                            Button("Thank you", role: .none) { }
-                        }
-                        
-                        Button {
-                            guard !reminder.name.isEmpty, reminder.time == Date() else { return }
+                                .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
                             
                             if reminder.repeats {
-                                if reminder.howOften.rawValue == "Week" {
-                                    if let fireDate = Calendar.current.date(byAdding: .day, value: 7, to: reminder.time) {
-                                        scheduleRepeatingNotification(time: fireDate, repeatingComponent: .day)
-                                    }
-                                } else if reminder.howOften.rawValue == "Month" {
-                                    if let fireDate = Calendar.current.date(byAdding: .month, value: 1, to: reminder.time) {
-                                        scheduleRepeatingNotification(time: fireDate, repeatingComponent: .month)
-                                    }
-                                } else if reminder.howOften.rawValue == "Year" {
-                                    if let fireDate = Calendar.current.date(byAdding: .year, value: 1, to: reminder.time) {
-                                        scheduleRepeatingNotification(time: fireDate, repeatingComponent: .year)
+                                Picker("How often:", selection: $reminder.howOften) {
+                                    ForEach(RepeatingNotifications.allCases, id: \.self) { value in
+                                        Text(value.rawValue)
+                                            .tag(value)
                                     }
                                 }
-                            } else {
-                                scheduleSingleNotification(time: reminder.time)
-                            }
-                            
-                            UNUserNotificationCenter.current().getPendingNotificationRequests { (requests) in
-                                for request in requests {
-                                    if let timeIntervalTrigger = request.trigger as? UNTimeIntervalNotificationTrigger {
-                                        print(Date(timeIntervalSinceNow: timeIntervalTrigger.timeInterval))
-                                    }
-
-                                }
-                            }
-                            
-                        } label: {
-                            Text("Add Reminder")
+                                .frame(maxWidth: .infinity)
+                                .multilineTextAlignment(.trailing)
                                 .padding()
                                 .background(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                .clipShape(RoundedRectangle(cornerRadius: 20 ))
-                                .padding(EdgeInsets(top: 5, leading: 10, bottom: 0, trailing: 10))
+                                .clipShape(RoundedRectangle(cornerRadius: 20))
+                                .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
+                            }
                         }
+                        
+                        HStack {
+                            
+                            if !showMessage {
+                                Button {
+                                    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+                                        if success {
+                                            showMessage = true
+                                        } else if error != nil {
+                                            showMessage = false
+                                        }
+                                    }
+                                } label: {
+                                    Text("Request Permission")
+                                        .padding()
+                                        .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                        .clipShape(RoundedRectangle(cornerRadius: 20 ))
+                                        .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
+                                }
+                                .alert("Your all set to recieve Reminders!", isPresented: $showMessage) {
+                                    Button("Thank you", role: .none) { }
+                                }
+                            }
+                            
+                            Button {
+                                guard !reminder.name.isEmpty else { return }
+                                
+                                if reminder.repeats {
+                                    if reminder.howOften.rawValue == "Week" {
+                                        if let fireDate = Calendar.current.date(byAdding: .day, value: 7, to: reminder.time) {
+                                            scheduleRepeatingNotification(time: fireDate, repeatingComponent: .day)
+                                        }
+                                    } else if reminder.howOften.rawValue == "Month" {
+                                        if let fireDate = Calendar.current.date(byAdding: .month, value: 1, to: reminder.time) {
+                                            scheduleRepeatingNotification(time: fireDate, repeatingComponent: .month)
+                                        }
+                                    } else if reminder.howOften.rawValue == "Year" {
+                                        if let fireDate = Calendar.current.date(byAdding: .year, value: 1, to: reminder.time) {
+                                            scheduleRepeatingNotification(time: fireDate, repeatingComponent: .year)
+                                        }
+                                    }
+                                } else {
+                                    scheduleSingleNotification(time: reminder.time)
+                                }
+                                
+                                UNUserNotificationCenter.current().getPendingNotificationRequests { (requests) in
+                                    for request in requests {
+                                        if let timeIntervalTrigger = request.trigger as? UNTimeIntervalNotificationTrigger {
+                                            print(Date(timeIntervalSinceNow: timeIntervalTrigger.timeInterval))
+                                        }
+                                        
+                                    }
+                                }
+                                
+                            } label: {
+                                Text("Add Reminder")
+                                    .padding()
+                                    .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                    .clipShape(RoundedRectangle(cornerRadius: 20 ))
+                                    .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
+                            }
+                        }
+                        Spacer()
+                        
                     }
-                    Spacer()
                 }
+                .frame(width: 380, height: 300, alignment: .center)
+                .padding(EdgeInsets(top: 20, leading: 0, bottom: 30, trailing: 0))
             }
-            .frame(width: 380, height: 300, alignment: .center)
-            .padding(EdgeInsets(top: 30, leading: 0, bottom: 50, trailing: 0))
             
-            ScrollView {
+            if allReminders.isEmpty && !addReminder {
                 VStack {
-                    ForEach(allReminders, id: \.self) { remind in
-                        NotifyCellView(allReminders: $allReminders, reminder: remind)
+                    Text("Looks like you don't have any Reminders.")
+                    Text("Press the \(Text("Plus").foregroundStyle(Color(hex: GardenColors.skyBlue.rawValue))) button to add Reminders")
+                }
+                .font(.title)
+                .multilineTextAlignment(.center)
+                .padding()
+            } else {
+                ScrollView {
+                    VStack {
+                        ForEach(allReminders, id: \.self) { remind in
+                            NotifyCellView(allReminders: $allReminders, reminder: remind)
+                                .padding()
+                        }
                     }
                 }
             }
@@ -146,7 +162,26 @@ struct NotificationsView: View {
             allReminders = notifyViewModel.loadFromFiles()
             allReminders = allReminders.filter { $0.time >= Date() && !$0.repeats }
             print(allReminders, "onAppear")
+            
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+                if success {
+                    showMessage = true
+                } else if error != nil {
+                    showMessage = false
+                }
+            }
         })
+        .navigationTitle(addReminder ?  "Create Reminder" : "Your Reminders")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    addReminder.toggle()
+                } label: {
+                    Image(systemName: addReminder ? "minus" : "plus")
+                        .foregroundStyle(Color(hex: GardenColors.skyBlue.rawValue))
+                }
+            }
+        }
     }
 }
 

@@ -9,8 +9,6 @@ import Foundation
 
 class NotifyViewModel: ObservableObject {
     
-//    @Published var allReminders = [Notify]()
-    
     private var documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     
     func saveToFiles(_ reminders: [Notify]) {
