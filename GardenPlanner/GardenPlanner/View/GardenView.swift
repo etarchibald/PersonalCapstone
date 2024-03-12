@@ -52,6 +52,7 @@ struct GardenView: View {
                     } label: {
                         Image(systemName: "bell.fill")
                             .frame(maxWidth: 50, maxHeight: 50)
+                            .font(.title2)
                             .background(Color(hex: GardenColors.skyBlue.rawValue))
                             .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                             .clipShape(Circle())

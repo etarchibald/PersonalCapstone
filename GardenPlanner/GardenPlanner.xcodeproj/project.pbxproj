@@ -73,11 +73,11 @@
 			children = (
 				4A2F9F2E2B890171004B9014 /* PlantAPIView.swift */,
 				4A2F9F2B2B87FE81004B9014 /* PlantCellView.swift */,
+				4A2F9F302B8901B1004B9014 /* PlantDetailView.swift */,
+				4A2F9F342B8D46B6004B9014 /* PlantPictureScrollView.swift */,
 				4A2F9F3A2B8F7FA8004B9014 /* GardenPlantCellView.swift */,
 				4A2F9F362B8E4C0D004B9014 /* GardenView.swift */,
 				4A2F27FA2B923C7D00C066D6 /* GardenPlantDetailView.swift */,
-				4A2F9F302B8901B1004B9014 /* PlantDetailView.swift */,
-				4A2F9F342B8D46B6004B9014 /* PlantPictureScrollView.swift */,
 				4A547E2A2B8796D400F4798D /* NotificationsView.swift */,
 				4A634AFD2B9B64BD00A683FD /* NotifyCellView.swift */,
 			);

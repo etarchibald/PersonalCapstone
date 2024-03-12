@@ -29,9 +29,12 @@ struct PlantCellView: View {
                         ProgressView()
                     case .success(let image):
                         image.resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .border(Color.white, width: 3)
-                            .frame(maxWidth: 120, maxHeight: 140)
+                            .aspectRatio(contentMode: .fill)
+                            .frame(maxWidth: 130, maxHeight: 150)
+                            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous), style: FillStyle())
+                            .shadow(radius: 10)
+                            .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 20))
+                            .shadow(radius: 5)
                     case .failure:
                         Image(systemName: "carrot.fill")
                             .foregroundStyle(.orange)
@@ -44,17 +47,17 @@ struct PlantCellView: View {
                 
                 VStack {
                     Text(plant.commonName ?? "")
-                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
                         .font(.title)
                     Text(plant.family)
                         .font(.title2)
                 }
                 .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 20))
             }
         }
     }
 }
 
 #Preview {
-    PlantCellView(plant: Plant(id: 0, commonName: "Apple", scientificName: "Something funny", imageURL: "https:", genus: "fruit", family: "possibly"))
+    PlantCellView(plant: Plant(id: 0, commonName: "Apple", scientificName: "Something funny", imageURL: "https://bs.plantnet.org/image/o/4f56a83172d92798bf754e81e7cf2f6ec271d278", genus: "fruit", family: "possibly"))
 }

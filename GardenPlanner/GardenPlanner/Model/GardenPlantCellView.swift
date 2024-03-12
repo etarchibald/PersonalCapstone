@@ -25,9 +25,10 @@ struct GardenPlantCellView: View {
                         ProgressView()
                     case .success(let image):
                         image.resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .border(Color.white, width: 3)
-                            .frame(width: 150, height: 150)
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 120, height: 150)
+                            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous), style: FillStyle())
+                            .shadow(radius: 5)
                     case .failure:
                         Image(systemName: "leaf.fill")
                             .foregroundStyle(.white)

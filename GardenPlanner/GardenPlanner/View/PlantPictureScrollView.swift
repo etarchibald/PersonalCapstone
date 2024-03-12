@@ -11,30 +11,32 @@ struct PlantPictureScrollView: View {
     
     var pictures: [APIImage]
     
-    @GestureState private var zoom = 1.0
-    
     var body: some View {
-        ScrollView(.horizontal) {
-            HStack {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 230) {
                 ForEach(pictures, id: \.self) { picture in
-                    AsyncImage(url: URL(string: picture.imageURL)) { phase in
-                        switch phase {
-                        case .empty:
-                            ProgressView()
-                        case .success(let image):
-                            image.resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(maxWidth: 130, maxHeight: 130)
-                        case .failure:
-                            Image(systemName: "photo")
-                        @unknown default:
-                            EmptyView()
+                    GeometryReader { geometry in
+                        AsyncImage(url: URL(string: picture.imageURL)) { phase in
+                            switch phase {
+                            case .empty:
+                                ProgressView()
+                            case .success(let image):
+                                image.resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 230, height: 230)
+                                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous), style: FillStyle())
+                                    .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 0)
+                                    .rotation3DEffect(Angle(degrees: (Double(geometry.frame(in: .global).midX) - 85) / -20), axis: (x: 0, y: 1.0, z: 0))
+                            case .failure:
+                                Image(systemName: "photo")
+                            @unknown default:
+                                EmptyView()
+                            }
                         }
                     }
                 }
-                .padding()
             }
-            .background(Color(hex: GardenColors.richBlack.rawValue))
+            .padding(EdgeInsets(top: 0, leading: 85, bottom: 0, trailing: 300))
         }
     }
 }
