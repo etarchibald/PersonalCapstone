@@ -13,12 +13,10 @@ struct GardenPlannerApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
 //    var plantModelContainer: ModelContainer
-//    var notifyModelContainer: ModelContainer
 //    
 //    init() {
 //        do {
 //            plantModelContainer = try ModelContainer(for: GardenPlant.self)
-//            notifyModelContainer = try ModelContainer(for: Notify.self)
 //        } catch {
 //            fatalError("Failed to load model")
 //        }
@@ -27,7 +25,7 @@ struct GardenPlannerApp: App {
     var body: some Scene {
         WindowGroup {
             GardenView()
-                .modelContainer(for: GardenPlant.self)
+                .modelContainer(for: YourPlant.self)
         }
     }
 }

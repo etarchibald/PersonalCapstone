@@ -152,7 +152,7 @@ struct NotificationsView: View {
                     VStack {
                         ForEach(allReminders, id: \.self) { remind in
                             NotifyCellView(allReminders: $allReminders, reminder: remind)
-                                .padding()
+                                .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
                         }
                     }
                 }
@@ -210,6 +210,7 @@ extension NotificationsView {
                     DispatchQueue.main.async {
                         allReminders.append(reminder)
                         notifyViewModel.saveToFiles(allReminders)
+                        print(allReminders)
                     }
                 }
             }

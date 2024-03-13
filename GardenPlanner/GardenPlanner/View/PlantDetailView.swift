@@ -14,7 +14,7 @@ struct PlantDetailView: View {
     
     @State private var plantAdded = false
     
-    @Query var gardenPlant: [GardenPlant]
+    @Query var gardenPlant: [YourPlant]
     
     var plantid: Int
     
@@ -22,7 +22,8 @@ struct PlantDetailView: View {
         let plant = plantViewModel.plantDetail
         
         Button {
-            let newPlant = GardenPlant(id: plantViewModel.plantDetail.id, imageURL: plantViewModel.plantDetail.imageURL ?? "image", name: plantViewModel.plantDetail.commonName ?? "Plant", notes: "")
+            let newPlant = YourPlant(id: plant.id, imageURL: plant.imageURL ?? "image", name: plant.commonName ?? "", growthMonths: plant.mainSpecies.growth.growthMonths ?? [], bloomMonths: plant.mainSpecies.growth.bloomMonths ?? [], fruitMonths: plant.mainSpecies.growth.growthMonths ?? [], light: plant.mainSpecies.growth.light ?? 5, growthHabit: plant.mainSpecies.specifications.growthHabit ?? "", growthRate: plant.mainSpecies.specifications.growthRate ?? "", entrys: [], notes: "")
+            
             modelContext.insert(newPlant)
             plantAdded = true
         } label: {
@@ -34,7 +35,7 @@ struct PlantDetailView: View {
         .frame(width: 380, alignment: .trailing)
         
         ScrollView {
-            AsyncImage(url: URL(string: plantViewModel.plantDetail.imageURL ?? "")) { phase in
+            AsyncImage(url: URL(string: plant.imageURL ?? "image")) { phase in
                 switch phase {
                 case .empty:
                     ProgressView()
@@ -45,7 +46,7 @@ struct PlantDetailView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous), style: FillStyle())
                         .shadow(radius: 10)
                 case .failure:
-                    Image(systemName: "tree.fill")
+                    Image(systemName: "tree")
                         .foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))
                         .font(.system(size: 100))
                         .frame(width: 200, height: 200, alignment: .center)
@@ -60,12 +61,20 @@ struct PlantDetailView: View {
                 .font(.title2)
             
             HStack {
-                plant.mainSpecies.edible.map {
-                    Text($0 ? "Edible" : "NOT Edible")
-                        .font(.title2)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
-                
+                VStack {
+                    plant.mainSpecies.edible.map {
+                        Text($0 ? "Edible" : "Not Edible")
+                            .font(.title2)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
+                        
+                    }
+                    
+                    ForEach(plant.mainSpecies.ediblePart ?? [], id: \.self) { part in
+                        Text(part)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+                    }
                 }
                 
                 if plant.mainSpecies.edible ?? false {
@@ -81,12 +90,6 @@ struct PlantDetailView: View {
                     .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
             }
             .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
-            
-            ForEach(plant.mainSpecies.ediblePart ?? [], id: \.self) { part in
-                Text(part)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
-            }
             
             VStack {
                 plant.mainSpecies.flower.color.map { _ in Text("Flower Color(s):") }
@@ -110,7 +113,11 @@ struct PlantDetailView: View {
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
                 
-                plant.mainSpecies.growth.description.map { Text($0) }
+                plant.mainSpecies.growth.description.map {
+                    Text($0)
+                        .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
+                        .multilineTextAlignment(.leading)
+                }
                 
                 VStack {
                     Text("Light on 0 to 10 scale: \(plant.mainSpecies.growth.light ?? 5)")
@@ -145,7 +152,7 @@ struct PlantDetailView: View {
                 
                 if plant.mainSpecies.growth.bloomMonths != nil {
                     
-                    Text("Growth Months:")
+                    Text("Bloom Months:")
                         .font(.title)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
@@ -171,16 +178,18 @@ struct PlantDetailView: View {
                 }
             }
             
-            VStack {
-                Text("Growth Rate:")
-                    .font(.title)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
-                
-                Text(plant.mainSpecies.specifications.growthRate ?? "")
-                    .font(.system(size: 20))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+            if plant.mainSpecies.specifications.growthRate != nil {
+                VStack {
+                    Text("Growth Rate:")
+                        .font(.title)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
+                    
+                    Text(plant.mainSpecies.specifications.growthRate ?? "")
+                        .font(.system(size: 20))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+                }
             }
             
             if let flowerImages = plant.mainSpecies.plantImages.flowerImages {

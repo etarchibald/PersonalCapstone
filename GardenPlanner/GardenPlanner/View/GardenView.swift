@@ -12,7 +12,7 @@ import SwiftData
 struct GardenView: View {
     @StateObject var plantViewModel = PlantsViewModel()
     
-    @Query var myGarden: [GardenPlant]
+    @Query var myGarden: [YourPlant]
     
     var body: some View {
         NavigationStack() {

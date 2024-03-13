@@ -29,6 +29,7 @@
 		4A634AFA2B9A1AD700A683FD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A634AF92B9A1AD700A683FD /* AppDelegate.swift */; };
 		4A634AFC2B9A7D1900A683FD /* NotifyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A634AFB2B9A7D1900A683FD /* NotifyViewModel.swift */; };
 		4A634AFE2B9B64BD00A683FD /* NotifyCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A634AFD2B9B64BD00A683FD /* NotifyCellView.swift */; };
+		4A962E7B2BA224A600F6CB32 /* EntryCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A962E7A2BA224A600F6CB32 /* EntryCellView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +56,7 @@
 		4A634AF92B9A1AD700A683FD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = View/AppDelegate.swift; sourceTree = "<group>"; };
 		4A634AFB2B9A7D1900A683FD /* NotifyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NotifyViewModel.swift; path = GardenPlanner/View/NotifyViewModel.swift; sourceTree = SOURCE_ROOT; };
 		4A634AFD2B9B64BD00A683FD /* NotifyCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyCellView.swift; sourceTree = "<group>"; };
+		4A962E7A2BA224A600F6CB32 /* EntryCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryCellView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,9 +77,10 @@
 				4A2F9F2B2B87FE81004B9014 /* PlantCellView.swift */,
 				4A2F9F302B8901B1004B9014 /* PlantDetailView.swift */,
 				4A2F9F342B8D46B6004B9014 /* PlantPictureScrollView.swift */,
-				4A2F9F3A2B8F7FA8004B9014 /* GardenPlantCellView.swift */,
 				4A2F9F362B8E4C0D004B9014 /* GardenView.swift */,
+				4A2F9F3A2B8F7FA8004B9014 /* GardenPlantCellView.swift */,
 				4A2F27FA2B923C7D00C066D6 /* GardenPlantDetailView.swift */,
+				4A962E7A2BA224A600F6CB32 /* EntryCellView.swift */,
 				4A547E2A2B8796D400F4798D /* NotificationsView.swift */,
 				4A634AFD2B9B64BD00A683FD /* NotifyCellView.swift */,
 			);
@@ -220,6 +223,7 @@
 				4A2F9F2F2B890171004B9014 /* PlantAPIView.swift in Sources */,
 				4A2F9F202B879F6B004B9014 /* Plant.swift in Sources */,
 				4A2F9F272B87ABC4004B9014 /* WebService.swift in Sources */,
+				4A962E7B2BA224A600F6CB32 /* EntryCellView.swift in Sources */,
 				4A2F9F312B8901B1004B9014 /* PlantDetailView.swift in Sources */,
 				4A547E2B2B8796D400F4798D /* NotificationsView.swift in Sources */,
 				4A2F27FB2B923C7D00C066D6 /* GardenPlantDetailView.swift in Sources */,

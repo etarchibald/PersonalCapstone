@@ -23,7 +23,7 @@ struct PlantCellView: View {
                 .shadow(radius: 10)
             
             HStack {
-                AsyncImage(url: URL(string: plant.imageURL ?? "")) { phase in
+                AsyncImage(url: URL(string: plant.imageURL ?? "image")) { phase in
                     switch phase {
                     case .empty:
                         ProgressView()
