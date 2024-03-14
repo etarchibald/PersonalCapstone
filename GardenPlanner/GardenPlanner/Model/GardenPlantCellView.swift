@@ -32,7 +32,8 @@ struct GardenPlantCellView: View {
                     case .failure:
                         Image(systemName: "leaf.fill")
                             .foregroundStyle(.white)
-                            .font(.largeTitle)
+                            .font(.system(size: 60))
+                            .padding()
                     @unknown default:
                         EmptyView()
                     }

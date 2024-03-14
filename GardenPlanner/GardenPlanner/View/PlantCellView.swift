@@ -32,8 +32,6 @@ struct PlantCellView: View {
                             .aspectRatio(contentMode: .fill)
                             .frame(maxWidth: 130, maxHeight: 150)
                             .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous), style: FillStyle())
-                            .shadow(radius: 10)
-                            .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 20))
                             .shadow(radius: 5)
                     case .failure:
                         Image(systemName: "carrot.fill")

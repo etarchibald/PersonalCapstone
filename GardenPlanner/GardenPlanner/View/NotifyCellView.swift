@@ -48,7 +48,7 @@ struct NotifyCellView: View {
                             RoundedRectangle(cornerRadius: 20, style: .continuous)
                                 .fill(Color(hex: GardenColors.plantGreen.rawValue))
                             
-                            Text("Repeats")
+                            Text(reminder.howOften.rawValue)
                                 .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                             
                         }
@@ -87,7 +87,7 @@ struct NotifyCellView: View {
             }
             
         }
-        .frame(width: 350, height: 120, alignment: .center)
+        .frame(maxHeight: .infinity, alignment: .center)
         .shadow(radius: 10)
     }
 }

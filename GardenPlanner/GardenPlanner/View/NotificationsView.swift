@@ -160,7 +160,7 @@ struct NotificationsView: View {
         }
         .onAppear(perform: {
             allReminders = notifyViewModel.loadFromFiles()
-            allReminders = allReminders.filter { $0.time >= Date() && !$0.repeats }
+            allReminders = allReminders.filter { $0.time >= Date() }
             print(allReminders, "onAppear")
             
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
@@ -193,14 +193,16 @@ extension NotificationsView {
     
     func scheduleRepeatingNotification(time: Date, repeatingComponent: Calendar.Component) {
         
+        let newReminder = Notify(id: UUID(), name: reminder.name, subtitle: reminder.subtitle, time: reminder.time, repeats: reminder.repeats, howOften: reminder.howOften)
+        
         let content = UNMutableNotificationContent()
-        content.title = reminder.name
-        content.subtitle = reminder.subtitle
+        content.title = newReminder.name
+        content.subtitle = newReminder.subtitle
         content.sound = UNNotificationSound.default
         
         if let firstRepeatingDate = Calendar.current.date(byAdding: repeatingComponent, value: 1, to: time) {
             let repeatingTrigger = UNTimeIntervalNotificationTrigger(timeInterval: firstRepeatingDate.timeIntervalSinceNow, repeats: true)
-            let repeatingRequest = UNNotificationRequest(identifier: reminder.id.uuidString, content: content, trigger: repeatingTrigger)
+            let repeatingRequest = UNNotificationRequest(identifier: newReminder.id.uuidString, content: content, trigger: repeatingTrigger)
             
             UNUserNotificationCenter.current().add(repeatingRequest) { (error) in
                 if let error = error {
@@ -208,9 +210,11 @@ extension NotificationsView {
                 } else {
                     print("Successfully scheduled")
                     DispatchQueue.main.async {
-                        allReminders.append(reminder)
+                        allReminders.append(newReminder)
                         notifyViewModel.saveToFiles(allReminders)
-                        print(allReminders)
+                        addReminder = false
+                        reminder.name = ""
+                        reminder.subtitle = ""
                     }
                 }
             }
@@ -218,14 +222,17 @@ extension NotificationsView {
     }
     
     func scheduleSingleNotification(time: Date) {
+        
+        let newReminder = Notify(id: UUID(), name: reminder.name, subtitle: reminder.subtitle, time: reminder.time, repeats: reminder.repeats, howOften: reminder.howOften)
+        
         let content = UNMutableNotificationContent()
-        content.title = reminder.name
-        content.subtitle = reminder.subtitle
+        content.title = newReminder.name
+        content.subtitle = newReminder.subtitle
         content.sound = UNNotificationSound.default
         
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: time.timeIntervalSinceNow, repeats: false)
         
-        let request = UNNotificationRequest(identifier: reminder.id.uuidString, content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: newReminder.id.uuidString, content: content, trigger: trigger)
         
         UNUserNotificationCenter.current().add(request) { (error) in
             if let error = error {
@@ -233,9 +240,11 @@ extension NotificationsView {
             } else {
                 print("Seccessfully scheduled")
                 DispatchQueue.main.async {
-                    allReminders.append(reminder)
+                    allReminders.append(newReminder)
                     notifyViewModel.saveToFiles(allReminders)
-                    print(allReminders)
+                    addReminder = false
+                    reminder.name = ""
+                    reminder.subtitle = ""
                 }
             }
         }

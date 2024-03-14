@@ -20,53 +20,5 @@
             landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "43414C75-A217-4F99-9001-C85DB0B5F955"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "GardenPlanner/View/NotificationsView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "211"
-            endingLineNumber = "211"
-            landmarkName = "scheduleRepeatingNotification(time:repeatingComponent:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "43414C75-A217-4F99-9001-C85DB0B5F955 - 1259299827cefd1c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Optional&lt;Swift.Error&gt;) -&gt; () in GardenPlanner.NotificationsView.scheduleRepeatingNotification(time: Foundation.Date, repeatingComponent: Foundation.Calendar.Component) -&gt; ()"
-                  moduleName = "GardenPlanner"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/ethanarchibald/MobileDev/SwiftUI%20Projects/PersonalCapstone/GardenPlanner/GardenPlanner/View/NotificationsView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "211"
-                  endingLineNumber = "211"
-                  offsetFromSymbolStart = "176">
-               </Location>
-               <Location
-                  uuid = "43414C75-A217-4F99-9001-C85DB0B5F955 - 1259299827cefd1c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in closure #1 (Swift.Optional&lt;Swift.Error&gt;) -&gt; () in GardenPlanner.NotificationsView.scheduleRepeatingNotification(time: Foundation.Date, repeatingComponent: Foundation.Calendar.Component) -&gt; ()"
-                  moduleName = "GardenPlanner"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/ethanarchibald/MobileDev/SwiftUI%20Projects/PersonalCapstone/GardenPlanner/GardenPlanner/View/NotificationsView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "211"
-                  endingLineNumber = "211"
-                  offsetFromSymbolStart = "192">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
