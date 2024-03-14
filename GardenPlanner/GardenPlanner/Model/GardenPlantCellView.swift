@@ -15,7 +15,7 @@ struct GardenPlantCellView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(Color(hex: "#228B22"))
+                .fill(LinearGradient(gradient: Gradient(colors: [Color(hex: GardenColors.plantGreen.rawValue), Color(hex: GardenColors.skyBlue.rawValue)]), startPoint: .bottom, endPoint: .top))
                 .shadow(radius: 10)
             
             VStack {

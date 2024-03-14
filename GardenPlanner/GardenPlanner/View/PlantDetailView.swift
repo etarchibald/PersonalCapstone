@@ -54,11 +54,21 @@ struct PlantDetailView: View {
                     EmptyView()
                 }
             }
-            
-            Text(plant.commonName ?? "")
-                .font(.largeTitle)
-            Text(plant.scientificName ?? "scienicy plant name")
-                .font(.title2)
+            ZStack {
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .fill(Color(hex: GardenColors.plantGreen.rawValue))
+                
+                VStack {
+                    Text(plant.commonName ?? "")
+                        .font(.largeTitle)
+                    
+                    Text(plant.scientificName ?? "scienicy plant name")
+                        .font(.title2)
+                }
+                .padding()
+            }
+            .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+            .padding(.horizontal, 10)
             
             HStack {
                 VStack {
@@ -195,16 +205,24 @@ struct PlantDetailView: View {
             if let flowerImages = plant.mainSpecies.plantImages.flowerImages {
                 Text("Flowers:")
                     .font(.title)
+                    .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
+                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+                    .background(Color(hex: GardenColors.plantGreen.rawValue))
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .padding()
                 PlantPictureScrollView(pictures: flowerImages)
                     .frame(height: 230, alignment: .center)
             }
             if let fruitImages = plant.mainSpecies.plantImages.fruitImages {
                 Text("Fruit:")
                     .font(.title)
+                    .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
+                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+                    .background(Color(hex: GardenColors.plantGreen.rawValue))
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .padding()
                 PlantPictureScrollView(pictures: fruitImages)
                     .frame(height: 230, alignment: .center)
                 
@@ -212,16 +230,24 @@ struct PlantDetailView: View {
             if let habitImages = plant.mainSpecies.plantImages.habitImages {
                 Text("Habitat:")
                     .font(.title)
+                    .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
+                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+                    .background(Color(hex: GardenColors.plantGreen.rawValue))
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .padding()
                 PlantPictureScrollView(pictures: habitImages)
                     .frame(height: 230, alignment: .center)
             }
             if let otherImages = plant.mainSpecies.plantImages.otherImages {
-                Text("Other Pictures:")
+                Text("Other:")
                     .font(.title)
+                    .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
+                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+                    .background(Color(hex: GardenColors.plantGreen.rawValue))
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .padding()
                 PlantPictureScrollView(pictures: otherImages)
                     .frame(height: 230, alignment: .center)
             }

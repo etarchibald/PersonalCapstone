@@ -13,11 +13,11 @@ struct GardenPlantDetailView: View {
     @Environment(\.modelContext) var modelContext
     
     @State private var showingDeleteAlert = false
-    @State private var showingAddEntry = true
+    @State private var showingAddEntry = false
     
     @Bindable var plant: YourPlant
     
-    @State private var noteEntry = Entry(id: UUID(), title: "", body: "", date: Date())
+    @State private var entry = Entry(id: UUID(), title: "", body: "", date: Date())
     
     var body: some View {
         ScrollView {
@@ -43,7 +43,7 @@ struct GardenPlantDetailView: View {
 
             ZStack {
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .fill(Color(hex: GardenColors.dirtBrown.rawValue))
+                    .fill(Color(hex: GardenColors.plantGreen.rawValue))
                 VStack {
                     Text(plant.name)
                         .font(.largeTitle)
@@ -133,7 +133,7 @@ struct GardenPlantDetailView: View {
             
             ZStack {
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .fill(Color(hex: GardenColors.dirtBrown.rawValue))
+                    .fill(Color(hex: GardenColors.plantGreen.rawValue))
                 VStack {
                     HStack {
                         Text("Entrys:")
@@ -152,20 +152,38 @@ struct GardenPlantDetailView: View {
                     .padding(EdgeInsets(top: 20, leading: 10, bottom: 20, trailing: 10))
                     
                     if showingAddEntry {
-                        TextField("Title", text: $noteEntry.title)
-                            .padding()
-                            .background(Color(hex: GardenColors.whiteSmoke.rawValue))
-                            .clipShape(RoundedRectangle(cornerRadius: 20 ))
-                            .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
                         
-                        TextField("Body", text: $noteEntry.body)
+                        Text("Add Entrys to help keep track of your plant. Press and hold to delete them")
+                            .multilineTextAlignment(.center)
+                            .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                        
+                        HStack {
+                            TextField("Title", text: $entry.title)
+                                .padding()
+                                .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                .clipShape(RoundedRectangle(cornerRadius: 20))
+                                .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+                            
+                            DatePicker("", selection: $entry.date, displayedComponents: [.date])
+                                .padding()
+                                .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                .clipShape(RoundedRectangle(cornerRadius: 20))
+                                .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
+                        }
+                        
+                        TextField("Body", text: $entry.body)
                             .padding()
                             .background(Color(hex: GardenColors.whiteSmoke.rawValue))
-                            .clipShape(RoundedRectangle(cornerRadius: 20 ))
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
                             .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
                         
                         Button {
-                            
+                            guard !entry.title.isEmpty else { return }
+                            showingAddEntry = false
+                            let newEntry = Entry(id: UUID(), title: entry.title, body: entry.body, date: entry.date)
+                            plant.entrys.append(newEntry)
+                            entry.title = ""
+                            entry.body = ""
                         } label: {
                             Text("Add Entry")
                                 .padding()
@@ -176,11 +194,34 @@ struct GardenPlantDetailView: View {
                         
                     }
                 }
+            }
+            .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 20))
+            
+            VStack {
+                EntryCellView(entrys: $plant.entrys)
+            }
+            .frame(height: plant.entrys.isEmpty ? 0 : 350)
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .fill(Color(hex: GardenColors.plantGreen.rawValue))
                 
+                VStack {
+                    Text("Notes:")
+                        .font(.largeTitle)
+                        .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                        .padding()
+                    
+                    TextEditor(text: $plant.notes)
+                        .padding()
+                        .frame(height: 300)
+                        .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
+                }
             }
             .padding()
             
-            //For each of entry cells
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -198,22 +239,29 @@ struct GardenPlantDetailView: View {
                     Button("Cancel", role: .cancel) { }
                 }
             }
-        }
-        
-        Button {
-            dismiss()
-        } label: {
-            Text("Save")
+            
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    dismiss()
+                } label: {
+                    Text("Save")
+                }
+                .padding()
+            }
         }
     }
 }
     
     #Preview {
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try! ModelContainer(for: YourPlant.self, configurations: config)
-        
-        let gardenPlant = YourPlant(id: 0, imageURL: "https://bs.plantnet.org/image/o/4f45fd2d82661996f5d5a5613b39bdd1287a56bc", name: "Alpine Strawberry", growthMonths: ["apr", "may", "jun"], bloomMonths: ["apr", "may", "jun"], fruitMonths: ["apr", "may", "jun"], light: 5, growthHabit: "Forb/herb", growthRate: "Rapid", entrys: [], notes: "")
-        
-        return GardenPlantDetailView(plant: gardenPlant)
-            .modelContainer(container)
+        do {
+            let config = ModelConfiguration(isStoredInMemoryOnly: true)
+            let container = try ModelContainer(for: YourPlant.self, configurations: config)
+            
+            let gardenPlant = YourPlant(id: 0, imageURL: "https://bs.plantnet.org/image/o/4f45fd2d82661996f5d5a5613b39bdd1287a56bc", name: "Alpine Strawberry", growthMonths: ["apr", "may", "jun"], bloomMonths: [], fruitMonths: ["apr", "may", "jun"], light: 5, growthHabit: "Forb/herb", growthRate: "Rapid", entrys: [], notes: "")
+            
+            return GardenPlantDetailView(plant: gardenPlant)
+                .modelContainer(container)
+        } catch {
+            return Text("Failed to create container: \(error.localizedDescription)")
+        }
     }

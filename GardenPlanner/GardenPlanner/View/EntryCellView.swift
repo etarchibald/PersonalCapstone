@@ -6,19 +6,65 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct EntryCellView: View {
+    @Environment(\.modelContext) var modelContext
     
-    var entry: Entry
+    @State private var showDeleteAlert = false
+    
+    @Binding var entrys: [Entry]
     
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(Color(hex: GardenColors.dirtBrown.rawValue))
+        ScrollView {
+            
+            ForEach(entrys, id: \.self) { entry in
+                
+                ZStack {
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        .fill(Color(hex: GardenColors.plantGreen.rawValue))
+                        .shadow(radius: 10)
+                    
+                    HStack {
+                        VStack {
+                            Text(entry.title)
+                                .font(.title2)
+                            if !entry.body.isEmpty {
+                                Text(entry.body)
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        VStack {
+//                            Text("Date created:")
+                            Text(entry.date.formatted(date: .abbreviated, time: .omitted))
+                        }
+                    }
+                    .padding(EdgeInsets(top: 30, leading: 30, bottom: 30, trailing: 30))
+                    .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                }
+                .contextMenu {
+                    Button("Delete", role: .destructive) {
+                        entrys = entrys.filter { entryToDelete in
+                            entryToDelete.id.uuidString == entry.id.uuidString ? false : true
+                        }
+                        
+                        modelContext.delete(entry)
+                    }
+                }
+            }
+            .padding()
         }
     }
 }
 
 #Preview {
-    EntryCellView(entry: Entry(id: UUID(), title: "Planted", body: "North Garden", date: Date()))
+    
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: YourPlant.self, configurations: config)
+    
+    let entry = [Entry(id: UUID(), title: "Planted", body: "North Garden", date: Date()), Entry(id: UUID(), title: "Something else", body: "", date: Date())]
+    
+    return EntryCellView(entrys: .constant(entry))
+        .modelContainer(container)
 }

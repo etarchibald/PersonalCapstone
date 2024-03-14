@@ -10,8 +10,8 @@ import SwiftUI
 
 enum GardenColors: String {
     case richBlack = "#101018"
-    case dirtBrown = "#663F00"
-    case plantGreen = "#228B22"
+    case dirtBrown = "#7A5000"
+    case plantGreen = "#018E42"
     case skyBlue = "#02B2F2"
     case whiteSmoke = "#F5F5F5"
 }
