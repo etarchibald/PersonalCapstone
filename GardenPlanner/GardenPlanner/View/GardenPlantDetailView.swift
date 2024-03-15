@@ -14,6 +14,7 @@ struct GardenPlantDetailView: View {
     
     @State private var showingDeleteAlert = false
     @State private var showingAddEntry = false
+    @State private var showingNotes = false
     
     @Bindable var plant: YourPlant
     
@@ -141,7 +142,9 @@ struct GardenPlantDetailView: View {
                             .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                         
                         Button {
-                            showingAddEntry.toggle()
+                            withAnimation(.bouncy) {
+                                showingAddEntry.toggle()
+                            }
                         } label: {
                             Image(systemName: showingAddEntry ? "minus" : "plus")
                                 .font(.largeTitle)
@@ -179,7 +182,9 @@ struct GardenPlantDetailView: View {
                         
                         Button {
                             guard !entry.title.isEmpty else { return }
-                            showingAddEntry = false
+                            withAnimation(.bouncy) {
+                                showingAddEntry = false
+                            }
                             let newEntry = Entry(id: UUID(), title: entry.title, body: entry.body, date: entry.date)
                             plant.entrys.append(newEntry)
                             entry.title = ""
@@ -207,17 +212,33 @@ struct GardenPlantDetailView: View {
                     .fill(Color(hex: GardenColors.plantGreen.rawValue))
                 
                 VStack {
-                    Text("Notes:")
-                        .font(.largeTitle)
-                        .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                    HStack {
+                        Text("Notes:")
+                            .font(.largeTitle)
+                            .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                            .padding()
+                        
+                        Button {
+                            withAnimation(.bouncy) {
+                                showingNotes.toggle()
+                            }
+                        } label: {
+                            Image(systemName: showingNotes ? "minus" : "plus")
+                                .font(.largeTitle)
+                                .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                        }
                         .padding()
+                    }
                     
-                    TextEditor(text: $plant.notes)
-                        .padding()
-                        .frame(height: 300)
-                        .background(Color(hex: GardenColors.whiteSmoke.rawValue))
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                        .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
+                    if showingNotes {
+                        TextEditor(text: $plant.notes)
+                            .padding()
+                            .frame(height: 300)
+                            .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                            .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
+                    }
                 }
             }
             .padding()

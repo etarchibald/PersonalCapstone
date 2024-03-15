@@ -25,7 +25,9 @@ struct PlantDetailView: View {
             let newPlant = YourPlant(id: plant.id, imageURL: plant.imageURL ?? "image", name: plant.commonName ?? "", growthMonths: plant.mainSpecies.growth.growthMonths ?? [], bloomMonths: plant.mainSpecies.growth.bloomMonths ?? [], fruitMonths: plant.mainSpecies.growth.growthMonths ?? [], light: plant.mainSpecies.growth.light ?? 5, growthHabit: plant.mainSpecies.specifications.growthHabit ?? "", growthRate: plant.mainSpecies.specifications.growthRate ?? "", entrys: [], notes: "")
             
             modelContext.insert(newPlant)
-            plantAdded = true
+            withAnimation(.linear) {
+                plantAdded = true
+            }
         } label: {
             Text(plantAdded ? "In your garden" : "Add to garden")
             Image(systemName: plantAdded ? "leaf.fill" : "leaf")

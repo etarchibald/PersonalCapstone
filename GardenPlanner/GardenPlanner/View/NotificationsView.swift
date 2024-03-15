@@ -98,28 +98,31 @@ struct NotificationsView: View {
                                 
                                 if reminder.repeats {
                                     if reminder.howOften.rawValue == "Week" {
-                                        if let fireDate = Calendar.current.date(byAdding: .day, value: 7, to: reminder.time) {
-                                            scheduleRepeatingNotification(time: fireDate, repeatingComponent: .day)
-                                        }
+                                        
+                                        scheduleWeeklyNotification(date: reminder.time)
+                                
                                     } else if reminder.howOften.rawValue == "Month" {
-                                        if let fireDate = Calendar.current.date(byAdding: .month, value: 1, to: reminder.time) {
-                                            scheduleRepeatingNotification(time: fireDate, repeatingComponent: .month)
-                                        }
+                                        
+                                        scheduleMonthlyNotification(date: reminder.time)
+                                        
                                     } else if reminder.howOften.rawValue == "Year" {
-                                        if let fireDate = Calendar.current.date(byAdding: .year, value: 1, to: reminder.time) {
-                                            scheduleRepeatingNotification(time: fireDate, repeatingComponent: .year)
-                                        }
+                                        
+                                        scheduleYearlyNotification(date: reminder.time)
                                     }
                                 } else {
                                     scheduleSingleNotification(time: reminder.time)
                                 }
                                 
+                                //to see all pending Notifications for debug
                                 UNUserNotificationCenter.current().getPendingNotificationRequests { (requests) in
                                     for request in requests {
                                         if let timeIntervalTrigger = request.trigger as? UNTimeIntervalNotificationTrigger {
                                             print(Date(timeIntervalSinceNow: timeIntervalTrigger.timeInterval))
                                         }
                                         
+                                        if let trigger = request.trigger as? UNCalendarNotificationTrigger {
+                                            print(trigger.dateComponents)
+                                        }
                                     }
                                 }
                                 
@@ -160,7 +163,6 @@ struct NotificationsView: View {
         }
         .onAppear(perform: {
             allReminders = notifyViewModel.loadFromFiles()
-            allReminders = allReminders.filter { $0.time >= Date() }
             print(allReminders, "onAppear")
             
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
@@ -175,7 +177,9 @@ struct NotificationsView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    addReminder.toggle()
+                    withAnimation(.bouncy) {
+                        addReminder.toggle()
+                    }
                 } label: {
                     Image(systemName: addReminder ? "minus" : "plus")
                         .foregroundStyle(Color(hex: GardenColors.skyBlue.rawValue))
@@ -191,31 +195,89 @@ struct NotificationsView: View {
 
 extension NotificationsView {
     
-    func scheduleRepeatingNotification(time: Date, repeatingComponent: Calendar.Component) {
+    
+    func scheduleWeeklyNotification(date: Date) {
         
         let newReminder = Notify(id: UUID(), name: reminder.name, subtitle: reminder.subtitle, time: reminder.time, repeats: reminder.repeats, howOften: reminder.howOften)
         
         let content = UNMutableNotificationContent()
         content.title = newReminder.name
-        content.subtitle = newReminder.subtitle
+        content.body = newReminder.subtitle
         content.sound = UNNotificationSound.default
         
-        if let firstRepeatingDate = Calendar.current.date(byAdding: repeatingComponent, value: 1, to: time) {
-            let repeatingTrigger = UNTimeIntervalNotificationTrigger(timeInterval: firstRepeatingDate.timeIntervalSinceNow, repeats: true)
-            let repeatingRequest = UNNotificationRequest(identifier: newReminder.id.uuidString, content: content, trigger: repeatingTrigger)
-            
-            UNUserNotificationCenter.current().add(repeatingRequest) { (error) in
-                if let error = error {
-                    print(error.localizedDescription)
-                } else {
-                    print("Successfully scheduled")
-                    DispatchQueue.main.async {
-                        allReminders.append(newReminder)
-                        notifyViewModel.saveToFiles(allReminders)
-                        addReminder = false
-                        reminder.name = ""
-                        reminder.subtitle = ""
-                    }
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: date)
+        let fireDateComponents = DateComponents(weekday: weekday)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: fireDateComponents, repeats: true)
+        let request = UNNotificationRequest(identifier: newReminder.id.uuidString, content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request) { (error) in
+            if let error = error {
+                print("Error scheduling notification: \(error.localizedDescription)")
+            } else {
+                print("Weekly notification scheduled successfully!")
+                DispatchQueue.main.async {
+                    allReminders.append(newReminder)
+                    notifyViewModel.saveToFiles(allReminders)
+                    closeAndResetAddReminderMenu()
+                }
+            }
+        }
+    }
+    
+    func scheduleMonthlyNotification(date: Date) {
+        
+        let newReminder = Notify(id: UUID(), name: reminder.name, subtitle: reminder.subtitle, time: reminder.time, repeats: reminder.repeats, howOften: reminder.howOften)
+        
+        let content = UNMutableNotificationContent()
+        content.title = newReminder.name
+        content.body = newReminder.subtitle
+        content.sound = UNNotificationSound.default
+        
+        var dateComponents = Calendar.current.dateComponents([.month, .hour, .minute,], from: date)
+        dateComponents.calendar = Calendar.current
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+        
+        let request = UNNotificationRequest(identifier: newReminder.id.uuidString, content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request) { (error) in
+            if let error = error {
+                print("Error scheduling notification: \(error.localizedDescription)")
+            } else {
+                print("Monthly notification scheduled successfully!")
+                DispatchQueue.main.async {
+                    allReminders.append(newReminder)
+                    notifyViewModel.saveToFiles(allReminders)
+                    closeAndResetAddReminderMenu()
+                }
+            }
+        }
+    }
+    
+    func scheduleYearlyNotification(date: Date) {
+        let newReminder = Notify(id: UUID(), name: reminder.name, subtitle: reminder.subtitle, time: reminder.time, repeats: reminder.repeats, howOften: reminder.howOften)
+        
+        let content = UNMutableNotificationContent()
+        content.title = newReminder.name
+        content.body = newReminder.subtitle
+        content.sound = UNNotificationSound.default
+        
+        let calendar = Calendar.current
+        let dateComponents = calendar.dateComponents([.month, .day], from: date)
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+        
+        let request = UNNotificationRequest(identifier: newReminder.id.uuidString, content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request) { (error) in
+            if let error = error {
+                print("Error scheduling notification: \(error.localizedDescription)")
+            } else {
+                print("Monthly notification scheduled successfully!")
+                DispatchQueue.main.async {
+                    allReminders.append(newReminder)
+                    notifyViewModel.saveToFiles(allReminders)
+                    closeAndResetAddReminderMenu()
                 }
             }
         }
@@ -242,11 +304,19 @@ extension NotificationsView {
                 DispatchQueue.main.async {
                     allReminders.append(newReminder)
                     notifyViewModel.saveToFiles(allReminders)
-                    addReminder = false
-                    reminder.name = ""
-                    reminder.subtitle = ""
+                    closeAndResetAddReminderMenu()
                 }
             }
+        }
+    }
+    
+    func closeAndResetAddReminderMenu() {
+        withAnimation(.bouncy) {
+            addReminder = false
+            reminder.name = ""
+            reminder.subtitle = ""
+            reminder.time = Date()
+            reminder.repeats = false
         }
     }
 }

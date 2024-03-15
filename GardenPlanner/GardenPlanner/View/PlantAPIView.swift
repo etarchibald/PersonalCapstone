@@ -12,7 +12,9 @@ struct PlantAPIView: View {
                 HStack {
                     Image(systemName: "magnifyingglass")
                     TextField("search", text: $searchText, onEditingChanged: { isEditing in
-                        self.showCancelButton = true
+                        withAnimation(.easeIn) {
+                            self.showCancelButton = true
+                        }
                     }, onCommit: {
                         fetchPlants()
                     })
@@ -58,7 +60,9 @@ struct PlantAPIView: View {
                     NavigationLink {
                         PlantDetailView(plantid: plant.id)
                     } label: {
-                        PlantCellView(plant: plant)
+                        withAnimation(.smooth) {
+                            PlantCellView(plant: plant)
+                        }
                     }
                 }
                 .padding()

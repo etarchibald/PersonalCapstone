@@ -34,7 +34,9 @@ struct NotifyCellView: View {
                             Text(reminder.subtitle)
                         }
                         
-                        Text(reminder.time.formatted(date: .abbreviated, time: .shortened))
+                        if !reminder.repeats {
+                            Text(reminder.time.formatted(date: .abbreviated, time: .shortened))
+                        }
                     }
                     .padding()
                 }
@@ -55,6 +57,17 @@ struct NotifyCellView: View {
                         .frame(width: 80, height: 50, alignment: .center)
                     }
                     
+                    if reminder.time <= Date() && reminder.repeats == false {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                .fill(.red)
+                            
+                            Text("Expired")
+                                .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                            
+                        }
+                        .frame(width: 80, height: 50, alignment: .center)
+                    }
                     
                     Button {
                         showDeleteAlert = true
@@ -79,10 +92,22 @@ struct NotifyCellView: View {
                             UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [reminder.id.uuidString])
                             notifyViewModel.saveToFiles(allReminders)
                             print(allReminders, "on button press")
+                            
+                            UNUserNotificationCenter.current().getPendingNotificationRequests { (requests) in
+                                for request in requests {
+                                    if let timeIntervalTrigger = request.trigger as? UNTimeIntervalNotificationTrigger {
+                                        print(Date(timeIntervalSinceNow: timeIntervalTrigger.timeInterval))
+                                    }
+                                    
+                                    if request.trigger is UNCalendarNotificationTrigger {
+                                        print(request)
+                                    }
+                                }
+                            }
                         }
                     }
                 }
-                .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 10))
+                .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 10))
                 
             }
             
