@@ -42,12 +42,13 @@ struct GardenPlantCellView: View {
                 
                 Text(name)
                     .font(.title)
-                    .foregroundStyle(.white)
+                    .fontWeight(.light)
+                    .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                     .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
             }
         }
         .frame(width: 170, height: 280)
-        .shadow(radius: 10)
+        .shadow(radius: 5)
     }
 }
 

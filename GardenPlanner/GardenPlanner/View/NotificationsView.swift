@@ -217,9 +217,11 @@ extension NotificationsView {
             } else {
                 print("Weekly notification scheduled successfully!")
                 DispatchQueue.main.async {
-                    allReminders.append(newReminder)
-                    notifyViewModel.saveToFiles(allReminders)
-                    closeAndResetAddReminderMenu()
+                    withAnimation(.smooth) {
+                        allReminders.append(newReminder)
+                        notifyViewModel.saveToFiles(allReminders)
+                        closeAndResetAddReminderMenu()
+                    }
                 }
             }
         }
@@ -246,9 +248,11 @@ extension NotificationsView {
             } else {
                 print("Monthly notification scheduled successfully!")
                 DispatchQueue.main.async {
-                    allReminders.append(newReminder)
-                    notifyViewModel.saveToFiles(allReminders)
-                    closeAndResetAddReminderMenu()
+                    withAnimation(.smooth) {
+                        allReminders.append(newReminder)
+                        notifyViewModel.saveToFiles(allReminders)
+                        closeAndResetAddReminderMenu()
+                    }
                 }
             }
         }
@@ -275,9 +279,11 @@ extension NotificationsView {
             } else {
                 print("Monthly notification scheduled successfully!")
                 DispatchQueue.main.async {
-                    allReminders.append(newReminder)
-                    notifyViewModel.saveToFiles(allReminders)
-                    closeAndResetAddReminderMenu()
+                    withAnimation(.smooth) {
+                        allReminders.append(newReminder)
+                        notifyViewModel.saveToFiles(allReminders)
+                        closeAndResetAddReminderMenu()
+                    }
                 }
             }
         }
@@ -302,9 +308,11 @@ extension NotificationsView {
             } else {
                 print("Seccessfully scheduled")
                 DispatchQueue.main.async {
-                    allReminders.append(newReminder)
-                    notifyViewModel.saveToFiles(allReminders)
-                    closeAndResetAddReminderMenu()
+                    withAnimation(.smooth) {
+                        allReminders.append(newReminder)
+                        notifyViewModel.saveToFiles(allReminders)
+                        closeAndResetAddReminderMenu()
+                    }
                 }
             }
         }

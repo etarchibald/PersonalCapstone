@@ -28,7 +28,8 @@ struct EntryCellView: View {
                     HStack {
                         VStack {
                             Text(entry.title)
-                                .font(.title2)
+                                .font(.title)
+                                .fontWeight(.light)
                             if !entry.body.isEmpty {
                                 Text(entry.body)
                             }
@@ -36,7 +37,6 @@ struct EntryCellView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         
                         VStack {
-//                            Text("Date created:")
                             Text(entry.date.formatted(date: .abbreviated, time: .omitted))
                         }
                     }

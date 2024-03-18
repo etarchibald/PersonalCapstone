@@ -48,6 +48,7 @@ struct GardenPlantDetailView: View {
                 VStack {
                     Text(plant.name)
                         .font(.largeTitle)
+                        .fontWeight(.light)
                         .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                 }
                 .padding()
@@ -152,6 +153,7 @@ struct GardenPlantDetailView: View {
                                 .frame(maxWidth: .infinity, alignment: .trailing)
                         }
                     }
+                    .fontWeight(.light)
                     .padding(EdgeInsets(top: 20, leading: 10, bottom: 20, trailing: 10))
                     
                     if showingAddEntry {
@@ -165,7 +167,7 @@ struct GardenPlantDetailView: View {
                                 .padding()
                                 .background(Color(hex: GardenColors.whiteSmoke.rawValue))
                                 .clipShape(RoundedRectangle(cornerRadius: 20))
-                                .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+                                .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
                             
                             DatePicker("", selection: $entry.date, displayedComponents: [.date])
                                 .padding()
@@ -186,7 +188,9 @@ struct GardenPlantDetailView: View {
                                 showingAddEntry = false
                             }
                             let newEntry = Entry(id: UUID(), title: entry.title, body: entry.body, date: entry.date)
-                            plant.entrys.append(newEntry)
+                            withAnimation(.easeIn) {
+                                plant.entrys.append(newEntry)
+                            }
                             entry.title = ""
                             entry.body = ""
                         } label: {
@@ -230,6 +234,7 @@ struct GardenPlantDetailView: View {
                         }
                         .padding()
                     }
+                    .fontWeight(.light)
                     
                     if showingNotes {
                         TextEditor(text: $plant.notes)

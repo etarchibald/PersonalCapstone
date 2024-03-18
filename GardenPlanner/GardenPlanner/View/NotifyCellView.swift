@@ -29,6 +29,7 @@ struct NotifyCellView: View {
                     
                     VStack {
                         Text(reminder.name)
+                            .font(.title2)
                         
                         if !reminder.subtitle.isEmpty {
                             Text(reminder.subtitle)
@@ -86,11 +87,13 @@ struct NotifyCellView: View {
                     .alert("Delete this Reminder?", isPresented: $showDeleteAlert) {
                         Button("Cancel", role: .cancel) { }
                         Button("Delete", role: .destructive) {
-                            allReminders = allReminders.filter { remind in
-                                remind.id.uuidString == reminder.id.uuidString ? false : true
+                            withAnimation(.smooth) {
+                                allReminders = allReminders.filter { remind in
+                                    remind.id.uuidString == reminder.id.uuidString ? false : true
+                                }
+                                UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [reminder.id.uuidString])
+                                notifyViewModel.saveToFiles(allReminders)
                             }
-                            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [reminder.id.uuidString])
-                            notifyViewModel.saveToFiles(allReminders)
                             print(allReminders, "on button press")
                             
                             UNUserNotificationCenter.current().getPendingNotificationRequests { (requests) in

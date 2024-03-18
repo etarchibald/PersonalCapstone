@@ -23,7 +23,9 @@ struct PlantAPIView: View {
                     Button(action: {
                         self.searchText = ""
                     }) {
-                        Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
+                        withAnimation {
+                            Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
+                        }
                     }
                 }
                 .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
@@ -36,7 +38,9 @@ struct PlantAPIView: View {
                     Button("Cancel") {
                         UIApplication.shared.endEditing(true)
                         self.searchText = ""
-                        self.showCancelButton = false
+                        withAnimation(.bouncy) {
+                            self.showCancelButton = false
+                        }
                     }
                     .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0))
                     .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))

@@ -21,21 +21,6 @@ struct PlantDetailView: View {
     var body: some View {
         let plant = plantViewModel.plantDetail
         
-        Button {
-            let newPlant = YourPlant(id: plant.id, imageURL: plant.imageURL ?? "image", name: plant.commonName ?? "", growthMonths: plant.mainSpecies.growth.growthMonths ?? [], bloomMonths: plant.mainSpecies.growth.bloomMonths ?? [], fruitMonths: plant.mainSpecies.growth.growthMonths ?? [], light: plant.mainSpecies.growth.light ?? 5, growthHabit: plant.mainSpecies.specifications.growthHabit ?? "", growthRate: plant.mainSpecies.specifications.growthRate ?? "", entrys: [], notes: "")
-            
-            modelContext.insert(newPlant)
-            withAnimation(.linear) {
-                plantAdded = true
-            }
-        } label: {
-            Text(plantAdded ? "In your garden" : "Add to garden")
-            Image(systemName: plantAdded ? "leaf.fill" : "leaf")
-                .font(.system(size: 40))
-        }
-        .foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))
-        .frame(width: 380, alignment: .trailing)
-        
         ScrollView {
             AsyncImage(url: URL(string: plant.imageURL ?? "image")) { phase in
                 switch phase {
@@ -63,6 +48,7 @@ struct PlantDetailView: View {
                 VStack {
                     Text(plant.commonName ?? "")
                         .font(.largeTitle)
+                        .fontWeight(.semibold)
                     
                     Text(plant.scientificName ?? "scienicy plant name")
                         .font(.title2)
@@ -122,6 +108,7 @@ struct PlantDetailView: View {
             VStack {
                 Text("Growth Info:")
                     .font(.largeTitle)
+                    .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
                 
@@ -205,58 +192,39 @@ struct PlantDetailView: View {
             }
             
             if let flowerImages = plant.mainSpecies.plantImages.flowerImages {
-                Text("Flowers:")
-                    .font(.title)
-                    .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
-                    .background(Color(hex: GardenColors.plantGreen.rawValue))
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .padding()
-                PlantPictureScrollView(pictures: flowerImages)
-                    .frame(height: 230, alignment: .center)
+                PicturesSectionView(title: "Flowers:", pictures: flowerImages)
             }
             if let fruitImages = plant.mainSpecies.plantImages.fruitImages {
-                Text("Fruit:")
-                    .font(.title)
-                    .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
-                    .background(Color(hex: GardenColors.plantGreen.rawValue))
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .padding()
-                PlantPictureScrollView(pictures: fruitImages)
-                    .frame(height: 230, alignment: .center)
+                PicturesSectionView(title: "Fruit:", pictures: fruitImages)
                 
             }
             if let habitImages = plant.mainSpecies.plantImages.habitImages {
-                Text("Habitat:")
-                    .font(.title)
-                    .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
-                    .background(Color(hex: GardenColors.plantGreen.rawValue))
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .padding()
-                PlantPictureScrollView(pictures: habitImages)
-                    .frame(height: 230, alignment: .center)
+                PicturesSectionView(title: "Habitat:", pictures: habitImages)
             }
             if let otherImages = plant.mainSpecies.plantImages.otherImages {
-                Text("Other:")
-                    .font(.title)
-                    .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
-                    .background(Color(hex: GardenColors.plantGreen.rawValue))
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .padding()
-                PlantPictureScrollView(pictures: otherImages)
-                    .frame(height: 230, alignment: .center)
+                PicturesSectionView(title: "Other:", pictures: otherImages)
             }
         }
         .onAppear(perform: {
             fetchPlantDetails()
         })
+        .toolbar {
+            Button {
+                let newPlant = YourPlant(id: plant.id, imageURL: plant.imageURL ?? "image", name: plant.commonName ?? "", growthMonths: plant.mainSpecies.growth.growthMonths ?? [], bloomMonths: plant.mainSpecies.growth.bloomMonths ?? [], fruitMonths: plant.mainSpecies.growth.growthMonths ?? [], light: plant.mainSpecies.growth.light ?? 5, growthHabit: plant.mainSpecies.specifications.growthHabit ?? "", growthRate: plant.mainSpecies.specifications.growthRate ?? "", entrys: [], notes: "")
+                
+                modelContext.insert(newPlant)
+                withAnimation(.smooth) {
+                    plantAdded = true
+                }
+            } label: {
+                Text(plantAdded ? "In your garden" : "Add to garden")
+                Image(systemName: plantAdded ? "leaf.fill" : "leaf")
+                    .font(.system(size: 30))
+            }
+            .foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            .contentTransition(.symbolEffect(.replace))
+        }
     }
     
     func fetchPlantDetails() {

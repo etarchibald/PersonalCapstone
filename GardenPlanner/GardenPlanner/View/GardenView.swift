@@ -57,6 +57,7 @@ struct GardenView: View {
                             .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                             .clipShape(Circle())
                     }
+                    .shadow(radius: 5)
                     
                     NavigationLink {
                         PlantAPIView()
@@ -68,6 +69,7 @@ struct GardenView: View {
                             .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                             .clipShape(Circle())
                     }
+                    .shadow(radius: 5)
                     
                     NavigationLink {
                         

@@ -44,8 +44,12 @@ struct PlantCellView: View {
                 }
                 
                 VStack {
-                    Text(plant.commonName ?? "")
-                        .font(.title)
+                    plant.commonName.map {
+                        Text($0)
+                            .font(.title)
+                            .fontWeight(.semibold)
+                    }
+                    
                     Text(plant.family)
                         .font(.title2)
                 }
