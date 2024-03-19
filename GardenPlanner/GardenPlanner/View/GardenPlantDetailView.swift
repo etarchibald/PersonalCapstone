@@ -188,7 +188,7 @@ struct GardenPlantDetailView: View {
                                 showingAddEntry = false
                             }
                             let newEntry = Entry(id: UUID(), title: entry.title, body: entry.body, date: entry.date)
-                            withAnimation(.easeIn) {
+                            withAnimation(.bouncy) {
                                 plant.entrys.append(newEntry)
                             }
                             entry.title = ""
@@ -260,6 +260,8 @@ struct GardenPlantDetailView: View {
                 .alert("Are you sure you want to delete \(plant.name)?", isPresented: $showingDeleteAlert) {
                     Button("Delete", role: .destructive) {
                         dismiss()
+                        //it throws bugs in swiftData if entrys is not an empty arrray
+                        plant.entrys = []
                         modelContext.delete(plant)
                     }
                     Button("Cancel", role: .cancel) { }

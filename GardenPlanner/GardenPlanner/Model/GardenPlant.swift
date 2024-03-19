@@ -41,7 +41,7 @@ class YourPlant: Hashable {
 
 @Model
 class Entry {
-    @Attribute(.unique) var id: UUID
+    var id: UUID
     var title: String
     var body: String
     var date: Date

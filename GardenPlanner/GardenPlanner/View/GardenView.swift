@@ -10,7 +10,6 @@ import SwiftData
 
 
 struct GardenView: View {
-    @StateObject var plantViewModel = PlantsViewModel()
     
     @Query var myGarden: [YourPlant]
     

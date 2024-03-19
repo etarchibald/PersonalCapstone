@@ -16,6 +16,13 @@ struct Notify: Codable, Hashable {
     var time: Date
     var repeats: Bool
     var howOften: RepeatingNotifications
+    var ownerPlant: OwnerPlant
+}
+
+struct OwnerPlant: Codable, Hashable {
+    var id: Int
+    var name: String
+    var addedEntry: Bool
 }
 
 enum RepeatingNotifications: String, Equatable, CaseIterable, Codable {

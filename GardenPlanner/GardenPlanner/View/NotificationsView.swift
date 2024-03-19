@@ -13,9 +13,11 @@ struct NotificationsView: View {
     
     @StateObject var notifyViewModel = NotifyViewModel()
     
+    @Query var gardenPlants: [YourPlant]
+    
     @State var allReminders = [Notify]()
     
-    @State var reminder = Notify(id: UUID(), name: "", subtitle: "", time: Calendar.current.date(byAdding: .hour, value: 1, to: Date()) ?? Date(), repeats: false, howOften: RepeatingNotifications.week)
+    @State var reminder = Notify(id: UUID(), name: "", subtitle: "", time: Calendar.current.date(byAdding: .hour, value: 1, to: Date()) ?? Date(), repeats: false, howOften: RepeatingNotifications.week, ownerPlant: OwnerPlant(id: 0, name: "", addedEntry: false))
     
     @State var showMessage = false
     
@@ -46,6 +48,25 @@ struct NotificationsView: View {
                             .background(Color(hex: GardenColors.whiteSmoke.rawValue))
                             .clipShape(RoundedRectangle(cornerRadius: 20 ))
                             .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
+                        
+                        if !gardenPlants.isEmpty {
+                            HStack {
+                                Text("Which Plant:")
+                                
+                                Picker("", selection: $reminder.ownerPlant) {
+                                    Text("None")
+                                    ForEach(gardenPlants, id: \.self) { plant in
+                                        Text(plant.name)
+                                            .tag(OwnerPlant(id: plant.id, name: plant.name, addedEntry: false))
+                                    }
+                                }
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                            }
+                            .padding()
+                            .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                            .padding(EdgeInsets(top: 8, leading: 10, bottom: 0, trailing: 10))
+                        }
                         
                         HStack {
                             Toggle("Repeat", isOn: $reminder.repeats)
@@ -139,7 +160,7 @@ struct NotificationsView: View {
                     }
                 }
                 .frame(width: 380, height: 300, alignment: .center)
-                .padding(EdgeInsets(top: 20, leading: 0, bottom: 30, trailing: 0))
+                .padding(EdgeInsets(top: 60, leading: 0, bottom: 80, trailing: 0))
             }
             
             if allReminders.isEmpty && !addReminder {
@@ -153,7 +174,7 @@ struct NotificationsView: View {
             } else {
                 ScrollView {
                     VStack {
-                        ForEach(allReminders, id: \.self) { remind in
+                        ForEach($allReminders, id: \.self) { remind in
                             NotifyCellView(allReminders: $allReminders, reminder: remind)
                                 .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
                         }
@@ -185,6 +206,16 @@ struct NotificationsView: View {
                         .foregroundStyle(Color(hex: GardenColors.skyBlue.rawValue))
                 }
             }
+            
+//            ToolbarItem(placement: .topBarLeading) {
+//                Button {
+//                    let center = UNUserNotificationCenter.current()
+//                    center.removeAllPendingNotificationRequests()
+//                    print("Clear")
+//                } label: {
+//                    Text("Clear all Reminders")
+//                }
+//            }
         }
     }
 }
@@ -198,7 +229,7 @@ extension NotificationsView {
     
     func scheduleWeeklyNotification(date: Date) {
         
-        let newReminder = Notify(id: UUID(), name: reminder.name, subtitle: reminder.subtitle, time: reminder.time, repeats: reminder.repeats, howOften: reminder.howOften)
+        let newReminder = Notify(id: UUID(), name: reminder.name, subtitle: reminder.subtitle, time: reminder.time, repeats: reminder.repeats, howOften: reminder.howOften, ownerPlant: reminder.ownerPlant)
         
         let content = UNMutableNotificationContent()
         content.title = newReminder.name
@@ -229,7 +260,7 @@ extension NotificationsView {
     
     func scheduleMonthlyNotification(date: Date) {
         
-        let newReminder = Notify(id: UUID(), name: reminder.name, subtitle: reminder.subtitle, time: reminder.time, repeats: reminder.repeats, howOften: reminder.howOften)
+        let newReminder = Notify(id: UUID(), name: reminder.name, subtitle: reminder.subtitle, time: reminder.time, repeats: reminder.repeats, howOften: reminder.howOften, ownerPlant: reminder.ownerPlant)
         
         let content = UNMutableNotificationContent()
         content.title = newReminder.name
@@ -259,7 +290,7 @@ extension NotificationsView {
     }
     
     func scheduleYearlyNotification(date: Date) {
-        let newReminder = Notify(id: UUID(), name: reminder.name, subtitle: reminder.subtitle, time: reminder.time, repeats: reminder.repeats, howOften: reminder.howOften)
+        let newReminder = Notify(id: UUID(), name: reminder.name, subtitle: reminder.subtitle, time: reminder.time, repeats: reminder.repeats, howOften: reminder.howOften, ownerPlant: reminder.ownerPlant)
         
         let content = UNMutableNotificationContent()
         content.title = newReminder.name
@@ -291,7 +322,7 @@ extension NotificationsView {
     
     func scheduleSingleNotification(time: Date) {
         
-        let newReminder = Notify(id: UUID(), name: reminder.name, subtitle: reminder.subtitle, time: reminder.time, repeats: reminder.repeats, howOften: reminder.howOften)
+        let newReminder = Notify(id: UUID(), name: reminder.name, subtitle: reminder.subtitle, time: reminder.time, repeats: reminder.repeats, howOften: reminder.howOften, ownerPlant: reminder.ownerPlant)
         
         let content = UNMutableNotificationContent()
         content.title = newReminder.name
@@ -323,8 +354,9 @@ extension NotificationsView {
             addReminder = false
             reminder.name = ""
             reminder.subtitle = ""
-            reminder.time = Date()
+            reminder.time = Calendar.current.date(byAdding: .hour, value: 1, to: Date()) ?? Date()
             reminder.repeats = false
+            reminder.ownerPlant = OwnerPlant(id: 0, name: "", addedEntry: false)
         }
     }
 }
