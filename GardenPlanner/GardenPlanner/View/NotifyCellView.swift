@@ -26,11 +26,13 @@ struct NotifyCellView: View {
             
             VStack {
                 
-                Text(reminder.ownerPlant.name)
-                    .font(.title)
-                    .fontWeight(.light)
-                    .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                    .padding()
+                if reminder.ownerPlant.name != "" {
+                    Text(reminder.ownerPlant.name)
+                        .font(.title)
+                        .fontWeight(.light)
+                        .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                        .padding(.top, 20)
+                }
                 
                 ZStack {
                     RoundedRectangle(cornerRadius: 25.0, style: .continuous)
@@ -50,7 +52,7 @@ struct NotifyCellView: View {
                     }
                     .padding()
                 }
-                .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                .padding(EdgeInsets(top: 10, leading: 20, bottom: 0, trailing: 20))
                 
                 
                 HStack {
@@ -79,7 +81,7 @@ struct NotifyCellView: View {
                         .frame(width: 80, height: 50, alignment: .center)
                     }
                     
-                    if !reminder.repeats {
+                    if !reminder.repeats && reminder.ownerPlant.name != "" {
                         Button {
                             for eachPlant in gardenPlants {
                                 if eachPlant.id == reminder.ownerPlant.id {
