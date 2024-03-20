@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 // Help keep track of notifications and help the user keep track of them
-struct Notify: Codable, Hashable {
+struct Notify: Codable, Hashable, Comparable {
     var id: UUID
     var name: String
     var subtitle: String
@@ -17,6 +17,10 @@ struct Notify: Codable, Hashable {
     var repeats: Bool
     var howOften: RepeatingNotifications
     var ownerPlant: OwnerPlant
+    
+    static func < (lhs: Notify, rhs: Notify) -> Bool {
+        lhs.time < rhs.time
+    }
 }
 
 struct OwnerPlant: Codable, Hashable {

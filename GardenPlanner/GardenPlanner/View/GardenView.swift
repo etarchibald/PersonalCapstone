@@ -11,11 +11,17 @@ import SwiftData
 
 struct GardenView: View {
     
-    @Query var myGarden: [YourPlant]
+    @Query var myGardenPlants: [YourPlant]
+    @State private var draggedItem: YourPlant?
+    
+    @State private var showingSearchBar = false
+    @State private var searchText = ""
+    
+    @State private var myGarden = [YourPlant]()
     
     var body: some View {
         NavigationStack() {
-            VStack {
+            ZStack {
                 VStack {
                     ScrollView {
                         if myGarden.isEmpty {
@@ -34,7 +40,7 @@ struct GardenView: View {
                                     NavigationLink {
                                         GardenPlantDetailView(plant: gardenPlant)
                                     } label: {
-                                        GardenPlantCellView(imageURl: gardenPlant.imageURL,name: gardenPlant.name)
+                                        GardenPlantCellView(imageURl: gardenPlant.imageURL, name: gardenPlant.name)
                                     }
                                 }
                                 
@@ -43,9 +49,76 @@ struct GardenView: View {
                     }
                 }
                 
-                Spacer()
-                
                 HStack {
+                    if !myGarden.isEmpty {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                .fill(Color(hex: GardenColors.skyBlue.rawValue))
+                                .frame(width: showingSearchBar ? 380 : 50, height: 50)
+                            
+                            HStack {
+                                if showingSearchBar {
+                                    HStack {
+                                        HStack {
+                                            Image(systemName: "magnifyingglass")
+                                            TextField("search", text: $searchText, onEditingChanged: { isEditing in
+                                                
+                                            }, onCommit: {
+                                                filterMyGarden(filterString: searchText)
+                                            })
+                                            .foregroundColor(.primary)
+                                            
+                                            Button(action: {
+                                                self.searchText = ""
+                                            }) {
+                                                withAnimation {
+                                                    Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
+                                                }
+                                            }
+                                        }
+                                        .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
+                                        .foregroundStyle(.secondary)
+                                        .background(Color(.secondarySystemBackground))
+                                        .clipShape(.rect(cornerRadius: 10))
+                                    }
+                                    .padding()
+                                }
+                                
+                                Button {
+                                    withAnimation(.bouncy) {
+                                        showingSearchBar.toggle()
+                                    }
+                                } label: {
+                                    if showingSearchBar {
+                                        
+                                        Button("Cancel") {
+                                            UIApplication.shared.endEditing(true)
+                                            self.searchText = ""
+                                            withAnimation(.bouncy) {
+                                                self.showingSearchBar = false
+                                                myGarden = myGardenPlants
+                                            }
+                                        }
+                                        .padding(.trailing)
+                                        .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                        
+                                    } else {
+                                        Image(systemName: "magnifyingglass")
+                                            .frame(maxWidth: 50, maxHeight: 50)
+                                            .font(.title2)
+                                            .background(Color(hex: GardenColors.skyBlue.rawValue))
+                                            .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                            .clipShape(Circle())
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                .padding()
+                
+                HStack(alignment: .bottom) {
                     NavigationLink {
                         NotificationsView()
                     } label: {
@@ -62,25 +135,25 @@ struct GardenView: View {
                         PlantAPIView()
                     } label: {
                         Image(systemName: "plus")
-                            .frame(maxWidth: 70, maxHeight: 70)
+                            .frame(width: 70, height: 70)
                             .font(.largeTitle)
                             .background(Color(hex: GardenColors.plantGreen.rawValue))
                             .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                             .clipShape(Circle())
                     }
                     .shadow(radius: 5)
-                    
-                    NavigationLink {
-                        
-                    } label: {
-                        Image(systemName: "")
-                            .frame(maxWidth: 50, maxHeight: 50)
-                            .background()
-                            .foregroundStyle(Color.clear)
-                            .clipShape(Circle())
-                    }
                 }
+                .frame(maxHeight: .infinity, alignment: .bottom)
+                .offset(x: -30)
             }
+        }
+        .onAppear(perform: {
+            myGarden = myGardenPlants
+        })
+    }
+    
+    func filterMyGarden(filterString: String) {
+        myGarden = myGarden.filter { $0.name.lowercased().contains(filterString.lowercased())
         }
     }
 }

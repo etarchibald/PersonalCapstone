@@ -15,7 +15,7 @@ struct NotificationsView: View {
     
     @Query var gardenPlants: [YourPlant]
     
-    @State var allReminders = [Notify]()
+    @State var allReminders = [Notify]().sorted()
     
     @State var reminder = Notify(id: UUID(), name: "", subtitle: "", time: Calendar.current.date(byAdding: .hour, value: 1, to: Date()) ?? Date(), repeats: false, howOften: RepeatingNotifications.week, ownerPlant: OwnerPlant(id: 0, name: "", addedEntry: false))
     
@@ -249,9 +249,7 @@ extension NotificationsView {
                 print("Weekly notification scheduled successfully!")
                 DispatchQueue.main.async {
                     withAnimation(.smooth) {
-                        allReminders.append(newReminder)
-                        notifyViewModel.saveToFiles(allReminders)
-                        closeAndResetAddReminderMenu()
+                        appendAndSaveReminders(newReminder: newReminder)
                     }
                 }
             }
@@ -280,9 +278,7 @@ extension NotificationsView {
                 print("Monthly notification scheduled successfully!")
                 DispatchQueue.main.async {
                     withAnimation(.smooth) {
-                        allReminders.append(newReminder)
-                        notifyViewModel.saveToFiles(allReminders)
-                        closeAndResetAddReminderMenu()
+                        appendAndSaveReminders(newReminder: newReminder)
                     }
                 }
             }
@@ -311,9 +307,7 @@ extension NotificationsView {
                 print("Monthly notification scheduled successfully!")
                 DispatchQueue.main.async {
                     withAnimation(.smooth) {
-                        allReminders.append(newReminder)
-                        notifyViewModel.saveToFiles(allReminders)
-                        closeAndResetAddReminderMenu()
+                        appendAndSaveReminders(newReminder: newReminder)
                     }
                 }
             }
@@ -340,14 +334,21 @@ extension NotificationsView {
                 print("Seccessfully scheduled")
                 DispatchQueue.main.async {
                     withAnimation(.smooth) {
-                        allReminders.append(newReminder)
-                        notifyViewModel.saveToFiles(allReminders)
-                        closeAndResetAddReminderMenu()
+                        appendAndSaveReminders(newReminder: newReminder)
                     }
                 }
             }
         }
     }
+    
+    
+    func appendAndSaveReminders(newReminder: Notify) {
+        allReminders.append(newReminder)
+        allReminders.sort()
+        notifyViewModel.saveToFiles(allReminders)
+        closeAndResetAddReminderMenu()
+    }
+    
     
     func closeAndResetAddReminderMenu() {
         withAnimation(.bouncy) {
