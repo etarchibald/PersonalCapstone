@@ -11,14 +11,17 @@ struct PlantAPIView: View {
             HStack {
                 HStack {
                     Image(systemName: "magnifyingglass")
-                    TextField("search", text: $searchText, onEditingChanged: { isEditing in
-                        withAnimation(.easeIn) {
-                            self.showCancelButton = true
+                    
+                    TextField("search", text: $searchText)
+                        .onChange(of: searchText) {
+                            withAnimation(.easeIn) {
+                                self.showCancelButton = true
+                            }
                         }
-                    }, onCommit: {
-                        fetchPlants()
-                    })
-                    .foregroundColor(.primary)
+                        .onSubmit {
+                            fetchPlants()
+                        }
+                        .foregroundStyle(.primary)
                     
                     Button(action: {
                         self.searchText = ""
@@ -40,6 +43,7 @@ struct PlantAPIView: View {
                         self.searchText = ""
                         withAnimation(.bouncy) {
                             self.showCancelButton = false
+                            plantsViewModel.plants = []
                         }
                     }
                     .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0))

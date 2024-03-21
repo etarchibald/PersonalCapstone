@@ -18,7 +18,7 @@ struct EntryCellView: View {
     var body: some View {
         ScrollView {
             
-            ForEach(entrys, id: \.self) { entry in
+            ForEach(entrys.sorted(), id: \.self) { entry in
                 
                 ZStack {
                     RoundedRectangle(cornerRadius: 20, style: .continuous)

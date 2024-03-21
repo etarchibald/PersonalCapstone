@@ -40,7 +40,7 @@ class YourPlant: Hashable {
 }
 
 @Model
-class Entry {
+class Entry: Comparable {
     var id: UUID
     var title: String
     var body: String
@@ -51,5 +51,9 @@ class Entry {
         self.title = title
         self.body = body
         self.date = date
+    }
+    
+    static func < (lhs: Entry, rhs: Entry) -> Bool {
+        lhs.date > rhs.date
     }
 }

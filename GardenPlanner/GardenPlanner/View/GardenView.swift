@@ -8,15 +8,14 @@
 import SwiftUI
 import SwiftData
 
-
 struct GardenView: View {
-    
     @Query var myGardenPlants: [YourPlant]
-    @State private var draggedItem: YourPlant?
     
     @State private var showingSearchBar = false
     @State private var searchText = ""
+    @State private var showingXButton = false
     
+    //Arry to store plants and to filter array according to searchText String
     @State private var myGarden = [YourPlant]()
     
     var body: some View {
@@ -50,66 +49,76 @@ struct GardenView: View {
                 }
                 
                 HStack {
-                    if !myGarden.isEmpty {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                                .fill(Color(hex: GardenColors.skyBlue.rawValue))
-                                .frame(width: showingSearchBar ? 380 : 50, height: 50)
-                            
-                            HStack {
-                                if showingSearchBar {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            .fill(Color(hex: GardenColors.skyBlue.rawValue))
+                            .frame(width: showingSearchBar ? 380 : 50, height: 50)
+                        
+                        HStack {
+                            if showingSearchBar {
+                                HStack {
                                     HStack {
-                                        HStack {
-                                            Image(systemName: "magnifyingglass")
-                                            TextField("search", text: $searchText, onEditingChanged: { isEditing in
-                                                
-                                            }, onCommit: {
-                                                filterMyGarden(filterString: searchText)
-                                            })
+                                        Image(systemName: "magnifyingglass")
+                                        TextField("search", text: $searchText)
+                                            .onChange(of: searchText) {
+                                                withAnimation(.easeIn) {
+                                                    self.showingXButton = true
+                                                }
+                                            }
+                                            .onSubmit {
+                                                withAnimation(.smooth) {
+                                                    filterMyGarden(filterString: searchText)
+                                                }
+                                            }
                                             .foregroundColor(.primary)
-                                            
+                                        
+                                        if showingXButton {
                                             Button(action: {
-                                                self.searchText = ""
+                                                withAnimation(.smooth) {
+                                                    self.searchText = ""
+                                                }
                                             }) {
                                                 withAnimation {
                                                     Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
                                                 }
                                             }
                                         }
-                                        .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
-                                        .foregroundStyle(.secondary)
-                                        .background(Color(.secondarySystemBackground))
-                                        .clipShape(.rect(cornerRadius: 10))
+                                        
                                     }
-                                    .padding()
+                                    .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
+                                    .foregroundStyle(.secondary)
+                                    .background(Color(.secondarySystemBackground))
+                                    .clipShape(.rect(cornerRadius: 10))
                                 }
-                                
-                                Button {
-                                    withAnimation(.bouncy) {
-                                        showingSearchBar.toggle()
-                                    }
-                                } label: {
-                                    if showingSearchBar {
-                                        
-                                        Button("Cancel") {
-                                            UIApplication.shared.endEditing(true)
-                                            self.searchText = ""
-                                            withAnimation(.bouncy) {
-                                                self.showingSearchBar = false
-                                                myGarden = myGardenPlants
-                                            }
+                                .padding()
+                            }
+                            
+                            Button {
+                                withAnimation(.bouncy) {
+                                    showingSearchBar.toggle()
+                                }
+                            } label: {
+                                if showingSearchBar {
+                                    
+                                    Button("Cancel") {
+                                        UIApplication.shared.endEditing(true)
+                                        self.searchText = ""
+                                        withAnimation(.smooth) {
+                                            self.showingSearchBar = false
+                                            self.showingXButton = false
+                                            myGarden = myGardenPlants
                                         }
-                                        .padding(.trailing)
-                                        .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                        
-                                    } else {
-                                        Image(systemName: "magnifyingglass")
-                                            .frame(maxWidth: 50, maxHeight: 50)
-                                            .font(.title2)
-                                            .background(Color(hex: GardenColors.skyBlue.rawValue))
-                                            .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                            .clipShape(Circle())
                                     }
+                                    .padding(.trailing)
+                                    .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                    
+                                } else {
+                                    Image(systemName: "magnifyingglass")
+                                        .frame(maxWidth: 50, maxHeight: 50)
+                                        .font(.title2)
+                                        .background(Color(hex: GardenColors.skyBlue.rawValue))
+                                        .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                        .clipShape(Circle())
                                 }
                             }
                         }
@@ -146,10 +155,10 @@ struct GardenView: View {
                 .frame(maxHeight: .infinity, alignment: .bottom)
                 .offset(x: -30)
             }
+            .onAppear(perform: {
+                myGarden = myGardenPlants
+            })
         }
-        .onAppear(perform: {
-            myGarden = myGardenPlants
-        })
     }
     
     func filterMyGarden(filterString: String) {
