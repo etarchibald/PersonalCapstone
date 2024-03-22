@@ -294,16 +294,16 @@ struct GardenPlantDetailView: View {
     }
 }
     
-    #Preview {
-        do {
-            let config = ModelConfiguration(isStoredInMemoryOnly: true)
-            let container = try ModelContainer(for: YourPlant.self, configurations: config)
-            
-            let gardenPlant = YourPlant(id: 0, imageURL: "https://bs.plantnet.org/image/o/4f45fd2d82661996f5d5a5613b39bdd1287a56bc", name: "Alpine Strawberry", growthMonths: ["apr", "may", "jun"], bloomMonths: [], fruitMonths: ["apr", "may", "jun"], light: 5, growthHabit: "Forb/herb", growthRate: "Rapid", entrys: [], notes: "")
-            
-            return GardenPlantDetailView(plant: gardenPlant)
-                .modelContainer(container)
-        } catch {
-            return Text("Failed to create container: \(error.localizedDescription)")
-        }
+#Preview {
+    do {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: YourPlant.self, configurations: config)
+        
+        let gardenPlant = YourPlant(id: 0, imageURL: "https://bs.plantnet.org/image/o/4f45fd2d82661996f5d5a5613b39bdd1287a56bc", name: "Alpine Strawberry", growthMonths: ["apr", "may", "jun"], bloomMonths: [], fruitMonths: ["apr", "may", "jun"], light: 5, growthHabit: "Forb/herb", growthRate: "Rapid", entrys: [], notes: "")
+        
+        return GardenPlantDetailView(plant: gardenPlant)
+            .modelContainer(container)
+    } catch {
+        return Text("Failed to create container: \(error.localizedDescription)")
     }
+}

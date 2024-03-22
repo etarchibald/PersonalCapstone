@@ -17,8 +17,8 @@ extension VortexSystem {
             shape: .box(width: 1.2, height: 0),
             birthRate: 200,
             lifespan: 5,
-            speed: 0.4,
-            speedVariation: 0.7,
+            speed: 0.2,
+            speedVariation: 0.5,
             angle: .degrees(180),
             colors: .random(
                 Color(red: 0.7, green: 0.7, blue: 1, opacity: 0.6),
