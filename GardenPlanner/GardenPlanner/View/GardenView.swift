@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import Vortex
 
 struct GardenView: View {
     @Query var myGardenPlants: [YourPlant]
@@ -21,6 +22,15 @@ struct GardenView: View {
     var body: some View {
         NavigationStack() {
             ZStack {
+                
+                VortexView(.customSlowRain) {
+                    Circle()
+                        .fill(.white)
+                        .frame(width: 32)
+                        .tag("circle")
+                }
+                .ignoresSafeArea(.all)
+                
                 VStack {
                     ScrollView {
                         if myGarden.isEmpty {
@@ -139,7 +149,6 @@ struct GardenView: View {
                             .clipShape(Circle())
                     }
                     .shadow(radius: 5)
-                    
                     NavigationLink {
                         PlantAPIView()
                     } label: {
@@ -157,6 +166,8 @@ struct GardenView: View {
             }
             .onAppear(perform: {
                 myGarden = myGardenPlants
+                searchText = ""
+                showingSearchBar = false
             })
         }
     }

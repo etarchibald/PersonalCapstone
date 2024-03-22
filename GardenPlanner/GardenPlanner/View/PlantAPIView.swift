@@ -1,4 +1,5 @@
 import SwiftUI
+import Vortex
 
 struct PlantAPIView: View {
     @StateObject var plantsViewModel = PlantsViewModel()
@@ -6,7 +7,6 @@ struct PlantAPIView: View {
     @State private var showCancelButton = false
     
     var body: some View {
-        
         VStack {
             HStack {
                 HStack {
@@ -15,7 +15,9 @@ struct PlantAPIView: View {
                     TextField("search", text: $searchText)
                         .onChange(of: searchText) {
                             withAnimation(.easeIn) {
-                                self.showCancelButton = true
+                                if !searchText.isEmpty {
+                                    self.showCancelButton = true
+                                }
                             }
                         }
                         .onSubmit {
@@ -40,10 +42,10 @@ struct PlantAPIView: View {
                 if showCancelButton {
                     Button("Cancel") {
                         UIApplication.shared.endEditing(true)
-                        self.searchText = ""
                         withAnimation(.bouncy) {
-                            self.showCancelButton = false
+                            self.searchText = ""
                             plantsViewModel.plants = []
+                            self.showCancelButton = false
                         }
                     }
                     .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0))
@@ -54,28 +56,43 @@ struct PlantAPIView: View {
         .padding(.horizontal)
         .background(Color(hex: GardenColors.plantGreen.rawValue))
         
-        if plantsViewModel.plants.isEmpty {
-            Spacer()
-            VStack {
-                Text("Search for \(Text("Plants").foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))) to add to your garden")
+        Spacer()
+        
+        ZStack {
+            
+            VortexView(.customSlowRain) {
+                Circle()
+                    .fill(.white)
+                    .frame(width: 32)
+                    .tag("circle")
             }
-            .font(.title)
-            .multilineTextAlignment(.center)
-            .padding()
-        } else {
-            ScrollView {
-                ForEach(plantsViewModel.plants) { plant in
-                    NavigationLink {
-                        PlantDetailView(plantid: plant.id)
-                    } label: {
-                        withAnimation(.smooth) {
-                            PlantCellView(plant: plant)
+            .ignoresSafeArea(.all)
+            
+            if plantsViewModel.plants.isEmpty {
+                Spacer()
+                VStack {
+                    Text("Search for \(Text("Plants").foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))) to add to your garden")
+                }
+                .font(.title)
+                .multilineTextAlignment(.center)
+                .padding()
+            } else {
+                ScrollView {
+                    ForEach(plantsViewModel.plants) { plant in
+                        NavigationLink {
+                            PlantDetailView(plantid: plant.id)
+                        } label: {
+                            withAnimation(.smooth) {
+                                PlantCellView(plant: plant)
+                            }
                         }
                     }
+                    .padding()
                 }
-                .padding()
             }
+            Spacer()
         }
+        
         Spacer()
     }
     
