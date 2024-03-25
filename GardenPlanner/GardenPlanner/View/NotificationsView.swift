@@ -79,14 +79,14 @@ struct NotificationsView: View {
                             }
                             
                             HStack {
-                                Toggle("Repeat", isOn: $reminder.repeats)
+                                Toggle("Repeat:", isOn: $reminder.repeats.animation(.bouncy))
                                     .padding()
                                     .background(Color(hex: GardenColors.whiteSmoke.rawValue))
                                     .clipShape(RoundedRectangle(cornerRadius: 20 ))
                                     .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
                                 
                                 if reminder.repeats {
-                                    Picker("How often:", selection: $reminder.howOften) {
+                                    Picker("Every:", selection: $reminder.howOften) {
                                         ForEach(RepeatingNotifications.allCases, id: \.self) { value in
                                             Text(value.rawValue)
                                                 .tag(value)
@@ -226,7 +226,6 @@ struct NotificationsView: View {
 }
 
 extension NotificationsView {
-    
     
     func scheduleWeeklyNotification(date: Date) {
         

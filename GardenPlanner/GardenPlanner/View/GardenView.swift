@@ -15,8 +15,7 @@ struct GardenView: View {
     @State private var showingSearchBar = false
     @State private var searchText = ""
     @State private var showingXButton = false
-    
-    //Arry to store plants and to filter array according to searchText String
+     
     @State private var myGarden = [YourPlant]()
     
     var body: some View {
@@ -61,7 +60,7 @@ struct GardenView: View {
                 HStack {
                     ZStack {
                         RoundedRectangle(cornerRadius: 20, style: .continuous)
-                            .fill(Color(hex: GardenColors.skyBlue.rawValue))
+                            .fill(Color(hex: GardenColors.plantGreen.rawValue))
                             .frame(width: showingSearchBar ? 380 : 50, height: 50)
                         
                         HStack {
@@ -126,7 +125,7 @@ struct GardenView: View {
                                     Image(systemName: "magnifyingglass")
                                         .frame(maxWidth: 50, maxHeight: 50)
                                         .font(.title2)
-                                        .background(Color(hex: GardenColors.skyBlue.rawValue))
+                                        .background(Color(hex: GardenColors.plantGreen.rawValue))
                                         .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                                         .clipShape(Circle())
                                 }
@@ -173,7 +172,9 @@ struct GardenView: View {
     }
     
     func filterMyGarden(filterString: String) {
-        myGarden = myGarden.filter { $0.name.lowercased().contains(filterString.lowercased())
+        myGarden = myGardenPlants
+        myGarden = myGarden.filter {
+            $0.name.lowercased().contains(filterString.lowercased())
         }
     }
 }

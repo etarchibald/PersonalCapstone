@@ -205,6 +205,7 @@ struct GardenPlantDetailView: View {
                                     }
                                     entry.title = ""
                                     entry.body = ""
+                                    entry.date = Date()
                                 } label: {
                                     Text("Add Entry")
                                         .padding()
@@ -216,7 +217,7 @@ struct GardenPlantDetailView: View {
                             }
                         }
                     }
-                    .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 20))
+                    .padding(EdgeInsets(top: 20, leading: 15, bottom: 0, trailing: 15))
                     
                     VStack {
                         EntryCellView(entrys: $plant.entrys)
@@ -258,8 +259,33 @@ struct GardenPlantDetailView: View {
                             }
                         }
                     }
-                    .padding()
+                    .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 15))
                     
+//                    ZStack {
+//                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+//                            .fill(Color(hex: GardenColors.plantGreen.rawValue))
+//                        
+//                        VStack {
+//                            HStack {
+//                                Text("Pictures:")
+//                                    .font(.title)
+//                                    .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+//                                    .padding()
+//                                
+//                                Button {
+//                                    
+//                                } label: {
+//                                    Image(systemName: showingNotes ? "minus" : "plus")
+//                                        .font(.largeTitle)
+//                                        .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+//                                        .frame(maxWidth: .infinity, alignment: .trailing)
+//                                }
+//                                .padding()
+//                            }
+//                            .fontWeight(.light)
+//                        }
+//                    }
+//                    .padding()
                 }
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {

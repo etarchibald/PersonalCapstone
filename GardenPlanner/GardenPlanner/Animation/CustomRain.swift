@@ -15,7 +15,7 @@ extension VortexSystem {
             tags: ["circle"],
             position: [0.5, 0],
             shape: .box(width: 1.2, height: 0),
-            birthRate: 200,
+            birthRate: 150,
             lifespan: 5,
             speed: 0.2,
             speedVariation: 0.5,
@@ -27,7 +27,7 @@ extension VortexSystem {
             ),
             size: 0.09,
             sizeVariation: 0.05,
-            stretchFactor: 12
+            stretchFactor: 20
         )
     }()
 }
