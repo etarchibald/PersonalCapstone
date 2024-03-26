@@ -25,8 +25,8 @@ struct EntryCellView: View {
                         .fill(Color(hex: GardenColors.plantGreen.rawValue))
                         .shadow(radius: 10)
                     
-                    HStack {
-                        VStack(alignment: .leading) {
+                    VStack {
+                        VStack(alignment: .center) {
                             Text(entry.title)
                                 .font(.title)
                                 .fontWeight(.light)
@@ -34,11 +34,14 @@ struct EntryCellView: View {
                                 Text(entry.body)
                             }
                         }
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .multilineTextAlignment(.center)
+                        .padding(.bottom, 5)
                         
                         VStack {
                             Text(entry.date.formatted(date: .abbreviated, time: .omitted))
                         }
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        
                     }
                     .padding(EdgeInsets(top: 30, leading: 30, bottom: 30, trailing: 30))
                     .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
