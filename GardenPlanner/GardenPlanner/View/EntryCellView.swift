@@ -26,7 +26,7 @@ struct EntryCellView: View {
                         .shadow(radius: 10)
                     
                     HStack {
-                        VStack {
+                        VStack(alignment: .leading) {
                             Text(entry.title)
                                 .font(.title)
                                 .fontWeight(.light)
@@ -44,13 +44,18 @@ struct EntryCellView: View {
                     .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                 }
                 .contextMenu {
+                    
                     Button("Delete", role: .destructive) {
-                        entrys = entrys.filter { entryToDelete in
-                            entryToDelete.id.uuidString == entry.id.uuidString ? false : true
+                        withAnimation(.smooth) {
+                            entrys = entrys.filter { entryToDelete in
+                                entryToDelete.id.uuidString == entry.id.uuidString ? false : true
+                            }
+                            
+                            modelContext.delete(entry)
                         }
                         
-                        modelContext.delete(entry)
                     }
+                    
                 }
             }
             .padding()
@@ -63,7 +68,7 @@ struct EntryCellView: View {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: YourPlant.self, configurations: config)
     
-    let entry = [Entry(id: UUID(), title: "Planted", body: "North Garden", date: Date()), Entry(id: UUID(), title: "Something else", body: "", date: Date())]
+    let entry = [Entry(id: UUID(), title: "Planted somthing longer with this and stuff", body: "North Garden yeah its somewhere up there yeah", date: Date()), Entry(id: UUID(), title: "Something else", body: "", date: Date())]
     
     return EntryCellView(entrys: .constant(entry))
         .modelContainer(container)

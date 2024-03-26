@@ -8,7 +8,6 @@
 import Foundation
 import SwiftData
 
-
 //Data model for persisting the plants in your garden
 @Model
 class YourPlant: Hashable {
@@ -23,8 +22,9 @@ class YourPlant: Hashable {
     var growthRate: String
     @Relationship(deleteRule: .cascade) var entrys: [Entry]
     var notes: String
+    @Relationship(deleteRule: .cascade) var photos: [UserPhotos]
     
-    init(id: Int, imageURL: String, name: String, growthMonths: [String], bloomMonths: [String], fruitMonths: [String], light: Int, growthHabit: String, growthRate: String, entrys: [Entry], notes: String) {
+    init(id: Int, imageURL: String, name: String, growthMonths: [String], bloomMonths: [String], fruitMonths: [String], light: Int, growthHabit: String, growthRate: String, entrys: [Entry], notes: String, photos: [UserPhotos]) {
         self.id = id
         self.imageURL = imageURL
         self.name = name
@@ -36,6 +36,7 @@ class YourPlant: Hashable {
         self.growthRate = growthRate
         self.entrys = entrys
         self.notes = notes
+        self.photos = photos
     }
 }
 
@@ -55,5 +56,22 @@ class Entry: Comparable {
     
     static func < (lhs: Entry, rhs: Entry) -> Bool {
         lhs.date > rhs.date
+    }
+}
+
+@Model
+class UserPhotos: Comparable {
+    var id: UUID
+    var dateAdded: Date
+    @Attribute(.externalStorage) var photo: Data
+    
+    init(id: UUID, dateAdded: Date, photo: Data) {
+        self.id = id
+        self.dateAdded = dateAdded
+        self.photo = photo
+    }
+    
+    static func < (lhs: UserPhotos, rhs: UserPhotos) -> Bool {
+        lhs.dateAdded > rhs.dateAdded
     }
 }

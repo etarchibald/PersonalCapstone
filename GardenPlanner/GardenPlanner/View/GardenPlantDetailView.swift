@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import Vortex
+import PhotosUI
 
 struct GardenPlantDetailView: View {
     @Environment(\.dismiss) var dismiss
@@ -20,6 +21,9 @@ struct GardenPlantDetailView: View {
     @Bindable var plant: YourPlant
     
     @State private var entry = Entry(id: UUID(), title: "", body: "", date: Date())
+    
+    @State private var pickerItems = [PhotosPickerItem]()
+    @State private var selectedImages = [Data]()
     
     var body: some View {
         ZStack {
@@ -261,31 +265,47 @@ struct GardenPlantDetailView: View {
                     }
                     .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 15))
                     
-//                    ZStack {
-//                        RoundedRectangle(cornerRadius: 20, style: .continuous)
-//                            .fill(Color(hex: GardenColors.plantGreen.rawValue))
-//                        
-//                        VStack {
-//                            HStack {
-//                                Text("Pictures:")
-//                                    .font(.title)
-//                                    .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-//                                    .padding()
-//                                
-//                                Button {
-//                                    
-//                                } label: {
-//                                    Image(systemName: showingNotes ? "minus" : "plus")
-//                                        .font(.largeTitle)
-//                                        .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-//                                        .frame(maxWidth: .infinity, alignment: .trailing)
-//                                }
-//                                .padding()
-//                            }
-//                            .fontWeight(.light)
-//                        }
-//                    }
-//                    .padding()
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            .fill(Color(hex: GardenColors.plantGreen.rawValue))
+                        
+                        VStack {
+                            HStack {
+                                Text("Pictures:")
+                                    .font(.title)
+                                    .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                    .padding()
+                                
+                                PhotosPicker(selection: $pickerItems, matching: .images) {
+                                    Image(systemName: "plus")
+                                        .font(.largeTitle)
+                                        .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                }
+                                .padding()
+                            }
+                            .fontWeight(.light)
+                        }
+                    }
+                    .padding()
+                    .onChange(of: pickerItems) {
+                        Task {
+                            selectedImages.removeAll()
+
+                            for item in pickerItems {
+                                if let loadedImage = try await item.loadTransferable(type: Data.self) {
+                                    withAnimation(.bouncy) {
+                                        selectedImages.append(loadedImage)
+                                        plant.photos.append(UserPhotos(id: UUID(), dateAdded: Date(), photo: loadedImage))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    GardenPlantDetailPicturesView(userPhotos: $plant.photos)
+                        .frame(height: 230, alignment: .center)
+                    
                 }
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
@@ -300,6 +320,7 @@ struct GardenPlantDetailView: View {
                                 dismiss()
                                 //it throws bugs in swiftData if entrys is not an empty arrray
                                 plant.entrys = []
+                                plant.photos = []
                                 modelContext.delete(plant)
                             }
                             Button("Cancel", role: .cancel) { }
@@ -325,7 +346,7 @@ struct GardenPlantDetailView: View {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: YourPlant.self, configurations: config)
         
-        let gardenPlant = YourPlant(id: 0, imageURL: "https://bs.plantnet.org/image/o/4f45fd2d82661996f5d5a5613b39bdd1287a56bc", name: "Alpine Strawberry", growthMonths: ["apr", "may", "jun"], bloomMonths: [], fruitMonths: ["apr", "may", "jun"], light: 5, growthHabit: "Forb/herb", growthRate: "Rapid", entrys: [], notes: "")
+        let gardenPlant = YourPlant(id: 0, imageURL: "https://bs.plantnet.org/image/o/4f45fd2d82661996f5d5a5613b39bdd1287a56bc", name: "Alpine Strawberry", growthMonths: ["apr", "may", "jun"], bloomMonths: [], fruitMonths: ["apr", "may", "jun"], light: 5, growthHabit: "Forb/herb", growthRate: "Rapid", entrys: [], notes: "", photos: [])
         
         return GardenPlantDetailView(plant: gardenPlant)
             .modelContainer(container)
