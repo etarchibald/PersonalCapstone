@@ -71,7 +71,7 @@ struct EntryCellView: View {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: YourPlant.self, configurations: config)
     
-    let entry = [Entry(id: UUID(), title: "Planted somthing longer with this and stuff", body: "North Garden yeah its somewhere up there yeah", date: Date()), Entry(id: UUID(), title: "Something else", body: "", date: Date())]
+    let entry = [Entry(id: UUID(), title: "Planted somthing longer with this and stuff", body: "North Garden yeah its somewhere up there yeah", date: Date()), Entry(id: UUID(), title: "Something else", body: "", date: Date()), Entry(id: UUID(), title: "Water", body: "Yeah", date: Date())]
     
     return EntryCellView(entrys: .constant(entry))
         .modelContainer(container)

@@ -17,6 +17,7 @@ struct GardenPlantDetailView: View {
     @State private var showingDeleteAlert = false
     @State private var showingAddEntry = false
     @State private var showingNotes = false
+    @State private var showCamera = false
     
     @Bindable var plant: YourPlant
     
@@ -276,13 +277,27 @@ struct GardenPlantDetailView: View {
                                     .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                                     .padding()
                                 
-                                PhotosPicker(selection: $pickerItems, matching: .images) {
-                                    Image(systemName: "plus")
-                                        .font(.largeTitle)
-                                        .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                HStack(spacing: 0) {
+                                    Button {
+                                        showCamera.toggle()
+                                    } label: {
+                                        Image(systemName: "camera")
+                                            .font(.largeTitle)
+                                            .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                    }
+                                    .padding(.horizontal)
+                                    .fullScreenCover(isPresented: $showCamera) {
+                                        AccessCameraView(selectedImages: $selectedImages)
+                                    }
+                                    
+                                    PhotosPicker(selection: $pickerItems, matching: .images) {
+                                        Image(systemName: "photo.stack")
+                                            .font(.largeTitle)
+                                            .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                    }
+                                    .padding()
                                 }
-                                .padding()
+                                .frame(maxWidth: .infinity, alignment: .trailing)
                             }
                             .fontWeight(.light)
                         }

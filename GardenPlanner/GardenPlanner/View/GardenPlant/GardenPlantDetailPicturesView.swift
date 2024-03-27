@@ -48,13 +48,13 @@ struct GardenPlantDetailPicturesView: View {
 extension GardenPlantDetailPicturesView {
     func createImage(_ value: Data) -> Image {
     #if canImport(UIKit)
-        let songArtwork: UIImage = UIImage(data: value) ?? UIImage()
-        return Image(uiImage: songArtwork)
+        let plantImage: UIImage = UIImage(data: value) ?? UIImage()
+        return Image(uiImage: plantImage)
     #elseif canImport(AppKit)
-        let songArtwork: NSImage = NSImage(data: value) ?? NSImage()
-        return Image(nsImage: songArtwork)
+        let plantImage: NSImage = NSImage(data: value) ?? NSImage()
+        return Image(nsImage: plantImage)
     #else
-        return Image(systemImage: "some_default")
+        return Image(systemImage: "photo")
     #endif
     }
 }

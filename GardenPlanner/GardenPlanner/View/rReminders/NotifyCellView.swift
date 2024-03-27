@@ -26,21 +26,13 @@ struct NotifyCellView: View {
             
             VStack {
                 
-                if reminder.ownerPlant.name != "" {
-                    Text(reminder.ownerPlant.name)
-                        .font(.title)
-                        .fontWeight(.light)
-                        .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                        .padding(.top, 20)
-                }
-                
                 ZStack {
                     RoundedRectangle(cornerRadius: 25.0, style: .continuous)
                         .fill(Color(hex: GardenColors.whiteSmoke.rawValue))
                     
                     VStack {
                         Text(reminder.name)
-                            .font(.title2)
+                            .font(.title)
                         
                         if !reminder.subtitle.isEmpty {
                             Text(reminder.subtitle)
@@ -56,6 +48,14 @@ struct NotifyCellView: View {
                 
                 
                 HStack {
+                    
+                    if reminder.ownerPlant.name != "" {
+                        Text(reminder.ownerPlant.name)
+                            .font(.largeTitle)
+                            .fontWeight(.light)
+                            .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                            .padding(.horizontal, 10)
+                    }
                     
                     if reminder.repeats {
                         ZStack {
