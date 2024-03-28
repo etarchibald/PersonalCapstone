@@ -98,56 +98,15 @@ struct GardenPlantDetailView: View {
                     
                     
                     if !plant.growthMonths.isEmpty {
-                        VStack {
-                            Text("Growth Months:")
-                                .font(.title)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
-                            
-                            HStack {
-                                ForEach(plant.growthMonths , id: \.self) { string in
-                                    Text(string.capitalized)
-                                        .font(.system(size: 22))
-                                }
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
-                        }
+                        GardenPlantDetailMonthsView(title: "Growth Months:", months: plant.growthMonths)
                     }
                     
                     if !plant.bloomMonths.isEmpty {
-                        
-                        Text("Bloom Months:")
-                            .font(.title)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
-                        
-                        HStack {
-                            ForEach(plant.bloomMonths , id: \.self) { string in
-                                Text(string.capitalized)
-                                    .font(.system(size: 22))
-                                
-                            }
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
+                        GardenPlantDetailMonthsView(title: "Bloom Months:", months: plant.bloomMonths)
                     }
                     
                     if !plant.fruitMonths.isEmpty {
-                        
-                        Text("Bloom Months:")
-                            .font(.title)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
-                        
-                        HStack {
-                            ForEach(plant.fruitMonths , id: \.self) { string in
-                                Text(string.capitalized)
-                                    .font(.system(size: 22))
-                            }
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
+                        GardenPlantDetailMonthsView(title: "Fruit Months:", months: plant.fruitMonths)
                     }
                     
                     ZStack {

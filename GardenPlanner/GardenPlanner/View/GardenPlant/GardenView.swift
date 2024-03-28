@@ -148,6 +148,7 @@ struct GardenView: View {
                             .clipShape(Circle())
                     }
                     .shadow(radius: 5)
+                    
                     NavigationLink {
                         PlantAPIView()
                     } label: {
@@ -159,6 +160,7 @@ struct GardenView: View {
                             .clipShape(Circle())
                     }
                     .shadow(radius: 5)
+                    
                 }
                 .frame(maxHeight: .infinity, alignment: .bottom)
                 .offset(x: -30)

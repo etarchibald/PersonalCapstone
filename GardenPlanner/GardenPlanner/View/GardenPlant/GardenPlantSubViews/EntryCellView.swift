@@ -41,6 +41,7 @@ struct EntryCellView: View {
                             Text(entry.date.formatted(date: .abbreviated, time: .omitted))
                         }
                         .frame(maxWidth: .infinity, alignment: .center)
+                        .fontWeight(.light)
                         
                     }
                     .padding(EdgeInsets(top: 30, leading: 30, bottom: 30, trailing: 30))

@@ -49,12 +49,12 @@ struct PlantAPIView: View {
                         }
                     }
                     .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0))
-                    .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                    .foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))
                 }
             }
         }
         .padding(.horizontal)
-        .background(Color(hex: GardenColors.plantGreen.rawValue))
+//        .background(Color(hex: GardenColors.plantGreen.rawValue))
         
         Spacer()
         
