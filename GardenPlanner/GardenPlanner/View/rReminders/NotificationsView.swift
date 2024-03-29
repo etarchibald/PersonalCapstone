@@ -217,7 +217,7 @@ extension NotificationsView {
         let newReminder = Notify(id: UUID(), name: reminder.name, subtitle: reminder.subtitle, time: reminder.time, repeats: reminder.repeats, howOften: reminder.howOften, ownerPlant: reminder.ownerPlant)
         
         let content = UNMutableNotificationContent()
-        content.title = newReminder.name
+        content.title = "\(newReminder.ownerPlant.name): \(newReminder.name)"
         content.body = newReminder.subtitle
         content.sound = UNNotificationSound.default
         

@@ -54,7 +54,6 @@ struct PlantAPIView: View {
             }
         }
         .padding(.horizontal)
-//        .background(Color(hex: GardenColors.plantGreen.rawValue))
         
         Spacer()
         

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 class PlantsViewModel: ObservableObject {
     
@@ -22,7 +23,9 @@ class PlantsViewModel: ObservableObject {
         
         guard let downloadedPlants: PlantArray = await WebService().downloadData(fromURL: urlComponents.url!) else { return }
         DispatchQueue.main.async {
-            self.plants = downloadedPlants.arrayOfPlants
+            withAnimation(.smooth) {
+                self.plants = downloadedPlants.arrayOfPlants
+            }
         }
     }
     
@@ -32,7 +35,9 @@ class PlantsViewModel: ObservableObject {
         urlComponents.queryItems = [tokenQueryItem]
         guard let downlaedPlantDetails: AllPlantDetails = await WebService().downloadData(fromURL: urlComponents.url!) else { return }
         DispatchQueue.main.async {
-            self.plantDetail = downlaedPlantDetails.allPlantDetails
+            withAnimation(.smooth) {
+                self.plantDetail = downlaedPlantDetails.allPlantDetails
+            }
         }
     }
 }
