@@ -15,18 +15,17 @@ struct GardenPlantDetailMonthsView: View {
     var body: some View {
         VStack {
             Text(title)
-                .font(.title)
+                .font(.title3)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
             
             HStack {
                 ForEach(months, id: \.self) { string in
                     Text(string.capitalized)
-                        .font(.system(size: 22))
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
+            .padding(.leading, 10)
         }
     }
 }

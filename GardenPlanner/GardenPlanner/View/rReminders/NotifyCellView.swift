@@ -33,11 +33,12 @@ struct NotifyCellView: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 25.0, style: .continuous)
                         .fill(colorScheme == .light ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.richBlack.rawValue))
+                    
                     VStack {
                         VStack {
                             if reminder.ownerPlant.name != "" {
                                 Text(reminder.ownerPlant.name)
-                                    .font(.largeTitle)
+                                    .font(.title2)
                                     .fontWeight(.light)
                                     .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                                     .padding()
@@ -49,8 +50,8 @@ struct NotifyCellView: View {
                         
                         VStack {
                             Text(reminder.name)
-                                .font(.largeTitle)
-                                .padding(reminder.ownerPlant.name == "" ? .top : .bottom)
+                                .font(.title2)
+                                .padding(reminder.ownerPlant.name == "" ? .top : .bottom, 0)
                             
                             if !reminder.subtitle.isEmpty {
                                 Text(reminder.subtitle)
@@ -58,22 +59,21 @@ struct NotifyCellView: View {
                             
                             if !reminder.repeats {
                                 Text(reminder.time.formatted(date: .abbreviated, time: .shortened))
+                                
                             } else {
                                 HStack {
                                     Text("Repeating:")
                                     Text("\(reminder.howOften.rawValue) at \(reminder.time.formatted(date: .omitted, time: .shortened))")
                                 }
-                                .padding(.top, 5)
                             }
                         }
-                        .padding(.horizontal)
                         
                         HStack {
                             
                             if (reminder.time <= Date() && reminder.repeats == false) || reminder.ownerPlant.addedEntry {
                                 
                                 Text("Complete")
-                                    .padding()
+                                    .padding(10)
                                     .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                                     .background(Color(hex: GardenColors.plantGreen.rawValue))
                                     .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
@@ -96,14 +96,14 @@ struct NotifyCellView: View {
                                             .fill(reminder.ownerPlant.addedEntry ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.skyBlue.rawValue))
                                         
                                         HStack {
-                                            Image(systemName: reminder.ownerPlant.addedEntry ? "checkmark" : "plus")
-                                                .contentTransition(.symbolEffect(.replace))
+//                                            Image(systemName: reminder.ownerPlant.addedEntry ? "checkmark" : "plus")
+//                                                .contentTransition(.symbolEffect(.replace))
                                             
                                             Text(reminder.ownerPlant.addedEntry ? "Entry Added" : "Add Entry")
                                         }
                                         .foregroundStyle(reminder.ownerPlant.addedEntry ? Color(hex: GardenColors.skyBlue.rawValue) : Color(hex: GardenColors.whiteSmoke.rawValue))
                                     }
-                                    .frame(width: 100, height: 50)
+                                    .frame(width: 85, height: 40)
                                     .shadow(radius: 1)
                                 }
                                 .padding(.horizontal)
@@ -118,10 +118,9 @@ struct NotifyCellView: View {
                                     
                                     Image(systemName: "trash.fill")
                                         .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                        .font(.title2)
                                     
                                 }
-                                .frame(width: 50, height: 50)
+                                .frame(width: 40, height: 40)
                             }
                             .alert("Delete this Reminder?", isPresented: $showDeleteAlert) {
                                 Button("Cancel", role: .cancel) { }

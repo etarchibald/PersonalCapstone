@@ -59,24 +59,23 @@ struct NotificationsView: View {
                                 .clipShape(RoundedRectangle(cornerRadius: 20 ))
                                 .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
                             
-                            if !gardenPlants.isEmpty {
-                                HStack {
-                                    Text("Which Plant:")
-                                    
-                                    Picker("", selection: $reminder.ownerPlant) {
-                                        Text("None")
-                                        ForEach(gardenPlants, id: \.self) { plant in
-                                            Text(plant.name)
-                                                .tag(OwnerPlant(id: plant.id, name: plant.name, addedEntry: false))
-                                        }
+                            
+                            HStack {
+                                Text("Which Plant:")
+                                
+                                Picker("", selection: $reminder.ownerPlant) {
+                                    Text("None")
+                                    ForEach(gardenPlants, id: \.self) { plant in
+                                        Text(plant.name)
+                                            .tag(OwnerPlant(id: plant.id, name: plant.name, addedEntry: false))
                                     }
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
                                 }
-                                .padding()
-                                .background(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                .clipShape(RoundedRectangle(cornerRadius: 20))
-                                .padding(EdgeInsets(top: 8, leading: 10, bottom: 0, trailing: 10))
+                                .frame(maxWidth: .infinity, alignment: .trailing)
                             }
+                            .padding()
+                            .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                            .padding(EdgeInsets(top: 8, leading: 10, bottom: 0, trailing: 10))
                             
                             HStack {
                                 Toggle("Repeat:", isOn: $reminder.repeats.animation(.bouncy))

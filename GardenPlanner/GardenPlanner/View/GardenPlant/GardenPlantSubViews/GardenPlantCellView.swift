@@ -19,36 +19,40 @@ struct GardenPlantCellView: View {
                 .shadow(radius: 10)
             
             VStack {
-                AsyncImage(url: URL(string: imageURl)) { phase in
-                    switch phase {
-                    case .empty:
-                        ProgressView()
-                    case .success(let image):
-                        image.resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 120, height: 150)
-                            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous), style: FillStyle())
-                            .shadow(radius: 5)
-                    case .failure:
-                        Image(systemName: "leaf.fill")
-                            .foregroundStyle(.white)
-                            .font(.system(size: 60))
-                            .padding()
-                    @unknown default:
-                        EmptyView()
-                    }
-                }
-                .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
+                plantPhotoView(image: imageURl)
                 
                 Text(name)
                     .font(.title)
                     .fontWeight(.light)
                     .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                    .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+                    .padding(.horizontal, 10)
             }
         }
         .frame(width: 170, height: 280)
         .shadow(radius: 5)
+    }
+    
+    func plantPhotoView(image: String) -> some View {
+        AsyncImage(url: URL(string: image)) { phase in
+            switch phase {
+            case .empty:
+                ProgressView()
+            case .success(let image):
+                image.resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 120, height: 150)
+                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous), style: FillStyle())
+                    .shadow(radius: 5)
+            case .failure:
+                Image(systemName: "leaf.fill")
+                    .foregroundStyle(.white)
+                    .font(.system(size: 60))
+                    .padding()
+            @unknown default:
+                EmptyView()
+            }
+        }
+        .padding(.top, 10)
     }
 }
 

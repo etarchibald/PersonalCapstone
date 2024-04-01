@@ -39,25 +39,7 @@ struct GardenPlantDetailView: View {
             
             VStack {
                 ScrollView {
-                    AsyncImage(url: URL(string: plant.imageURL)) { phase in
-                        switch phase {
-                        case .empty:
-                            ProgressView()
-                        case .success(let image):
-                            image.resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(maxWidth: 380, maxHeight: 200)
-                                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous), style: FillStyle())
-                                .shadow(radius: 10)
-                        case .failure:
-                            Image(systemName: "tree.fill")
-                                .foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))
-                                .font(.system(size: 100))
-                                .frame(width: 200, height: 200, alignment: .center)
-                        @unknown default:
-                            EmptyView()
-                        }
-                    }
+                    plantPhotoView(image: plant.imageURL)
                     
                     ZStack {
                         RoundedRectangle(cornerRadius: 20, style: .continuous)
@@ -79,18 +61,18 @@ struct GardenPlantDetailView: View {
                             .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
                         
                         Text(plant.growthHabit)
-                            .font(.title2)
+                            .font(.title3)
                             .frame(alignment: .trailing)
                             .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 10))
                     }
                     
                     VStack {
                         Text("Light on 0 to 10 scale: \(plant.light )")
-                            .font(.title2)
+                            .font(.title3)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
                         
-                        ProgressView(value: Double(plant.light ), total: 10)
+                        ProgressView(value: Double(plant.light), total: 10)
                             .padding(.horizontal)
                             .tint(.yellow)
                     }
@@ -313,6 +295,28 @@ struct GardenPlantDetailView: View {
             }
         }
     }
+    
+    func plantPhotoView(image: String) -> some View {
+        AsyncImage(url: URL(string: image)) { phase in
+            switch phase {
+            case .empty:
+                ProgressView()
+            case .success(let image):
+                image.resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(maxWidth: 380, maxHeight: 200)
+                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous), style: FillStyle())
+                    .shadow(radius: 10)
+            case .failure:
+                Image(systemName: "tree.fill")
+                    .foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))
+                    .font(.system(size: 100))
+                    .frame(width: 200, height: 200, alignment: .center)
+            @unknown default:
+                EmptyView()
+            }
+        }
+    }
 }
     
 #Preview {
@@ -320,7 +324,7 @@ struct GardenPlantDetailView: View {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: YourPlant.self, configurations: config)
         
-        let gardenPlant = YourPlant(id: 0, imageURL: "https://bs.plantnet.org/image/o/4f45fd2d82661996f5d5a5613b39bdd1287a56bc", name: "Alpine Strawberry", growthMonths: ["apr", "may", "jun"], bloomMonths: [], fruitMonths: ["apr", "may", "jun"], light: 5, growthHabit: "Forb/herb", growthRate: "Rapid", entrys: [], notes: "", photos: [])
+        let gardenPlant = YourPlant(id: 0, imageURL: "https://bs.plantnet.org/image/o/4f45fd2d82661996f5d5a5613b39bdd1287a56bc", name: "Alpine StrawBerry", sowing: "Something", daysToHarvest: 60, rowSpacing: 35, spread: 30, growthMonths: [], bloomMonths: [], fruitMonths: [], light: 8, growthHabit: "Forb/herb", growthRate: "Rapid", entrys: [], notes: "", photos: [])
         
         return GardenPlantDetailView(plant: gardenPlant)
             .modelContainer(container)

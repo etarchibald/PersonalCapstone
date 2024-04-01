@@ -57,84 +57,86 @@ struct GardenView: View {
                     }
                 }
                 
-                HStack {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
-                            .fill(Color(hex: GardenColors.plantGreen.rawValue))
-                            .frame(width: showingSearchBar ? 380 : 50, height: 50)
-                        
-                        HStack {
-                            if showingSearchBar {
-                                HStack {
-                                    HStack {
-                                        Image(systemName: "magnifyingglass")
-                                        TextField("search", text: $searchText)
-                                            .onChange(of: searchText) {
-                                                withAnimation(.easeIn) {
-                                                    self.showingXButton = true
-                                                }
-                                            }
-                                            .onSubmit {
-                                                withAnimation(.smooth) {
-                                                    filterMyGarden(filterString: searchText)
-                                                }
-                                            }
-                                            .foregroundColor(.primary)
-                                        
-                                        if showingXButton {
-                                            Button(action: {
-                                                withAnimation(.smooth) {
-                                                    self.searchText = ""
-                                                }
-                                            }) {
-                                                withAnimation {
-                                                    Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
-                                                }
-                                            }
-                                        }
-                                        
-                                    }
-                                    .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
-                                    .foregroundStyle(.secondary)
-                                    .background(Color(.secondarySystemBackground))
-                                    .clipShape(.rect(cornerRadius: 10))
-                                }
-                                .padding()
-                            }
+                if !myGarden.isEmpty {
+                    HStack {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                .fill(Color(hex: GardenColors.plantGreen.rawValue))
+                                .frame(width: showingSearchBar ? 380 : 50, height: 50)
                             
-                            Button {
-                                withAnimation(.bouncy) {
-                                    showingSearchBar.toggle()
-                                }
-                            } label: {
+                            HStack {
                                 if showingSearchBar {
-                                    
-                                    Button("Cancel") {
-                                        UIApplication.shared.endEditing(true)
-                                        self.searchText = ""
-                                        withAnimation(.smooth) {
-                                            self.showingSearchBar = false
-                                            self.showingXButton = false
-                                            myGarden = myGardenPlants
+                                    HStack {
+                                        HStack {
+                                            Image(systemName: "magnifyingglass")
+                                            TextField("search", text: $searchText)
+                                                .onChange(of: searchText) {
+                                                    withAnimation(.easeIn) {
+                                                        self.showingXButton = true
+                                                    }
+                                                }
+                                                .onSubmit {
+                                                    withAnimation(.smooth) {
+                                                        filterMyGarden(filterString: searchText)
+                                                    }
+                                                }
+                                                .foregroundColor(.primary)
+                                            
+                                            if showingXButton {
+                                                Button(action: {
+                                                    withAnimation(.smooth) {
+                                                        self.searchText = ""
+                                                    }
+                                                }) {
+                                                    withAnimation {
+                                                        Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
+                                                    }
+                                                }
+                                            }
+                                            
                                         }
+                                        .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
+                                        .foregroundStyle(.secondary)
+                                        .background(Color(.secondarySystemBackground))
+                                        .clipShape(.rect(cornerRadius: 10))
                                     }
-                                    .padding(.trailing)
-                                    .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                    
-                                } else {
-                                    Image(systemName: "magnifyingglass")
-                                        .frame(maxWidth: 50, maxHeight: 50)
-                                        .font(.title2)
-                                        .background(Color(hex: GardenColors.plantGreen.rawValue))
+                                    .padding()
+                                }
+                                
+                                Button {
+                                    withAnimation(.bouncy) {
+                                        showingSearchBar.toggle()
+                                    }
+                                } label: {
+                                    if showingSearchBar {
+                                        
+                                        Button("Cancel") {
+                                            UIApplication.shared.endEditing(true)
+                                            self.searchText = ""
+                                            withAnimation(.smooth) {
+                                                self.showingSearchBar = false
+                                                self.showingXButton = false
+                                                myGarden = myGardenPlants
+                                            }
+                                        }
+                                        .padding(.trailing)
                                         .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                        .clipShape(Circle())
+                                        
+                                    } else {
+                                        Image(systemName: "magnifyingglass")
+                                            .frame(maxWidth: 50, maxHeight: 50)
+                                            .font(.title2)
+                                            .background(Color(hex: GardenColors.plantGreen.rawValue))
+                                            .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                            .clipShape(Circle())
+                                    }
                                 }
                             }
                         }
                     }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                    .padding()
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-                .padding()
                 
                 HStack(alignment: .bottom) {
                     NavigationLink {

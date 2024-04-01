@@ -15,49 +15,61 @@ struct PlantCellView: View {
         self.plant = plant
     }
     
+    private let cornerRadius: CGFloat = 20
+    private let imageWidth: CGFloat = 60
+    private let imageHeight: CGFloat = 85
+
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 50, style: .continuous)
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                 .fill(Color(hex: GardenColors.plantGreen.rawValue))
-                .frame(width: 380, height: 180)
                 .shadow(radius: 10)
             
-            HStack {
-                AsyncImage(url: URL(string: plant.imageURL ?? "image")) { phase in
-                    switch phase {
-                    case .empty:
-                        ProgressView()
-                    case .success(let image):
-                        image.resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(maxWidth: 130, maxHeight: 150)
-                            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous), style: FillStyle())
-                            .shadow(radius: 5)
-                    case .failure:
-                        Image(systemName: "carrot.fill")
-                            .foregroundStyle(.orange)
-                            .font(.system(size: 80))
-                            .frame(maxWidth: 120, maxHeight: 140)
-                    @unknown default:
-                        EmptyView()
-                    }
-                }
+            HStack(spacing: 16) {
+                plantImageView()
                 
-                VStack {
-                    plant.commonName.map {
-                        Text($0)
-                            .font(.title)
+                VStack(alignment: .leading) {
+                    if let commonName = plant.commonName {
+                        Text(commonName)
                             .fontWeight(.semibold)
                     }
                     
                     Text(plant.family)
-                        .font(.title2)
+                        .font(.subheadline)
                 }
                 .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 20))
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+                
+                Spacer()
+            }
+            .padding()
+        }
+    }
+    
+    func plantImageView() -> some View {
+        AsyncImage(url: URL(string: plant.imageURL ?? "image")) { phase in
+            switch phase {
+            case .empty:
+                ProgressView()
+                    .frame(width: imageWidth, height: imageHeight)
+            case .success(let image):
+                image.resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: imageWidth, height: imageHeight)
+                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous), style: FillStyle())
+                    .shadow(radius: 5)
+            case .failure:
+                Image(systemName: "carrot.fill")
+                    .foregroundStyle(.orange)
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: imageWidth, height: imageHeight)
+            @unknown default:
+                EmptyView()
             }
         }
     }
+    
 }
 
 #Preview {

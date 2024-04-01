@@ -25,26 +25,27 @@ struct EntryCellView: View {
                         .fill(Color(hex: GardenColors.plantGreen.rawValue))
                         .shadow(radius: 10)
                     
-                    VStack {
-                        VStack(alignment: .center) {
-                            Text(entry.title)
-                                .font(.title)
-                                .fontWeight(.light)
+                    VStack(alignment: .leading) {
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Text(entry.title)
+                                    .font(.title3)
+                                    .fontWeight(.light)
+                                
+                                Spacer()
+                                
+                                Text(entry.date.formatted(date: .abbreviated, time: .omitted))
+                                    .frame(maxHeight: .infinity, alignment: .topTrailing)
+                            }
                             if !entry.body.isEmpty {
                                 Text(entry.body)
+                                    .fontWeight(.light)
                             }
                         }
-                        .multilineTextAlignment(.center)
+                        .multilineTextAlignment(.leading)
                         .padding(.bottom, 5)
-                        
-                        VStack {
-                            Text(entry.date.formatted(date: .abbreviated, time: .omitted))
-                        }
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .fontWeight(.light)
-                        
                     }
-                    .padding(EdgeInsets(top: 30, leading: 30, bottom: 30, trailing: 30))
+                    .padding(30)
                     .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                 }
                 .contextMenu {
