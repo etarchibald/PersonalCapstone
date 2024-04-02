@@ -18,10 +18,13 @@ struct GardenPlantDetailView: View {
     @State private var showingAddEntry = false
     @State private var showingNotes = false
     @State private var showCamera = false
+    @State private var showReminders = false
+    @State private var showMessage = false
     
     @Bindable var plant: YourPlant
     
     @State private var entry = Entry(id: UUID(), title: "", body: "", date: Date())
+    @State private var reminder = Reminder(id: UUID(), name: "", subtitle: "", time: Calendar.current.date(byAdding: .hour, value: 1, to: Date()) ?? Date(), repeats: false, howOften: RepeatingNotifications.daily, ownerPlant: OwnerPlant(id: 0, name: "", addedEntry: false))
     
     @State private var pickerItems = [PhotosPickerItem]()
     @State private var selectedImages = [Data]()
@@ -170,6 +173,148 @@ struct GardenPlantDetailView: View {
                     }
                     .frame(height: plant.entrys.isEmpty ? 0 : 350)
                     
+                    
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            .fill(Color(hex: GardenColors.plantGreen.rawValue))
+                        
+                        VStack {
+                            HStack {
+                                Text("Reminders:")
+                                    .font(.largeTitle)
+                                    .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                
+                                Button {
+                                    withAnimation(.bouncy) {
+                                        showReminders.toggle()
+                                    }
+                                } label: {
+                                    Image(systemName: showReminders ? "minus" : "plus")
+                                        .font(.largeTitle)
+                                        .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                }
+                            }
+                            .fontWeight(.light)
+                            .padding(EdgeInsets(top: 20, leading: 10, bottom: 20, trailing: 10))
+                            
+                            
+                            
+                            if showReminders {
+                                TextField("Title", text: $reminder.name)
+                                    .padding()
+                                    .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                    .clipShape(RoundedRectangle(cornerRadius: 20 ))
+                                    .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+                                
+                                TextField("Message", text: $reminder.subtitle)
+                                    .padding()
+                                    .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                    .clipShape(RoundedRectangle(cornerRadius: 20 ))
+                                    .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
+                                
+                                DatePicker("When:", selection: $reminder.time)
+                                    .padding()
+                                    .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                    .clipShape(RoundedRectangle(cornerRadius: 20 ))
+                                    .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
+                                
+                                HStack {
+                                    Toggle("Repeat:", isOn: $reminder.repeats.animation(.bouncy))
+                                        .padding()
+                                        .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                        .clipShape(RoundedRectangle(cornerRadius: 20 ))
+                                        .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
+                                    
+                                    if reminder.repeats {
+                                        Picker("Every:", selection: $reminder.howOften) {
+                                            ForEach(RepeatingNotifications.allCases, id: \.self) { value in
+                                                Text(value.rawValue)
+                                                    .tag(value)
+                                            }
+                                        }
+                                        .frame(maxWidth: .infinity)
+                                        .multilineTextAlignment(.trailing)
+                                        .padding()
+                                        .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                                        .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
+                                    }
+                                }
+                                HStack {
+                                    if !showMessage {
+                                        Button {
+                                            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+                                                if success {
+                                                    showMessage = true
+                                                } else if error != nil {
+                                                    showMessage = false
+                                                }
+                                            }
+                                        } label: {
+                                            Text("Request Permission")
+                                                .padding()
+                                                .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                                .clipShape(RoundedRectangle(cornerRadius: 20 ))
+                                                .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
+                                        }
+                                        .alert("Your all set to recieve Reminders!", isPresented: $showMessage) {
+                                            Button("Thank you", role: .none) { }
+                                        }
+                                    }
+                                    
+                                    Button {
+                                        guard !reminder.name.isEmpty else { return }
+                                        
+                                        let newReminder = Reminder(id: reminder.id, name: reminder.name, subtitle: reminder.subtitle, time: reminder.time, repeats: reminder.repeats, howOften: reminder.howOften, ownerPlant: OwnerPlant(id: plant.id, name: plant.name, addedEntry: false))
+                                        
+                                        print("newReminder id: \(newReminder.id.uuidString)")
+                                        plant.reminders.append(newReminder)
+                                        
+                                        ReminderViewModel.shared.scheduleReminder(at: newReminder.time, reminder: newReminder)
+                                        
+                                        withAnimation(.bouncy) {
+                                            showReminders = false
+                                            reminder.name = ""
+                                            reminder.subtitle = ""
+                                            reminder.time = Calendar.current.date(byAdding: .hour, value: 1, to: Date()) ?? Date()
+                                            reminder.repeats = false
+                                        }
+                                        
+                                        //to see all pending Notifications for debug
+                                        UNUserNotificationCenter.current().getPendingNotificationRequests { (requests) in
+                                            for request in requests {
+                                                if let timeIntervalTrigger = request.trigger as? UNTimeIntervalNotificationTrigger {
+                                                    print(Date(timeIntervalSinceNow: timeIntervalTrigger.timeInterval))
+                                                }
+                                                
+                                                if let trigger = request.trigger as? UNCalendarNotificationTrigger {
+                                                    print(trigger.dateComponents)
+                                                }
+                                            }
+                                        }
+                                        
+                                    } label: {
+                                        Text("Add Reminder")
+                                            .padding()
+                                            .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                            .clipShape(RoundedRectangle(cornerRadius: 20 ))
+                                            .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
+                                    }
+                                }
+                                Spacer()
+                            }
+                        }
+                    }
+                    .padding(.horizontal)
+                    
+                    ScrollView {
+                        ForEach(plant.reminders, id: \.self) { reminder in
+                            ReminderCellView(allReminders: $plant.reminders, reminder: reminder)
+                                .padding(.horizontal)
+                        }
+                    }
+                
                     ZStack {
                         RoundedRectangle(cornerRadius: 20, style: .continuous)
                             .fill(Color(hex: GardenColors.plantGreen.rawValue))
@@ -260,7 +405,7 @@ struct GardenPlantDetailView: View {
                     }
                     
                     GardenPlantDetailPicturesView(userPhotos: $plant.photos)
-                        .frame(height: 230, alignment: .center)
+                        .frame(height: plant.photos.isEmpty ? 0 : 230, alignment: .center)
                     
                 }
                 .toolbar {
@@ -277,6 +422,12 @@ struct GardenPlantDetailView: View {
                                 //it throws bugs in swiftData if entrys is not an empty arrray
                                 plant.entrys = []
                                 plant.photos = []
+                                
+                                for reminder in plant.reminders {
+                                    UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [reminder.id.uuidString])
+                                }
+                                
+                                plant.reminders = []
                                 modelContext.delete(plant)
                             }
                             Button("Cancel", role: .cancel) { }
@@ -290,6 +441,27 @@ struct GardenPlantDetailView: View {
                             Text("Save")
                         }
                         .padding()
+                    }
+                }
+                .onAppear {
+                    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+                        if success {
+                            showMessage = true
+                        } else if error != nil {
+                            showMessage = false
+                        }
+                    }
+                    
+                    UNUserNotificationCenter.current().getPendingNotificationRequests { (requests) in
+                        for request in requests {
+                            if let timeIntervalTrigger = request.trigger as? UNTimeIntervalNotificationTrigger {
+                                print(Date(timeIntervalSinceNow: timeIntervalTrigger.timeInterval))
+                            }
+                            
+                            if request.trigger is UNCalendarNotificationTrigger {
+                                print(request)
+                            }
+                        }
                     }
                 }
             }
@@ -324,7 +496,7 @@ struct GardenPlantDetailView: View {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: YourPlant.self, configurations: config)
         
-        let gardenPlant = YourPlant(id: 0, imageURL: "https://bs.plantnet.org/image/o/4f45fd2d82661996f5d5a5613b39bdd1287a56bc", name: "Alpine StrawBerry", sowing: "Something", daysToHarvest: 60, rowSpacing: 35, spread: 30, growthMonths: [], bloomMonths: [], fruitMonths: [], light: 8, growthHabit: "Forb/herb", growthRate: "Rapid", entrys: [], notes: "", photos: [])
+        let gardenPlant = YourPlant(id: 0, imageURL: "https://bs.plantnet.org/image/o/4f45fd2d82661996f5d5a5613b39bdd1287a56bc", name: "Alpine StrawBerry", sowing: "Something", daysToHarvest: 60, rowSpacing: 35, spread: 30, growthMonths: [], bloomMonths: [], fruitMonths: [], light: 8, growthHabit: "Forb/herb", growthRate: "Rapid", entrys: [], notes: "", photos: [], reminders: [])
         
         return GardenPlantDetailView(plant: gardenPlant)
             .modelContainer(container)

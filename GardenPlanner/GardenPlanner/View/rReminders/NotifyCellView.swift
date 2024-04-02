@@ -11,14 +11,13 @@ import SwiftData
 struct NotifyCellView: View {
     @Environment(\.colorScheme) var colorScheme
     
-    @StateObject private var notifyViewModel = NotifyViewModel()
-    @Binding var allReminders: [Notify]
+    @Binding var allReminders: [Reminder]
     
     @State private var showDeleteAlert = false
     
     @Query var gardenPlants: [YourPlant]
     
-    @Binding var reminder: Notify
+    @Binding var reminder: Reminder
     
     var body: some View {
         
@@ -35,18 +34,18 @@ struct NotifyCellView: View {
                         .fill(colorScheme == .light ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.richBlack.rawValue))
                     
                     VStack {
-                        VStack {
-                            if reminder.ownerPlant.name != "" {
-                                Text(reminder.ownerPlant.name)
-                                    .font(.title2)
-                                    .fontWeight(.light)
-                                    .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                    .padding()
-                                    .background(Color(hex: GardenColors.skyBlue.rawValue))
-                                    .clipShape(UnevenRoundedRectangle(cornerRadii: .init(topLeading: 0, bottomLeading: 0, bottomTrailing: 20, topTrailing: 0)))
-                            }
-                        }
-                        .frame(maxWidth: .infinity, alignment: .topLeading)
+//                        VStack {
+//                            if reminder.ownerPlant.name != "" {
+//                                Text(reminder.ownerPlant.name)
+//                                    .font(.title2)
+//                                    .fontWeight(.light)
+//                                    .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+//                                    .padding()
+//                                    .background(Color(hex: GardenColors.skyBlue.rawValue))
+//                                    .clipShape(UnevenRoundedRectangle(cornerRadii: .init(topLeading: 0, bottomLeading: 0, bottomTrailing: 20, topTrailing: 0)))
+//                            }
+//                        }
+//                        .frame(maxWidth: .infinity, alignment: .topLeading)
                         
                         VStack {
                             Text(reminder.name)
@@ -89,16 +88,12 @@ struct NotifyCellView: View {
                                             }
                                         }
                                     }
-                                    notifyViewModel.saveToFiles(allReminders)
                                 } label: {
                                     ZStack {
                                         RoundedRectangle(cornerRadius: 10, style: .continuous)
                                             .fill(reminder.ownerPlant.addedEntry ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.skyBlue.rawValue))
                                         
                                         HStack {
-//                                            Image(systemName: reminder.ownerPlant.addedEntry ? "checkmark" : "plus")
-//                                                .contentTransition(.symbolEffect(.replace))
-                                            
                                             Text(reminder.ownerPlant.addedEntry ? "Entry Added" : "Add Entry")
                                         }
                                         .foregroundStyle(reminder.ownerPlant.addedEntry ? Color(hex: GardenColors.skyBlue.rawValue) : Color(hex: GardenColors.whiteSmoke.rawValue))
@@ -130,7 +125,6 @@ struct NotifyCellView: View {
                                         allReminders = allReminders.filter { remind in
                                             remind.id.uuidString == reminder.id.uuidString ? false : true
                                         }
-                                        notifyViewModel.saveToFiles(allReminders)
                                     }
                                     print(allReminders, "on button press")
                                     
@@ -141,7 +135,7 @@ struct NotifyCellView: View {
                                             }
                                             
                                             if request.trigger is UNCalendarNotificationTrigger {
-                                                print(request)
+                                                print("Request: \(request)")
                                             }
                                         }
                                     }
@@ -159,6 +153,6 @@ struct NotifyCellView: View {
     }
 }
 
-#Preview {
-    NotifyCellView(allReminders: .constant([]), reminder: .constant(Notify(id: UUID(), name: "Water something very long and bad", subtitle: "Cherry Tree to do with a thing with another thing to make this string longer", time: Date(), repeats: false, howOften: RepeatingNotifications.week, ownerPlant: OwnerPlant(id: 0, name: "Apple", addedEntry: false))))
-}
+//#Preview {
+//    NotifyCellView(allReminders: .constant([]), reminder: .constant(Reminder(id: UUID(), name: "Water something very long and bad", subtitle: "Cherry Tree to do with a thing with another thing to make this string longer", time: Date(), repeats: false, howOften: RepeatingNotifications.week, ownerPlant: OwnerPlant(id: 0, name: "Apple", addedEntry: false))))
+//}

@@ -11,16 +11,17 @@ import UserNotifications
 import Vortex
 
 struct NotificationsView: View {
+    @Environment(\.modelContext) var modelContext
     
-    @StateObject var notifyViewModel = NotifyViewModel()
+    @StateObject var plantsViewModel = PlantsViewModel()
     
     @Query var gardenPlants: [YourPlant]
     
-    @State var allReminders = [Notify]().sorted()
+    @State var allReminders = [Reminder]()
     
-    @State var reminder = Notify(id: UUID(), name: "", subtitle: "", time: Calendar.current.date(byAdding: .hour, value: 1, to: Date()) ?? Date(), repeats: false, howOften: RepeatingNotifications.daily, ownerPlant: OwnerPlant(id: 0, name: "", addedEntry: false))
+    @State var reminder = Reminder(id: UUID(), name: "", subtitle: "", time: Calendar.current.date(byAdding: .hour, value: 1, to: Date()) ?? Date(), repeats: false, howOften: RepeatingNotifications.daily, ownerPlant: OwnerPlant(id: 0, name: "", addedEntry: false))
     
-    @State var showMessage = false
+    @State private var showMessage = false
     
     @State private var addReminder = false
     
@@ -64,7 +65,6 @@ struct NotificationsView: View {
                                 Text("Which Plant:")
                                 
                                 Picker("", selection: $reminder.ownerPlant) {
-                                    Text("None")
                                     ForEach(gardenPlants, id: \.self) { plant in
                                         Text(plant.name)
                                             .tag(OwnerPlant(id: plant.id, name: plant.name, addedEntry: false))
@@ -126,7 +126,8 @@ struct NotificationsView: View {
                                 Button {
                                     guard !reminder.name.isEmpty else { return }
                                     
-                                    scheduleReminder(at: reminder.time)
+//                                    scheduleReminder(at: reminder.time)
+//                                    ReminderViewModel.shared.scheduleReminder(at: reminder.time, reminder: reminder)
                                     
                                     //to see all pending Notifications for debug
                                     UNUserNotificationCenter.current().getPendingNotificationRequests { (requests) in
@@ -177,7 +178,11 @@ struct NotificationsView: View {
                 }
             }
             .onAppear(perform: {
-                allReminders = notifyViewModel.loadFromFiles()
+//                ForEach(gardenPlants, id: \.self) { plant in
+//                    ForEach(plant.reminders, id: \.self) { reminder in
+//                        allReminders.append(reminder)
+//                    }
+//                }
                 print(allReminders, "onAppear")
                 
                 UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
@@ -200,60 +205,26 @@ struct NotificationsView: View {
                             .foregroundStyle(Color(hex: GardenColors.skyBlue.rawValue))
                     }
                 }
-            }
-        }
-    }
-}
-
-#Preview {
-    NotificationsView()
-}
-
-extension NotificationsView {
-    
-    
-    func scheduleReminder(at date: Date) {
-        let newReminder = Notify(id: UUID(), name: reminder.name, subtitle: reminder.subtitle, time: reminder.time, repeats: reminder.repeats, howOften: reminder.howOften, ownerPlant: reminder.ownerPlant)
-        
-        let content = UNMutableNotificationContent()
-        content.title = "\(newReminder.ownerPlant.name): \(newReminder.name)"
-        content.body = newReminder.subtitle
-        content.sound = UNNotificationSound.default
-        
-        var trigger = UNCalendarNotificationTrigger(dateMatching: DateComponents(), repeats: false)
-        
-        if reminder.repeats {
-            
-            let dateComponents = reminder.howOften.dateComponents(for: date)
-            trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-            
-        } else {
-            
-            let dateComponents = Calendar.current.dateComponents([.day, .hour, .minute], from: date)
-            trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
-        }
-        
-        let request = UNNotificationRequest(identifier: newReminder.id.uuidString, content: content, trigger: trigger)
-        
-        UNUserNotificationCenter.current().add(request) { error in
-            if let error = error {
-                print("Error scheduling notification: \(error)")
-            } else {
-                print("Notification scheduled successfully.")
-                DispatchQueue.main.async {
-                    appendAndSaveReminders(newReminder: newReminder)
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                        print("cleared all Reminders")
+                    } label: {
+                        Image(systemName: "trash")
+                            .foregroundStyle(.red)
+                    }
                 }
             }
         }
     }
-    
-    func appendAndSaveReminders(newReminder: Notify) {
-        allReminders.append(newReminder)
-        allReminders.sort()
-        notifyViewModel.saveToFiles(allReminders)
-        closeAndResetAddReminderMenu()
-    }
-    
+}
+
+//#Preview {
+//    NotificationsView()
+//}
+
+extension NotificationsView {
     
     func closeAndResetAddReminderMenu() {
         withAnimation(.bouncy) {
