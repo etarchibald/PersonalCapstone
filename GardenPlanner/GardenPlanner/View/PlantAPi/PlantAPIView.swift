@@ -6,6 +6,8 @@ struct PlantAPIView: View {
     @State private var searchText = ""
     @State private var showCancelButton = false
     
+    private var pageNumber = 1
+    
     var body: some View {
         VStack {
             HStack {
@@ -77,12 +79,14 @@ struct PlantAPIView: View {
                 .padding()
             } else {
                 ScrollView {
-                    ForEach(plantsViewModel.plants) { plant in
-                        NavigationLink {
-                            PlantDetailView(plantid: plant.id)
-                        } label: {
-                            withAnimation(.smooth) {
-                                PlantCellView(plant: plant)
+                    VStack {
+                        ForEach(plantsViewModel.plants) { plant in
+                            NavigationLink {
+                                PlantDetailView(plantid: plant.id)
+                            } label: {
+                                withAnimation(.smooth) {
+                                    PlantCellView(plant: plant)
+                                }
                             }
                         }
                     }
@@ -97,7 +101,7 @@ struct PlantAPIView: View {
     
     func fetchPlants() {
         Task {
-            await plantsViewModel.fetchPlants(using: searchText)
+            await plantsViewModel.fetchPlants(using: searchText, pageNumber: pageNumber)
         }
     }
 }

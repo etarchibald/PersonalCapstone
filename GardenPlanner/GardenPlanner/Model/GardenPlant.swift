@@ -15,6 +15,7 @@ class YourPlant: Hashable {
     @Attribute(.unique) var id: Int
     var imageURL: String
     var name: String
+    var mainSpeciesId: Int
     var sowing: String
     var daysToHarvest: Int
     var rowSpacing: Int
@@ -30,10 +31,11 @@ class YourPlant: Hashable {
     @Relationship(deleteRule: .cascade) var photos: [UserPhotos]
     @Relationship(deleteRule: .cascade) var reminders: [Reminder]
     
-    init(id: Int, imageURL: String, name: String, sowing: String, daysToHarvest: Int, rowSpacing: Int, spread: Int, growthMonths: [String], bloomMonths: [String], fruitMonths: [String], light: Int, growthHabit: String, growthRate: String, entrys: [Entry], notes: String, photos: [UserPhotos], reminders: [Reminder]) {
+    init(id: Int, imageURL: String, name: String, mainSpeciesId: Int, sowing: String, daysToHarvest: Int, rowSpacing: Int, spread: Int, growthMonths: [String], bloomMonths: [String], fruitMonths: [String], light: Int, growthHabit: String, growthRate: String, entrys: [Entry], notes: String, photos: [UserPhotos], reminders: [Reminder]) {
         self.id = id
         self.imageURL = imageURL
         self.name = name
+        self.mainSpeciesId = mainSpeciesId
         self.sowing = sowing
         self.daysToHarvest = daysToHarvest
         self.rowSpacing = rowSpacing

@@ -19,6 +19,7 @@ struct PlantDetail: Codable {
     var id: Int
     var commonName: String?
     var scientificName: String?
+    var mainSpeciesId: Int?
     var imageURL: String?
     var observations: String?
     var vegetable: Bool?
@@ -28,6 +29,7 @@ struct PlantDetail: Codable {
         case id = "id"
         case commonName = "common_name"
         case scientificName = "scientific_name"
+        case mainSpeciesId = "main_species_id"
         case imageURL = "image_url"
         case observations = "observations"
         case vegetable = "vegetable"

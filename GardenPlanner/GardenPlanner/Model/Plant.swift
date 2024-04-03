@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Plant: Codable, Identifiable {
+struct Plant: Codable, Hashable, Identifiable {
     var id: Int
     var commonName: String?
     var scientificName: String?

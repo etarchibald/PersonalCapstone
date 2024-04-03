@@ -13,18 +13,19 @@ class PlantsViewModel: ObservableObject {
     var token = "ZcXbvzEqOE0qjuBSavumezdVboTXipVKGkLMr"
     
     @Published var plants = [Plant]()
-    @Published var plantDetail = PlantDetail(id: 0, commonName: "", scientificName: "", imageURL: "", vegetable: false, mainSpecies: MainSpecies(edible: false, plantImages: PlantImages(fruitImages: [], flowerImages: [], habitImages: []), flower: Flower(color: []), growth: Growth(), specifications: Specifications()))
+    @Published var plantDetail = PlantDetail(id: 0, commonName: "", scientificName: "", mainSpeciesId: 0, imageURL: "", vegetable: false, mainSpecies: MainSpecies(edible: false, plantImages: PlantImages(fruitImages: [], flowerImages: [], habitImages: []), flower: Flower(color: []), growth: Growth(), specifications: Specifications()))
     
-    func fetchPlants(using searchTerm: String) async {
+    func fetchPlants(using searchTerm: String, pageNumber number: Int) async {
         var urlComponents = URLComponents(string: "https://trefle.io/api/v1/plants/search")!
         let searchForQueryItem = URLQueryItem(name: "q", value: searchTerm)
+        let pageNumberQueryItem = URLQueryItem(name: "page", value: String(number))
         let tokenQueryItem = URLQueryItem(name: "token", value: "qwV\(token)-a0")
-        urlComponents.queryItems = [searchForQueryItem, tokenQueryItem]
+        urlComponents.queryItems = [searchForQueryItem, tokenQueryItem, pageNumberQueryItem]
         
         guard let downloadedPlants: PlantArray = await WebService().downloadData(fromURL: urlComponents.url!) else { return }
         DispatchQueue.main.async {
             withAnimation(.smooth) {
-                self.plants = downloadedPlants.arrayOfPlants
+                self.plants.append(contentsOf: downloadedPlants.arrayOfPlants)
             }
         }
     }

@@ -6,8 +6,16 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct PlantCellView: View {
+    @Environment(\.modelContext) var modelContext
+    
+    @StateObject var plantViewModel = PlantsViewModel()
+    
+    @Query var gardenPlant: [YourPlant]
+    
+    @State private var plantAdded = false
     
     var plant: Plant
     
@@ -42,8 +50,28 @@ struct PlantCellView: View {
                 .fixedSize(horizontal: false, vertical: true)
                 
                 Spacer()
+                
+                Button {
+                    if !plantAdded {
+                        Task {
+                            await plantViewModel.fetchPlantDetail(using: plant.id)
+                            addPlantToGarden()
+                        }
+                    }
+                    
+                } label: {
+                    Image(systemName: plantAdded ? "leaf.fill" : "leaf")
+                        .font(.title2)
+                        .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                        .contentTransition(.symbolEffect(.replace))
+                }
+                .padding(.horizontal)
             }
             .padding()
+            .onAppear {
+                //check and see if its already in garden
+                updateUI()
+            }
         }
     }
     
@@ -67,6 +95,25 @@ struct PlantCellView: View {
             @unknown default:
                 EmptyView()
             }
+        }
+    }
+    
+    func updateUI() {
+        for plant in gardenPlant {
+            if plant.mainSpeciesId == self.plant.id {
+                self.plantAdded = true
+            }
+        }
+    }
+    
+    func addPlantToGarden() {
+        let plant = plantViewModel.plantDetail
+        
+        let newPlant = YourPlant(id: plant.id, imageURL: plant.imageURL ?? "image", name: plant.commonName ?? "", mainSpeciesId: plant.mainSpeciesId ?? 0, sowing: plant.mainSpecies.growth.sowing ?? "", daysToHarvest: plant.mainSpecies.growth.daysToHarvest ?? 0, rowSpacing: plant.mainSpecies.growth.rowSpacing?.cm ?? 0, spread: plant.mainSpecies.growth.spread?.cm ?? 0, growthMonths: plant.mainSpecies.growth.growthMonths ?? [], bloomMonths: plant.mainSpecies.growth.bloomMonths ?? [], fruitMonths: plant.mainSpecies.growth.growthMonths ?? [], light: plant.mainSpecies.growth.light ?? 5, growthHabit: plant.mainSpecies.specifications.growthHabit ?? "", growthRate: plant.mainSpecies.specifications.growthRate ?? "", entrys: [], notes: "", photos: [], reminders: [])
+        
+        modelContext.insert(newPlant)
+        withAnimation(.smooth) {
+            plantAdded = true
         }
     }
     

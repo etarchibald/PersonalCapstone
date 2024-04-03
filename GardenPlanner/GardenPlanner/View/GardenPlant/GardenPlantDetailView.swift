@@ -52,6 +52,9 @@ struct GardenPlantDetailView: View {
                                 .font(.largeTitle)
                                 .fontWeight(.light)
                                 .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                .onAppear {
+                                    print(plant.id)
+                                }
                         }
                         .padding()
                     }
@@ -495,7 +498,7 @@ struct GardenPlantDetailView: View {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: YourPlant.self, configurations: config)
         
-        let gardenPlant = YourPlant(id: 0, imageURL: "https://bs.plantnet.org/image/o/4f45fd2d82661996f5d5a5613b39bdd1287a56bc", name: "Alpine StrawBerry", sowing: "Something", daysToHarvest: 60, rowSpacing: 35, spread: 30, growthMonths: [], bloomMonths: [], fruitMonths: [], light: 8, growthHabit: "Forb/herb", growthRate: "Rapid", entrys: [], notes: "", photos: [], reminders: [])
+        let gardenPlant = YourPlant(id: 0, imageURL: "https://bs.plantnet.org/image/o/4f45fd2d82661996f5d5a5613b39bdd1287a56bc", name: "Alpine StrawBerry", mainSpeciesId: 0, sowing: "Something", daysToHarvest: 60, rowSpacing: 35, spread: 30, growthMonths: [], bloomMonths: [], fruitMonths: [], light: 8, growthHabit: "Forb/herb", growthRate: "Rapid", entrys: [], notes: "", photos: [], reminders: [])
         
         return GardenPlantDetailView(plant: gardenPlant)
             .modelContainer(container)
