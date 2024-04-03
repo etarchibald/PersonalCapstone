@@ -266,12 +266,12 @@ struct GardenPlantDetailView: View {
                                     Button {
                                         guard !reminder.name.isEmpty else { return }
                                         
-                                        let newReminder = Reminder(id: reminder.id, name: reminder.name, subtitle: reminder.subtitle, time: reminder.time, repeats: reminder.repeats, howOften: reminder.howOften, ownerPlant: OwnerPlant(id: plant.id, name: plant.name, addedEntry: false))
+                                        let newReminder = Reminder(id: UUID(), name: reminder.name, subtitle: reminder.subtitle, time: reminder.time, repeats: reminder.repeats, howOften: reminder.howOften, ownerPlant: OwnerPlant(id: plant.id, name: plant.name, addedEntry: false))
                                         
                                         print("newReminder id: \(newReminder.id.uuidString)")
                                         plant.reminders.append(newReminder)
                                         
-                                        ReminderViewModel.shared.scheduleReminder(at: newReminder.time, reminder: newReminder)
+                                        ReminderViewModel.shared.scheduleReminder(reminder: newReminder)
                                         
                                         withAnimation(.bouncy) {
                                             showReminders = false
@@ -308,12 +308,11 @@ struct GardenPlantDetailView: View {
                     }
                     .padding(.horizontal)
                     
-                    ScrollView {
-                        ForEach(plant.reminders, id: \.self) { reminder in
-                            ReminderCellView(allReminders: $plant.reminders, reminder: reminder)
-                                .padding(.horizontal)
-                        }
+                    VStack {
+                        ReminderCellView(allReminders: $plant.reminders)
+                            .padding()
                     }
+                    .frame(height: plant.reminders.isEmpty ? 0 : 350)
                 
                     ZStack {
                         RoundedRectangle(cornerRadius: 20, style: .continuous)

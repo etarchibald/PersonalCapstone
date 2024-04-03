@@ -196,11 +196,11 @@
 		4A6BBB972BB5AF8C00ACE001 /* GardenPlantSubViews */ = {
 			isa = PBXGroup;
 			children = (
-				4A6BBB9C2BBC85F400ACE001 /* ReminderCellView.swift */,
 				4A6BBB8E2BB3556C00ACE001 /* GardenPlantCellView.swift */,
 				4A6BBB882BB30DB800ACE001 /* GardenPlantDetailPicturesView.swift */,
 				4A6BBB982BB5B02200ACE001 /* GardenPlantDetailMonthsView.swift */,
 				4A962E7A2BA224A600F6CB32 /* EntryCellView.swift */,
+				4A6BBB9C2BBC85F400ACE001 /* ReminderCellView.swift */,
 			);
 			path = GardenPlantSubViews;
 			sourceTree = "<group>";

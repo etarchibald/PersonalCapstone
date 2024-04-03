@@ -12,7 +12,7 @@ class ReminderViewModel {
     
     static let shared = ReminderViewModel()
     
-    func scheduleReminder(at date: Date, reminder: Reminder) {
+    func scheduleReminder(reminder: Reminder) {
         let newReminder = Reminder(id: reminder.id, name: reminder.name, subtitle: reminder.subtitle, time: reminder.time, repeats: reminder.repeats, howOften: reminder.howOften, ownerPlant: reminder.ownerPlant)
         
         let content = UNMutableNotificationContent()
@@ -24,12 +24,12 @@ class ReminderViewModel {
         
         if reminder.repeats {
             
-            let dateComponents = reminder.howOften.dateComponents(for: date)
+            let dateComponents = reminder.howOften.dateComponents(for: reminder.time)
             trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
             
         } else {
             
-            let dateComponents = Calendar.current.dateComponents([.day, .hour, .minute], from: date)
+            let dateComponents = Calendar.current.dateComponents([.day, .hour, .minute], from: reminder.time)
             trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
         }
         
