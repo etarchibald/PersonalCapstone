@@ -8,15 +8,19 @@
 import SwiftUI
 import SwiftData
 import Vortex
+import CoreLocation
 
 struct PlantDetailView: View {
     @Environment(\.modelContext) var modelContext
     @StateObject var plantViewModel = PlantsViewModel()
+    @StateObject var locationDataManager = LocationDataManager()
     
     @State private var plantAdded = false
     
     @State private var showNative = false
     @State private var showIntroduced = false
+    
+    @State private var ableToGrowInUserLocation = false
     
     @Query var gardenPlant: [YourPlant]
     
@@ -214,6 +218,11 @@ struct PlantDetailView: View {
                         .padding(10)
                     }
                     
+                    ableToPlantInLocationView()
+                        .font(.title2)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(EdgeInsets(top: 15, leading: 10, bottom: 0, trailing: 10))
+                    
                     if let nativeDistributions = plant.mainSpecies.distribution?.native, let introducedDistributions = plant.mainSpecies.distribution?.introduced {
                         VStack(alignment: .leading) {
                             Text("Distributions:")
@@ -263,7 +272,7 @@ struct PlantDetailView: View {
                             }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(EdgeInsets(top: 5, leading: 10, bottom: 0, trailing: 0))
+                        .padding(.horizontal, 10)
                         
                     }
                     
@@ -338,6 +347,62 @@ struct PlantDetailView: View {
                     .frame(width: 200, height: 200, alignment: .center)
             @unknown default:
                 EmptyView()
+            }
+        }
+    }
+    
+    func ableToPlantInLocationView() -> some View {
+        VStack {
+            switch locationDataManager.locationManager.authorizationStatus {
+            case .authorizedWhenInUse:  // Location services are available.
+                // Insert code here of what should happen when Location services are authorized
+                
+                let locationOfUser = CLLocation(latitude: Double(locationDataManager.locationManager.location?.coordinate.latitude ?? 0.0), longitude: Double(locationDataManager.locationManager.location?.coordinate.longitude ?? 0.0))
+                
+                //make bool call here to display if user can plant here
+                HStack {
+                    Text(ableToGrowInUserLocation ? "You are able to grow this plant" : "Unable to grow this in your area")
+                    
+                    Image(systemName: ableToGrowInUserLocation ? "checkmark" : "")
+                        .foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))
+                }
+                .onAppear {
+                    getCityAndCountry(for: locationOfUser)
+                }
+                
+                
+            case .restricted, .denied:  // Location services currently unavailable.
+                // Insert code here of what should happen when Location services are NOT authorize
+                Text("Current location data was restricted or denied.")
+                
+            case .notDetermined:        // Authorization not determined yet.
+                Text("Finding your location...")
+                ProgressView()
+                
+            default:
+                ProgressView()
+            }
+        }
+    }
+    
+    func getCityAndCountry(for location: CLLocation) {
+        
+        location.placemark { placemark, error in
+            if let placemark = placemark {
+                //loop statement to check and make sure it matches
+                let fullNameState = locationDataManager.statesDictionary[placemark.state]
+                
+                for place in plantViewModel.plantDetail.mainSpecies.distribution?.native ?? [] {
+                    if place.lowercased() == fullNameState?.lowercased() {
+                        ableToGrowInUserLocation = true
+                    }
+                }
+                
+                for place in plantViewModel.plantDetail.mainSpecies.distribution?.introduced ?? [] {
+                    if place.lowercased() == fullNameState?.lowercased() {
+                        ableToGrowInUserLocation = true
+                    }
+                }
             }
         }
     }

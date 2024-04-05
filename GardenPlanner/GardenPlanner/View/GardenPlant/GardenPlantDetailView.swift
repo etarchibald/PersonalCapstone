@@ -144,7 +144,7 @@ struct GardenPlantDetailView: View {
                                     .padding()
                                     .background(Color(hex: GardenColors.whiteSmoke.rawValue))
                                     .clipShape(RoundedRectangle(cornerRadius: 20))
-                                    .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+                                    .padding(.horizontal, 10)
                                 
                                 Button {
                                     guard !entry.title.isEmpty else { return }
@@ -207,13 +207,13 @@ struct GardenPlantDetailView: View {
                                 TextField("Title", text: $reminder.name)
                                     .padding()
                                     .background(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                    .clipShape(RoundedRectangle(cornerRadius: 20 ))
-                                    .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+                                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                                    .padding(.horizontal, 10)
                                 
                                 TextField("Message", text: $reminder.subtitle)
                                     .padding()
                                     .background(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                    .clipShape(RoundedRectangle(cornerRadius: 20 ))
+                                    .clipShape(RoundedRectangle(cornerRadius: 20))
                                     .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
                                 
                                 DatePicker("When:", selection: $reminder.time)
@@ -226,7 +226,7 @@ struct GardenPlantDetailView: View {
                                     Toggle("Repeat:", isOn: $reminder.repeats.animation(.bouncy))
                                         .padding()
                                         .background(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                        .clipShape(RoundedRectangle(cornerRadius: 20 ))
+                                        .clipShape(RoundedRectangle(cornerRadius: 20))
                                         .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
                                     
                                     if reminder.repeats {
@@ -258,7 +258,7 @@ struct GardenPlantDetailView: View {
                                             Text("Request Permission")
                                                 .padding()
                                                 .background(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                                .clipShape(RoundedRectangle(cornerRadius: 20 ))
+                                                .clipShape(RoundedRectangle(cornerRadius: 20))
                                                 .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
                                         }
                                         .alert("Your all set to recieve Reminders!", isPresented: $showMessage) {
@@ -271,12 +271,10 @@ struct GardenPlantDetailView: View {
                                         
                                         let newReminder = Reminder(id: UUID(), name: reminder.name, subtitle: reminder.subtitle, time: reminder.time, repeats: reminder.repeats, howOften: reminder.howOften, ownerPlant: OwnerPlant(id: plant.id, name: plant.name, addedEntry: false))
                                         
-                                        print("newReminder id: \(newReminder.id.uuidString)")
-                                        plant.reminders.append(newReminder)
-                                        
                                         ReminderViewModel.shared.scheduleReminder(reminder: newReminder)
                                         
                                         withAnimation(.bouncy) {
+                                            plant.reminders.append(newReminder)
                                             showReminders = false
                                             reminder.name = ""
                                             reminder.subtitle = ""

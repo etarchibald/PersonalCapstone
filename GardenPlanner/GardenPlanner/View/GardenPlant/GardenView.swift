@@ -139,17 +139,17 @@ struct GardenView: View {
                 }
                 
                 HStack(alignment: .bottom) {
-                    NavigationLink {
-                        NotificationsView()
-                    } label: {
-                        Image(systemName: "bell.fill")
-                            .frame(maxWidth: 50, maxHeight: 50)
-                            .font(.title2)
-                            .background(Color(hex: GardenColors.skyBlue.rawValue))
-                            .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                            .clipShape(Circle())
-                    }
-                    .shadow(radius: 5)
+//                    NavigationLink {
+//                        NotificationsView()
+//                    } label: {
+//                        Image(systemName: "bell.fill")
+//                            .frame(maxWidth: 50, maxHeight: 50)
+//                            .font(.title2)
+//                            .background(Color(hex: GardenColors.skyBlue.rawValue))
+//                            .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+//                            .clipShape(Circle())
+//                    }
+//                    .shadow(radius: 5)
                     
                     NavigationLink {
                         PlantAPIView()
@@ -165,7 +165,7 @@ struct GardenView: View {
                     
                 }
                 .frame(maxHeight: .infinity, alignment: .bottom)
-                .offset(x: -30)
+//                .offset(x: -30)
             }
             .onAppear(perform: {
                 myGarden = myGardenPlants
