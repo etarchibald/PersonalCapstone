@@ -6,7 +6,10 @@ struct PlantAPIView: View {
     @State private var searchText = ""
     @State private var showCancelButton = false
     
-    private var pageNumber = 1
+    private let spaceName = "scroll"
+    @State private var pageNumber = 1
+    @State var wholeSize: CGSize = .zero
+    @State var scrollViewSize: CGSize = .zero
     
     var body: some View {
         VStack {
@@ -23,7 +26,7 @@ struct PlantAPIView: View {
                             }
                         }
                         .onSubmit {
-                            fetchPlants()
+                            fetchPlants(for: pageNumber)
                         }
                         .foregroundStyle(.primary)
                     
@@ -78,20 +81,52 @@ struct PlantAPIView: View {
                 .multilineTextAlignment(.center)
                 .padding()
             } else {
-                ScrollView {
-                    VStack {
-                        ForEach(plantsViewModel.plants) { plant in
-                            NavigationLink {
-                                PlantDetailView(plantid: plant.id)
-                            } label: {
-                                withAnimation(.smooth) {
-                                    PlantCellView(plant: plant)
+                ChildSizeReader(size: $wholeSize) {
+                    ScrollView {
+                        ChildSizeReader(size: $scrollViewSize) {
+                            VStack {
+                                ForEach(plantsViewModel.plants) { plant in
+                                    NavigationLink {
+                                        PlantDetailView(plantid: plant.id)
+                                    } label: {
+                                        withAnimation(.smooth) {
+                                            PlantCellView(plant: plant)
+                                        }
+                                    }
                                 }
                             }
+                            .padding()
+                            .background(
+                                GeometryReader { proxy in
+                                    Color.clear.preference(
+                                        key: ViewOffsetKey.self,
+                                        value: -1 * proxy.frame(in: .named(spaceName)).origin.y
+                                    )
+                                }
+                            )
+                            .onPreferenceChange(
+                                ViewOffsetKey.self,
+                                perform: { value in
+                                    if value >= scrollViewSize.height - wholeSize.height {
+                                        print("User has reached the bottom of the ScrollView.")
+                                        pageNumber += 1
+                                        print("newNumber: \(pageNumber)")
+                                        fetchPlants(for: pageNumber)
+                                    } else {
+                                        print("not reached.")
+                                    }
+                                }
+                            )
+                            
                         }
                     }
-                    .padding()
+                    .coordinateSpace(name: spaceName)
                 }
+//                .onChange(of: scrollViewSize) { oldValue, newValue in
+//                    print("oldValue: \(oldValue)")
+//                    print("newValue: \(newValue)")
+//                }
+                
             }
             Spacer()
         }
@@ -99,9 +134,9 @@ struct PlantAPIView: View {
         Spacer()
     }
     
-    func fetchPlants() {
+    func fetchPlants(for page: Int) {
         Task {
-            await plantsViewModel.fetchPlants(using: searchText, pageNumber: pageNumber)
+            await plantsViewModel.fetchPlants(using: searchText, pageNumber: page)
         }
     }
 }
@@ -132,4 +167,44 @@ extension View {
     func resignKeyboardOnDragGesuture() -> some View {
         return modifier(ResignKeyBoardOnDragGesture())
     }
+}
+
+//for adding to scrollView
+
+struct ViewOffsetKey: PreferenceKey {
+  typealias Value = CGFloat
+  static var defaultValue = CGFloat.zero
+  static func reduce(value: inout Value, nextValue: () -> Value) {
+    value += nextValue()
+  }
+}
+
+struct ChildSizeReader<Content: View>: View {
+  @Binding var size: CGSize
+
+  let content: () -> Content
+  var body: some View {
+    ZStack {
+      content().background(
+        GeometryReader { proxy in
+          Color.clear.preference(
+            key: SizePreferenceKey.self,
+            value: proxy.size
+          )
+        }
+      )
+    }
+    .onPreferenceChange(SizePreferenceKey.self) { preferences in
+      self.size = preferences
+    }
+  }
+}
+
+struct SizePreferenceKey: PreferenceKey {
+  typealias Value = CGSize
+  static var defaultValue: Value = .zero
+
+  static func reduce(value _: inout Value, nextValue: () -> Value) {
+    _ = nextValue()
+  }
 }

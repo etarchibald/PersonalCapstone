@@ -112,14 +112,10 @@ struct ReminderCellView: View {
                                         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [reminder.id.uuidString])
                                         
                                         allReminders = allReminders.filter { remind in
-                                            remind.id.uuidString == reminder.id.uuidString ? false : true
+                                            remind.id == reminder.id ? false : true
                                         }
                                         
-                                        do {
-                                            try modelContext.save()
-                                        } catch {
-                                            print("Error saving model Context")
-                                        }
+                                        modelContext.delete(reminder)
                                         
                                     }
                                     print(allReminders, "on button press")

@@ -274,6 +274,9 @@ struct GardenPlantDetailView: View {
                                         ReminderViewModel.shared.scheduleReminder(reminder: newReminder)
                                         
                                         withAnimation(.bouncy) {
+                                            print(newReminder.id)
+                                            print(newReminder.howOften)
+                                            print(newReminder.repeats)
                                             plant.reminders.append(newReminder)
                                             showReminders = false
                                             reminder.name = ""
@@ -449,18 +452,6 @@ struct GardenPlantDetailView: View {
                             showMessage = true
                         } else if error != nil {
                             showMessage = false
-                        }
-                    }
-                    
-                    UNUserNotificationCenter.current().getPendingNotificationRequests { (requests) in
-                        for request in requests {
-                            if let timeIntervalTrigger = request.trigger as? UNTimeIntervalNotificationTrigger {
-                                print(Date(timeIntervalSinceNow: timeIntervalTrigger.timeInterval))
-                            }
-                            
-                            if request.trigger is UNCalendarNotificationTrigger {
-                                print(request)
-                            }
                         }
                     }
                 }

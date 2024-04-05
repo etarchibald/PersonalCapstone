@@ -53,7 +53,7 @@ struct EntryCellView: View {
                     Button("Delete", role: .destructive) {
                         withAnimation(.smooth) {
                             entrys = entrys.filter { entryToDelete in
-                                entryToDelete.id.uuidString == entry.id.uuidString ? false : true
+                                entryToDelete.id == entry.id ? false : true
                             }
                             
                             modelContext.delete(entry)
