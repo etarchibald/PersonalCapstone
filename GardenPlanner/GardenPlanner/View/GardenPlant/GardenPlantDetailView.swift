@@ -258,13 +258,7 @@ struct GardenPlantDetailView: View {
                                 HStack {
                                     if !showMessage {
                                         Button {
-                                            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
-                                                if success {
-                                                    showMessage = true
-                                                } else if error != nil {
-                                                    showMessage = false
-                                                }
-                                            }
+                                            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
                                         } label: {
                                             Text("Request Permission")
                                                 .padding()

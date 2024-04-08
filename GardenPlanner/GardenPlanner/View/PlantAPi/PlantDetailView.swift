@@ -90,8 +90,72 @@ struct PlantDetailView: View {
                                 .frame(maxWidth: .infinity, alignment: .trailing)
                                 .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
                         }
+                        
                     }
                     .padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 10))
+                    
+                    ableToPlantInLocationView()
+                        .font(.title2)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(EdgeInsets(top: 15, leading: 10, bottom: 0, trailing: 10))
+                    
+                    if let nativeDistributions = plant.mainSpecies.distribution?.native, let introducedDistributions = plant.mainSpecies.distribution?.introduced {
+                        HStack {
+                            Text("Distributions:")
+                                .font(.title2)
+                            
+                            VStack(alignment: .leading) {
+                                HStack {
+                                    Text("Native:")
+                                        .font(.title3)
+                                    
+                                    Button {
+                                        withAnimation(.bouncy) {
+                                            showNative.toggle()
+                                        }
+                                    } label: {
+                                        Image(systemName: showNative ? "chevron.down" : "chevron.right")
+                                            .contentTransition(.symbolEffect(.replace))
+                                    }
+                                }
+                            }
+                            
+                            VStack(alignment: .leading) {
+                                HStack {
+                                    Text("Introduced:")
+                                        .font(.title3)
+                                    
+                                    Button {
+                                        withAnimation(.bouncy) {
+                                            showIntroduced.toggle()
+                                        }
+                                    } label: {
+                                        Image(systemName: showIntroduced ? "chevron.down" : "chevron.right")
+                                            .contentTransition(.symbolEffect(.replace))
+                                    }
+                                }
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 10)
+                        
+                        VStack(alignment: .leading) {
+                            if showNative {
+                                ForEach(nativeDistributions, id: \.self) { place in
+                                    Text(place)
+                                }
+                            }
+                            
+                            if showIntroduced {
+                                ForEach(introducedDistributions, id: \.self) { place in
+                                    Text(place)
+                                }
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 10)
+                        
+                    }
                     
                     VStack {
                         
@@ -131,7 +195,7 @@ struct PlantDetailView: View {
                                 HStack {
                                     Text("Row Spacing:")
                                         .font(.title3)
-                                    Text("cm: \(rowSpacing) In: \(Double(rowSpacing) * 0.39)")
+                                    Text("cm: \(rowSpacing) In: \((Double(rowSpacing) * 0.39).formatted(.number.precision(.fractionLength(0...1))))")
                                 }
                             }
                             
@@ -139,7 +203,38 @@ struct PlantDetailView: View {
                                 HStack {
                                     Text("Spread:")
                                         .font(.title3)
-                                    Text("cm: \(spread) In: \(Double(spread) * 0.39)")
+                                    Text("cm: \(spread) In: \((Double(spread) * 0.39).formatted(.number.precision(.fractionLength(0...1))))")
+                                }
+                            }
+                            
+                            if let growthForm = plant.mainSpecies.specifications.growthForm {
+                                VStack {
+                                    Text("Growth Form:")
+                                        .font(.title3)
+                                        .padding(EdgeInsets(top: 5, leading: 10, bottom: 0, trailing: 10))
+                                    
+                                    Text(growthForm)
+                                        .padding(.horizontal, 10)
+                                }
+                            }
+                            
+                            if let growthRate = plant.mainSpecies.specifications.growthRate {
+                                VStack {
+                                    Text("Growth Rate:")
+                                        .font(.title3)
+                                        .padding(EdgeInsets(top: 5, leading: 10, bottom: 0, trailing: 10))
+                                    
+                                    Text(growthRate)
+                                        .padding(.horizontal, 10)
+                                }
+                            }
+                            
+                            if let daysToHarvest = plant.mainSpecies.growth.daysToHarvest {
+                                HStack {
+                                    Text("Days to harvest:")
+                                        .font(.title3)
+                                    
+                                    Text("\(daysToHarvest)")
                                 }
                             }
                         }
@@ -173,99 +268,6 @@ struct PlantDetailView: View {
                         if let flowerColors = plant.mainSpecies.flower.color {
                             GardenPlantDetailMonthsView(title: "Flower Color(s):", months: flowerColors)
                         }
-                    }
-                    
-                    if let growthForm = plant.mainSpecies.specifications.growthForm {
-                        VStack {
-                            Text("Growth Form:")
-                                .font(.title3)
-                                .padding(EdgeInsets(top: 5, leading: 10, bottom: 0, trailing: 10))
-                            
-                            Text(growthForm)
-                                .padding(.horizontal, 10)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    
-                    if let growthRate = plant.mainSpecies.specifications.growthRate {
-                        VStack {
-                            Text("Growth Rate:")
-                                .font(.title3)
-                                .padding(EdgeInsets(top: 5, leading: 10, bottom: 0, trailing: 10))
-                            
-                            Text(growthRate)
-                                .padding(.horizontal, 10)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    
-                    if let daysToHarvest = plant.mainSpecies.growth.daysToHarvest {
-                        HStack {
-                            Text("Days to harvest:")
-                                .font(.title3)
-                            
-                            Text("\(daysToHarvest)")
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(10)
-                    }
-                    
-                    ableToPlantInLocationView()
-                        .font(.title2)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(EdgeInsets(top: 15, leading: 10, bottom: 0, trailing: 10))
-                    
-                    if let nativeDistributions = plant.mainSpecies.distribution?.native, let introducedDistributions = plant.mainSpecies.distribution?.introduced {
-                        VStack(alignment: .leading) {
-                            Text("Distributions:")
-                                .font(.title2)
-                            
-                            VStack(alignment: .leading) {
-                                HStack {
-                                    Text("Native:")
-                                        .font(.title3)
-                                    
-                                    Button {
-                                        withAnimation(.bouncy) {
-                                            showNative.toggle()
-                                        }
-                                    } label: {
-                                        Image(systemName: showNative ? "chevron.down" : "chevron.right")
-                                            .contentTransition(.symbolEffect(.replace))
-                                    }
-                                }
-                                
-                                if showNative {
-                                    ForEach(nativeDistributions, id: \.self) { place in
-                                        Text(place)
-                                    }
-                                }
-                            }
-                            
-                            VStack(alignment: .leading) {
-                                HStack {
-                                    Text("Introduced:")
-                                        .font(.title3)
-                                    
-                                    Button {
-                                        withAnimation(.bouncy) {
-                                            showIntroduced.toggle()
-                                        }
-                                    } label: {
-                                        Image(systemName: showIntroduced ? "chevron.down" : "chevron.right")
-                                            .contentTransition(.symbolEffect(.replace))
-                                    }
-                                }
-                                if showIntroduced {
-                                    ForEach(introducedDistributions, id: \.self) { place in
-                                        Text(place)
-                                    }
-                                }
-                            }
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 10)
-                        
                     }
                     
                     if let flowerImages = plant.mainSpecies.plantImages.flowerImages {
@@ -366,9 +368,19 @@ struct PlantDetailView: View {
                 
             case .restricted, .denied:  // Location services currently unavailable.
                 // Insert code here of what should happen when Location services are NOT authorize
-                Text("Current location data was restricted or denied.")
                 
-                //call to action to enable location
+                VStack(alignment: .leading) {
+                    Text("location not found ")
+                    
+                    Button {
+                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                    } label: {
+                        Text("Press \(Text("here").foregroundStyle(.tint)) to enable locations")
+                            .foregroundStyle(.black)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
                 
             case .notDetermined:        // Authorization not determined yet.
                 Text("Finding your location...")

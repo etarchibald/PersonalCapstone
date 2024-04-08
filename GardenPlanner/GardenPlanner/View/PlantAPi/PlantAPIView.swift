@@ -99,9 +99,8 @@ struct PlantAPIView: View {
                                 ViewOffsetKey.self,
                                 perform: { value in
                                     if value >= scrollViewSize.height - wholeSize.height {
-                                        print("User has reached the bottom of the ScrollView.")
                                         pageNumber += 1
-                                        print("newNumber: \(pageNumber)")
+
                                         fetchPlants(for: pageNumber)
                                     }
                                 }
