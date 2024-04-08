@@ -49,7 +49,6 @@ struct PlantDetailView: View {
                         VStack {
                             Text(plant.commonName ?? "")
                                 .font(.largeTitle)
-                                .fontWeight(.semibold)
                             
                             Text(plant.scientificName ?? "scienicy plant name")
                                 .font(.title2)
@@ -85,10 +84,12 @@ struct PlantDetailView: View {
                             }
                         }
                         
-                        Text(plant.mainSpecies.specifications.growthHabit ?? "")
-                            .font(.title2)
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                            .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
+                        if let growthHabit = plant.mainSpecies.specifications.growthHabit {
+                            Text(growthHabit)
+                                .font(.title2)
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
+                        }
                     }
                     .padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 10))
                     
@@ -101,17 +102,8 @@ struct PlantDetailView: View {
                             VStack {
                                 Text("Growth Info:")
                                     .font(.largeTitle)
-                                    .fontWeight(.semibold)
                                     .frame(maxWidth: .infinity, alignment: .center)
                                     .padding(.horizontal, 10)
-                                
-                                if let observations = plant.observations, let rank = plant.mainSpecies.rank {
-                                    HStack {
-                                        Text(observations)
-                                        Spacer()
-                                        Text(rank.capitalized)
-                                    }
-                                }
                                 
                             }
                             .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
@@ -334,6 +326,7 @@ struct PlantDetailView: View {
             switch phase {
             case .empty:
                 ProgressView()
+                    .frame(width: 380, height: 200)
             case .success(let image):
                 image.resizable()
                     .aspectRatio(contentMode: .fill)
@@ -374,6 +367,8 @@ struct PlantDetailView: View {
             case .restricted, .denied:  // Location services currently unavailable.
                 // Insert code here of what should happen when Location services are NOT authorize
                 Text("Current location data was restricted or denied.")
+                
+                //call to action to enable location
                 
             case .notDetermined:        // Authorization not determined yet.
                 Text("Finding your location...")

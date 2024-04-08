@@ -1,5 +1,4 @@
 import SwiftUI
-import Vortex
 
 struct PlantAPIView: View {
     @StateObject var plantsViewModel = PlantsViewModel()
@@ -26,12 +25,14 @@ struct PlantAPIView: View {
                             }
                         }
                         .onSubmit {
+                            plantsViewModel.plants = []
                             fetchPlants(for: pageNumber)
                         }
                         .foregroundStyle(.primary)
                     
                     Button(action: {
                         self.searchText = ""
+                        plantsViewModel.plants = []
                     }) {
                         withAnimation {
                             Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
@@ -64,14 +65,6 @@ struct PlantAPIView: View {
         
         ZStack {
             
-            VortexView(.customSlowRain) {
-                Circle()
-                    .fill(.white)
-                    .frame(width: 32)
-                    .tag("circle")
-            }
-            .ignoresSafeArea(.all)
-            
             if plantsViewModel.plants.isEmpty {
                 Spacer()
                 VStack {
@@ -84,14 +77,12 @@ struct PlantAPIView: View {
                 ChildSizeReader(size: $wholeSize) {
                     ScrollView {
                         ChildSizeReader(size: $scrollViewSize) {
-                            VStack {
+                            LazyVStack {
                                 ForEach(plantsViewModel.plants) { plant in
                                     NavigationLink {
                                         PlantDetailView(plantid: plant.id)
                                     } label: {
-                                        withAnimation(.smooth) {
-                                            PlantCellView(plant: plant)
-                                        }
+                                        PlantCellView(plant: plant)
                                     }
                                 }
                             }
@@ -112,8 +103,6 @@ struct PlantAPIView: View {
                                         pageNumber += 1
                                         print("newNumber: \(pageNumber)")
                                         fetchPlants(for: pageNumber)
-                                    } else {
-                                        print("not reached.")
                                     }
                                 }
                             )

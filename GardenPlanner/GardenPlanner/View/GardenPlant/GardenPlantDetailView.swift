@@ -13,6 +13,7 @@ import PhotosUI
 struct GardenPlantDetailView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
+    @Environment(\.colorScheme) var colorScheme
     
     @State private var showingDeleteAlert = false
     @State private var showingAddEntry = false
@@ -62,7 +63,7 @@ struct GardenPlantDetailView: View {
                     
                     HStack {
                         Text("Growth Info:")
-                            .font(.largeTitle)
+                            .font(.title)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
                         
@@ -103,7 +104,7 @@ struct GardenPlantDetailView: View {
                         VStack {
                             HStack {
                                 Text("Entrys:")
-                                    .font(.largeTitle)
+                                    .font(.title)
                                     .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                                 
                                 Button {
@@ -112,13 +113,13 @@ struct GardenPlantDetailView: View {
                                     }
                                 } label: {
                                     Image(systemName: showingAddEntry ? "minus" : "plus")
-                                        .font(.largeTitle)
+                                        .font(.title)
                                         .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                                         .frame(maxWidth: .infinity, alignment: .trailing)
                                 }
                             }
                             .fontWeight(.light)
-                            .padding(EdgeInsets(top: 20, leading: 10, bottom: 20, trailing: 10))
+                            .padding(EdgeInsets(top: 20, leading: 10, bottom: 20, trailing: 15))
                             
                             if showingAddEntry {
                                 
@@ -129,20 +130,20 @@ struct GardenPlantDetailView: View {
                                 HStack {
                                     TextField("Title", text: $entry.title)
                                         .padding()
-                                        .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                        .background(colorScheme == .light ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.richBlack.rawValue))
                                         .clipShape(RoundedRectangle(cornerRadius: 20))
                                         .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
                                     
                                     DatePicker("", selection: $entry.date, displayedComponents: [.date])
                                         .padding()
-                                        .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                        .background(colorScheme == .light ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.richBlack.rawValue))
                                         .clipShape(RoundedRectangle(cornerRadius: 20))
                                         .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
                                 }
                                 
                                 TextField("Body", text: $entry.body)
                                     .padding()
-                                    .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                    .background(colorScheme == .light ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.richBlack.rawValue))
                                     .clipShape(RoundedRectangle(cornerRadius: 20))
                                     .padding(.horizontal, 10)
                                 
@@ -161,7 +162,7 @@ struct GardenPlantDetailView: View {
                                 } label: {
                                     Text("Add Entry")
                                         .padding()
-                                        .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                        .background(colorScheme == .light ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.richBlack.rawValue))
                                         .clipShape(RoundedRectangle(cornerRadius: 20 ))
                                         .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
                                 }
@@ -184,7 +185,7 @@ struct GardenPlantDetailView: View {
                         VStack {
                             HStack {
                                 Text("Reminders:")
-                                    .font(.largeTitle)
+                                    .font(.title)
                                     .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                                 
                                 Button {
@@ -193,57 +194,67 @@ struct GardenPlantDetailView: View {
                                     }
                                 } label: {
                                     Image(systemName: showReminders ? "minus" : "plus")
-                                        .font(.largeTitle)
+                                        .font(.title)
                                         .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                                         .frame(maxWidth: .infinity, alignment: .trailing)
                                 }
                             }
                             .fontWeight(.light)
-                            .padding(EdgeInsets(top: 20, leading: 10, bottom: 20, trailing: 10))
+                            .padding(EdgeInsets(top: 20, leading: 10, bottom: 20, trailing: 15))
                             
                             
                             
                             if showReminders {
                                 TextField("Title", text: $reminder.name)
                                     .padding()
-                                    .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                    .background(colorScheme == .light ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.richBlack.rawValue))
                                     .clipShape(RoundedRectangle(cornerRadius: 20))
                                     .padding(.horizontal, 10)
                                 
                                 TextField("Message", text: $reminder.subtitle)
                                     .padding()
-                                    .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                    .background(colorScheme == .light ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.richBlack.rawValue))
                                     .clipShape(RoundedRectangle(cornerRadius: 20))
                                     .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
                                 
                                 DatePicker("When:", selection: $reminder.time)
                                     .padding()
-                                    .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                    .background(colorScheme == .light ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.richBlack.rawValue))
                                     .clipShape(RoundedRectangle(cornerRadius: 20 ))
                                     .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
                                 
                                 HStack {
-                                    Toggle("Repeat:", isOn: $reminder.repeats.animation(.bouncy))
-                                        .padding()
-                                        .background(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                                        .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
-                                    
-                                    if reminder.repeats {
-                                        Picker("Every:", selection: $reminder.howOften) {
-                                            ForEach(RepeatingNotifications.allCases, id: \.self) { value in
-                                                Text(value.rawValue)
-                                                    .tag(value)
+                                    HStack {
+                                        
+                                        Text("Repeats:")
+                                        
+                                        Spacer()
+                                        
+                                        if reminder.repeats {
+                                            Picker("Every:", selection: $reminder.howOften) {
+                                                ForEach(RepeatingNotifications.allCases, id: \.self) { value in
+                                                    Text(value.rawValue)
+                                                        .tag(value)
+                                                }
                                             }
                                         }
-                                        .frame(maxWidth: .infinity)
-                                        .multilineTextAlignment(.trailing)
-                                        .padding()
-                                        .background(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                                        .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
+                                        
+                                        Button {
+                                            withAnimation(.smooth) {
+                                                reminder.repeats.toggle()
+                                            }
+                                        } label: {
+                                            Image(systemName: reminder.repeats ? "checkmark" : "square")
+                                                .contentTransition(.symbolEffect(.replace))
+                                        }
+                                        
                                     }
+                                    .padding()
+                                    .background(colorScheme == .light ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.richBlack.rawValue))
+                                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                                    .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 15))
                                 }
+                                
                                 HStack {
                                     if !showMessage {
                                         Button {
@@ -274,9 +285,6 @@ struct GardenPlantDetailView: View {
                                         ReminderViewModel.shared.scheduleReminder(reminder: newReminder)
                                         
                                         withAnimation(.bouncy) {
-                                            print(newReminder.id)
-                                            print(newReminder.howOften)
-                                            print(newReminder.repeats)
                                             plant.reminders.append(newReminder)
                                             showReminders = false
                                             reminder.name = ""
@@ -301,7 +309,7 @@ struct GardenPlantDetailView: View {
                                     } label: {
                                         Text("Add Reminder")
                                             .padding()
-                                            .background(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                            .background(colorScheme == .light ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.richBlack.rawValue))
                                             .clipShape(RoundedRectangle(cornerRadius: 20 ))
                                             .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
                                     }
@@ -325,7 +333,7 @@ struct GardenPlantDetailView: View {
                         VStack {
                             HStack {
                                 Text("Notes:")
-                                    .font(.largeTitle)
+                                    .font(.title)
                                     .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                                     .padding()
                                 
@@ -335,7 +343,7 @@ struct GardenPlantDetailView: View {
                                     }
                                 } label: {
                                     Image(systemName: showingNotes ? "minus" : "plus")
-                                        .font(.largeTitle)
+                                        .font(.title)
                                         .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                                         .frame(maxWidth: .infinity, alignment: .trailing)
                                 }
@@ -353,7 +361,7 @@ struct GardenPlantDetailView: View {
                             }
                         }
                     }
-                    .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 15))
+                    .padding(.horizontal, 15)
                     
                     ZStack {
                         RoundedRectangle(cornerRadius: 20, style: .continuous)
@@ -371,7 +379,7 @@ struct GardenPlantDetailView: View {
                                         showCamera.toggle()
                                     } label: {
                                         Image(systemName: "camera")
-                                            .font(.largeTitle)
+                                            .font(.title)
                                             .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                                     }
                                     .padding(.horizontal)
@@ -381,7 +389,7 @@ struct GardenPlantDetailView: View {
                                     
                                     PhotosPicker(selection: $pickerItems, matching: .images) {
                                         Image(systemName: "photo.stack")
-                                            .font(.largeTitle)
+                                            .font(.title)
                                             .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                                     }
                                     .padding()
@@ -391,7 +399,8 @@ struct GardenPlantDetailView: View {
                             .fontWeight(.light)
                         }
                     }
-                    .padding()
+                    .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
+                    
                     .onChange(of: pickerItems) {
                         Task {
                             selectedImages.removeAll()

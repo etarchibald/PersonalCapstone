@@ -12,11 +12,15 @@ import Vortex
 struct GardenView: View {
     @Query var myGardenPlants: [YourPlant]
     
+    @FocusState private var isSearchBarFocused: Bool
+    
     @State private var showingSearchBar = false
     @State private var searchText = ""
     @State private var showingXButton = false
      
     @State private var myGarden = [YourPlant]()
+    
+    private var cornerRadius: CGFloat = 10
     
     var body: some View {
         NavigationStack() {
@@ -57,86 +61,90 @@ struct GardenView: View {
                     }
                 }
                 
-                if !myGarden.isEmpty {
-                    HStack {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                                .fill(Color(hex: GardenColors.plantGreen.rawValue))
-                                .frame(width: showingSearchBar ? 380 : 50, height: 50)
-                            
-                            HStack {
-                                if showingSearchBar {
+                HStack {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                            .fill(Color(hex: GardenColors.plantGreen.rawValue))
+                            .frame(width: showingSearchBar ? 380 : 50, height: 50)
+                        
+                        HStack {
+                            if showingSearchBar {
+                                HStack {
                                     HStack {
-                                        HStack {
-                                            Image(systemName: "magnifyingglass")
-                                            TextField("search", text: $searchText)
-                                                .onChange(of: searchText) {
-                                                    withAnimation(.easeIn) {
-                                                        self.showingXButton = true
-                                                    }
-                                                }
-                                                .onSubmit {
-                                                    withAnimation(.smooth) {
-                                                        filterMyGarden(filterString: searchText)
-                                                    }
-                                                }
-                                                .foregroundColor(.primary)
-                                            
-                                            if showingXButton {
-                                                Button(action: {
-                                                    withAnimation(.smooth) {
-                                                        self.searchText = ""
-                                                    }
-                                                }) {
-                                                    withAnimation {
-                                                        Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
-                                                    }
-                                                }
-                                            }
-                                            
-                                        }
-                                        .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
-                                        .foregroundStyle(.secondary)
-                                        .background(Color(.secondarySystemBackground))
-                                        .clipShape(.rect(cornerRadius: 10))
-                                    }
-                                    .padding()
-                                }
-                                
-                                Button {
-                                    withAnimation(.bouncy) {
-                                        showingSearchBar.toggle()
-                                    }
-                                } label: {
-                                    if showingSearchBar {
-                                        
-                                        Button("Cancel") {
-                                            UIApplication.shared.endEditing(true)
-                                            self.searchText = ""
-                                            withAnimation(.smooth) {
-                                                self.showingSearchBar = false
-                                                self.showingXButton = false
-                                                myGarden = myGardenPlants
-                                            }
-                                        }
-                                        .padding(.trailing)
-                                        .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                        
-                                    } else {
                                         Image(systemName: "magnifyingglass")
-                                            .frame(maxWidth: 50, maxHeight: 50)
-                                            .font(.title2)
-                                            .background(Color(hex: GardenColors.plantGreen.rawValue))
-                                            .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                            .clipShape(Circle())
+                                        TextField("search", text: $searchText)
+                                            .onChange(of: searchText) {
+                                                withAnimation(.easeIn) {
+                                                    self.showingXButton = true
+                                                    filterMyGarden(filterString: searchText)
+                                                    if searchText == "" {
+                                                        myGarden = myGardenPlants
+                                                    }
+                                                }
+                                            }
+                                            .onSubmit {
+                                                withAnimation(.smooth) {
+                                                    filterMyGarden(filterString: searchText)
+                                                }
+                                            }
+                                            .foregroundColor(.primary)
+                                            .focused($isSearchBarFocused)
+                                        
+                                        if showingXButton {
+                                            Button(action: {
+                                                withAnimation(.smooth) {
+                                                    self.searchText = ""
+                                                }
+                                            }) {
+                                                withAnimation {
+                                                    Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
+                                                }
+                                            }
+                                        }
+                                        
                                     }
+                                    .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
+                                    .foregroundStyle(.secondary)
+                                    .background(Color(.secondarySystemBackground))
+                                    .clipShape(.rect(cornerRadius: cornerRadius))
+                                }
+                                .padding(.horizontal, 10)
+                            }
+                            
+                            Button {
+                                withAnimation(.bouncy) {
+                                    showingSearchBar.toggle()
+                                    isSearchBarFocused.toggle()
+                                }
+                            } label: {
+                                if showingSearchBar {
+            
+                                    Button("Cancel") {
+                                        UIApplication.shared.endEditing(true)
+                                        self.searchText = ""
+                                        withAnimation(.smooth) {
+                                            self.showingSearchBar = false
+                                            self.showingXButton = false
+                                            myGarden = myGardenPlants
+                                        }
+                                    }
+                                    .padding(.trailing)
+                                    .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                    
+                                } else {
+                                    Image(systemName: "magnifyingglass")
+                                        .frame(maxWidth: 50, maxHeight: 50)
+                                        .font(.title2)
+                                        .background(Color(hex: GardenColors.plantGreen.rawValue))
+                                        .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                        .clipShape(Circle())
                                 }
                             }
                         }
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-                    .padding()
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                .padding()
                 
                 HStack(alignment: .bottom) {
 //                    NavigationLink {
