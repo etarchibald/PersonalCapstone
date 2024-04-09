@@ -18,7 +18,7 @@ enum NetworkError: Error {
 class WebService: Codable {
     func downloadData<T: Codable>(fromURL url: URL) async -> T? {
             do {
-//                guard let url = else { throw NetworkError.badUrl }
+//                guard let url = url else { throw NetworkError.badUrl }
                 let (data, response) = try await URLSession.shared.data(from: url)
                 guard let response = response as? HTTPURLResponse else { throw NetworkError.badResponse }
                 guard response.statusCode >= 200 && response.statusCode < 300 else { throw NetworkError.badStatus }

@@ -26,6 +26,8 @@ struct PlantDetailView: View {
     
     var plantid: Int
     
+    private let cornerRadius: CGFloat = 20
+    
     var body: some View {
         let plant = plantViewModel.plantDetail
         
@@ -41,56 +43,64 @@ struct PlantDetailView: View {
             
             VStack {
                 ScrollView {
-                    plantImageView(image: plant.imageURL ?? "image")
+                    
+                    if let plantImageURL = plant.imageURL {
+                        plantImageView(image: plantImageURL)
+                    }
+                    
                     ZStack {
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                             .fill(Color(hex: GardenColors.plantGreen.rawValue))
                         
                         VStack {
-                            Text(plant.commonName ?? "")
-                                .font(.largeTitle)
-                            
-                            Text(plant.scientificName ?? "scienicy plant name")
-                                .font(.title2)
+                            if let commonName = plant.commonName {
+                                Text(commonName)
+                                    .font(.largeTitle)
+                            }
+                            if let scientificName = plant.scientificName {
+                                Text(scientificName)
+                                    .font(.title2)
+                            }
                         }
                         .padding()
                     }
                     .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                     .padding(.horizontal, 10)
                     
-                    HStack {
+                    
+                    if let growthHabit = plant.mainSpecies.specifications.growthHabit {
+                        Text(growthHabit)
+                            .font(.title2)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(10)
+                    }
+                    
+                    
+                    VStack {
+                        
                         if let edible = plant.mainSpecies.edible, let ediblePart = plant.mainSpecies.ediblePart {
-                            VStack {
-                                Text(edible ? "Edible" : "Not Edible")
-                                    .font(.title2)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.top, 10)
-                                
-                                
-                                
-                                ForEach(ediblePart, id: \.self) { part in
-                                    Text(part)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                }
-                            }
                             
                             if edible {
                                 if let vegetable = plant.mainSpecies.edible {
                                     Text(vegetable ? "Vegetable" : "Fruit")
                                         .font(.title2)
                                         .frame(maxWidth: .infinity, alignment: .leading)
-                                        .padding(.horizontal, 10)
                                 }
                             }
+                            
+                            VStack {
+                                Text(edible ? "Edible:" : "Not Edible")
+                                    .font(.title2)
+                                    
+                                
+                                
+                                ForEach(ediblePart, id: \.self) { part in
+                                    Text(part)
+                                }
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         }
-                        
-                        if let growthHabit = plant.mainSpecies.specifications.growthHabit {
-                            Text(growthHabit)
-                                .font(.title2)
-                                .frame(maxWidth: .infinity, alignment: .trailing)
-                                .padding(EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10))
-                        }
-                        
+   
                     }
                     .padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 10))
                     
@@ -160,7 +170,7 @@ struct PlantDetailView: View {
                     VStack {
                         
                         ZStack {
-                            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                                 .fill(Color(hex: GardenColors.plantGreen.rawValue))
                             
                             VStack {
@@ -176,18 +186,25 @@ struct PlantDetailView: View {
                         .padding()
                         
                         if let growthDescription = plant.mainSpecies.growth.description {
-                            Text(growthDescription)
-                                .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
-                                .multilineTextAlignment(.leading)
+                            //api every now and again returns a string of double quotes instead of nill
+                            if growthDescription != "\"\"" {
+                                Text(growthDescription)
+                                    .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
+                                    .multilineTextAlignment(.leading)
+                            }
                         }
                         
-                        VStack(alignment: .leading) {
+                        VStack {
                             if let sowing = plant.mainSpecies.growth.sowing {
-                                VStack(alignment: .leading) {
-                                    Text("Sowing:")
-                                        .font(.title2)
-                                    
-                                    Text(sowing)
+                                
+                                if sowing != "\"\"" {
+                                    VStack(alignment: .leading) {
+                                        Text("Sowing:")
+                                            .font(.title2)
+                                        
+                                        Text(sowing)
+                                    }
+                                    .padding(.top, 5)
                                 }
                             }
                             
@@ -197,6 +214,7 @@ struct PlantDetailView: View {
                                         .font(.title3)
                                     Text("cm: \(rowSpacing) In: \((Double(rowSpacing) * 0.39).formatted(.number.precision(.fractionLength(0...1))))")
                                 }
+                                .padding(.top, 5)
                             }
                             
                             if let spread = plant.mainSpecies.growth.spread?.cm {
@@ -205,28 +223,29 @@ struct PlantDetailView: View {
                                         .font(.title3)
                                     Text("cm: \(spread) In: \((Double(spread) * 0.39).formatted(.number.precision(.fractionLength(0...1))))")
                                 }
+                                .padding(.top, 5)
                             }
                             
                             if let growthForm = plant.mainSpecies.specifications.growthForm {
                                 VStack {
                                     Text("Growth Form:")
                                         .font(.title3)
-                                        .padding(EdgeInsets(top: 5, leading: 10, bottom: 0, trailing: 10))
                                     
                                     Text(growthForm)
-                                        .padding(.horizontal, 10)
                                 }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.top, 5)
                             }
                             
                             if let growthRate = plant.mainSpecies.specifications.growthRate {
                                 VStack {
                                     Text("Growth Rate:")
                                         .font(.title3)
-                                        .padding(EdgeInsets(top: 5, leading: 10, bottom: 0, trailing: 10))
                                     
                                     Text(growthRate)
-                                        .padding(.horizontal, 10)
                                 }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.top, 5)
                             }
                             
                             if let daysToHarvest = plant.mainSpecies.growth.daysToHarvest {
@@ -236,6 +255,7 @@ struct PlantDetailView: View {
                                     
                                     Text("\(daysToHarvest)")
                                 }
+                                .padding(.top, 5)
                             }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -289,12 +309,7 @@ struct PlantDetailView: View {
                 })
                 .toolbar {
                     Button {
-                        let newPlant = YourPlant(id: plant.id, imageURL: plant.imageURL ?? "image", name: plant.commonName ?? "", mainSpeciesId: plant.mainSpeciesId ?? 0, sowing: plant.mainSpecies.growth.sowing ?? "", daysToHarvest: plant.mainSpecies.growth.daysToHarvest ?? 0, rowSpacing: plant.mainSpecies.growth.rowSpacing?.cm ?? 0, spread: plant.mainSpecies.growth.spread?.cm ?? 0, growthMonths: plant.mainSpecies.growth.growthMonths ?? [], bloomMonths: plant.mainSpecies.growth.bloomMonths ?? [], fruitMonths: plant.mainSpecies.growth.growthMonths ?? [], light: plant.mainSpecies.growth.light ?? 5, growthHabit: plant.mainSpecies.specifications.growthHabit ?? "", growthRate: plant.mainSpecies.specifications.growthRate ?? "", entrys: [], notes: "", photos: [], reminders: [])
-                        
-                        modelContext.insert(newPlant)
-                        withAnimation(.smooth) {
-                            plantAdded = true
-                        }
+                        addPlantToGaren()
                     } label: {
                         Text(plantAdded ? "In your garden" : "Add to garden")
                         Image(systemName: plantAdded ? "leaf.fill" : "leaf")
@@ -320,6 +335,17 @@ struct PlantDetailView: View {
             if plant.id == plantViewModel.plantDetail.id {
                 self.plantAdded = true
             }
+        }
+    }
+    
+    func addPlantToGaren() {
+        let plant = plantViewModel.plantDetail
+        
+        let newPlant = YourPlant(id: plant.id, imageURL: plant.imageURL ?? "image", name: plant.commonName ?? "", mainSpeciesId: plant.mainSpeciesId ?? 0, sowing: plant.mainSpecies.growth.sowing ?? "", daysToHarvest: plant.mainSpecies.growth.daysToHarvest ?? 0, rowSpacing: plant.mainSpecies.growth.rowSpacing?.cm ?? 0, spread: plant.mainSpecies.growth.spread?.cm ?? 0, growthMonths: plant.mainSpecies.growth.growthMonths ?? [], bloomMonths: plant.mainSpecies.growth.bloomMonths ?? [], fruitMonths: plant.mainSpecies.growth.growthMonths ?? [], light: plant.mainSpecies.growth.light ?? 5, growthHabit: plant.mainSpecies.specifications.growthHabit ?? "", growthRate: plant.mainSpecies.specifications.growthRate ?? "", entrys: [], notes: "", photos: [], reminders: [])
+        
+        modelContext.insert(newPlant)
+        withAnimation(.smooth) {
+            plantAdded = true
         }
     }
     
@@ -396,7 +422,7 @@ struct PlantDetailView: View {
         
         location.placemark { placemark, error in
             if let placemark = placemark {
-                //loop statement to check and make sure it matches
+                
                 let fullNameState = locationDataManager.statesDictionary[placemark.state]
                 
                 for place in plantViewModel.plantDetail.mainSpecies.distribution?.native ?? [] {
@@ -416,5 +442,5 @@ struct PlantDetailView: View {
 }
 
 #Preview {
-    PlantDetailView(plantid: 264892)
+    PlantDetailView(plantid: 236068)
 }

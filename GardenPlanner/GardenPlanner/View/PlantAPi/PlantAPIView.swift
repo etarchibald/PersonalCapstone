@@ -33,6 +33,7 @@ struct PlantAPIView: View {
                     Button(action: {
                         self.searchText = ""
                         plantsViewModel.plants = []
+                        pageNumber = 1
                     }) {
                         withAnimation {
                             Image(systemName: "xmark.circle.fill").opacity(searchText == "" ? 0 : 1)
@@ -43,7 +44,7 @@ struct PlantAPIView: View {
                 .foregroundStyle(.secondary)
                 .background(Color(.secondarySystemBackground))
                 .clipShape(.rect(cornerRadius: 10))
-                .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0))
+                .padding(.bottom)
                 
                 if showCancelButton {
                     Button("Cancel") {
@@ -51,10 +52,11 @@ struct PlantAPIView: View {
                         withAnimation(.bouncy) {
                             self.searchText = ""
                             plantsViewModel.plants = []
+                            pageNumber = 1
                             self.showCancelButton = false
                         }
                     }
-                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0))
+                    .padding(.bottom)
                     .foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))
                 }
             }
@@ -100,7 +102,7 @@ struct PlantAPIView: View {
                                 perform: { value in
                                     if value >= scrollViewSize.height - wholeSize.height {
                                         pageNumber += 1
-
+                                        print(pageNumber)
                                         fetchPlants(for: pageNumber)
                                     }
                                 }
@@ -110,11 +112,6 @@ struct PlantAPIView: View {
                     }
                     .coordinateSpace(name: spaceName)
                 }
-//                .onChange(of: scrollViewSize) { oldValue, newValue in
-//                    print("oldValue: \(oldValue)")
-//                    print("newValue: \(newValue)")
-//                }
-                
             }
             Spacer()
         }
@@ -131,68 +128,4 @@ struct PlantAPIView: View {
 
 #Preview {
     PlantAPIView()
-}
-
-extension UIApplication {
-    func endEditing(_ force: Bool) {
-        let scenes = UIApplication.shared.connectedScenes
-        let windowScene = scenes.first as? UIWindowScene
-        let window = windowScene?.windows.first
-        window?.endEditing(force)
-    }
-}
-
-struct ResignKeyBoardOnDragGesture: ViewModifier {
-    var gesture = DragGesture().onChanged { _ in
-        UIApplication.shared.endEditing(true)
-    }
-    func body(content: Content) -> some View {
-        content.gesture(gesture)
-    }
-}
-
-extension View {
-    func resignKeyboardOnDragGesuture() -> some View {
-        return modifier(ResignKeyBoardOnDragGesture())
-    }
-}
-
-//for adding to scrollView
-
-struct ViewOffsetKey: PreferenceKey {
-  typealias Value = CGFloat
-  static var defaultValue = CGFloat.zero
-  static func reduce(value: inout Value, nextValue: () -> Value) {
-    value += nextValue()
-  }
-}
-
-struct ChildSizeReader<Content: View>: View {
-  @Binding var size: CGSize
-
-  let content: () -> Content
-  var body: some View {
-    ZStack {
-      content().background(
-        GeometryReader { proxy in
-          Color.clear.preference(
-            key: SizePreferenceKey.self,
-            value: proxy.size
-          )
-        }
-      )
-    }
-    .onPreferenceChange(SizePreferenceKey.self) { preferences in
-      self.size = preferences
-    }
-  }
-}
-
-struct SizePreferenceKey: PreferenceKey {
-  typealias Value = CGSize
-  static var defaultValue: Value = .zero
-
-  static func reduce(value _: inout Value, nextValue: () -> Value) {
-    _ = nextValue()
-  }
 }

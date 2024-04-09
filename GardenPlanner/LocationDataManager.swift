@@ -108,9 +108,6 @@ class LocationDataManager: NSObject, CLLocationManagerDelegate, ObservableObject
 }
 
 extension CLLocation {
-//    func fetchCityAndCountry(completion: @escaping (_ city: String?, _ country:  String?, _ error: Error?) -> ()) {
-//        CLGeocoder().reverseGeocodeLocation(self) { completion($0?.first?.locality, $0?.first?.country, $1) }
-//    }
     
     func placemark(completion: @escaping (_ placemark: CLPlacemark?, _ error: Error?) -> ()) {
         CLGeocoder().reverseGeocodeLocation(self) { completion($0?.first, $1) }
@@ -132,5 +129,5 @@ extension CLPlacemark {
     var county: String? { subAdministrativeArea }
     /// zip code, eg. 95014
     var zipCode: String? { postalCode }
-    /// postal address formatted
+    
 }

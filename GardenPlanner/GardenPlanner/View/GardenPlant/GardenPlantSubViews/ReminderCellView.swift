@@ -77,7 +77,7 @@ struct ReminderCellView: View {
                                     }
                                 } label: {
                                     ZStack {
-                                        RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                        RoundedRectangle(cornerRadius: 20, style: .continuous)
                                             .fill(reminder.ownerPlant.addedEntry ? Color(hex: GardenColors.plantGreen.rawValue) : Color(hex: GardenColors.whiteSmoke.rawValue))
                                         
                                         HStack {

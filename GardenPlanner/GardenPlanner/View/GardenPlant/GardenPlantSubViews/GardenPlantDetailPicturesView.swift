@@ -36,7 +36,7 @@ struct GardenPlantDetailPicturesView: View {
                         }
                 }
             }
-            .padding(EdgeInsets(top: 0, leading: 85, bottom: 0, trailing: 85))
+            .padding(.horizontal, 85)
         }
     }
 }

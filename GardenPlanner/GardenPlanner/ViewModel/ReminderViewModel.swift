@@ -40,9 +40,6 @@ class ReminderViewModel {
                 print("Error scheduling notification: \(error)")
             } else {
                 print("Notification scheduled successfully.")
-//                DispatchQueue.main.async {
-//                    append and save the new Reminder to the plant
-//                }
             }
         }
     }

@@ -30,6 +30,8 @@ struct GardenPlantDetailView: View {
     @State private var pickerItems = [PhotosPickerItem]()
     @State private var selectedImages = [Data]()
     
+    private let cornerRadius: CGFloat = 20
+    
     var body: some View {
         ZStack {
             
@@ -46,7 +48,7 @@ struct GardenPlantDetailView: View {
                     plantPhotoView(image: plant.imageURL)
                     
                     ZStack {
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                             .fill(Color(hex: GardenColors.plantGreen.rawValue))
                         VStack {
                             Text(plant.name)
@@ -65,7 +67,7 @@ struct GardenPlantDetailView: View {
                         Text("Growth Info:")
                             .font(.title)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+                            .padding(10)
                         
                         Text(plant.growthHabit)
                             .font(.title3)
@@ -99,8 +101,9 @@ struct GardenPlantDetailView: View {
                     }
                     
                     ZStack {
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                             .fill(Color(hex: GardenColors.plantGreen.rawValue))
+                        
                         VStack {
                             HStack {
                                 Text("Entrys:")
@@ -131,20 +134,20 @@ struct GardenPlantDetailView: View {
                                     TextField("Title", text: $entry.title)
                                         .padding()
                                         .background(colorScheme == .light ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.richBlack.rawValue))
-                                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                                        .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
+                                        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+                                        .padding(.leading, 10)
                                     
                                     DatePicker("", selection: $entry.date, displayedComponents: [.date])
                                         .padding()
                                         .background(colorScheme == .light ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.richBlack.rawValue))
-                                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                                        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
                                         .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
                                 }
                                 
                                 TextField("Body", text: $entry.body)
                                     .padding()
                                     .background(colorScheme == .light ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.richBlack.rawValue))
-                                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
                                     .padding(.horizontal, 10)
                                 
                                 Button {
@@ -163,7 +166,7 @@ struct GardenPlantDetailView: View {
                                     Text("Add Entry")
                                         .padding()
                                         .background(colorScheme == .light ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.richBlack.rawValue))
-                                        .clipShape(RoundedRectangle(cornerRadius: 20 ))
+                                        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
                                         .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
                                 }
                                 
@@ -179,7 +182,7 @@ struct GardenPlantDetailView: View {
                     
                     
                     ZStack {
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                             .fill(Color(hex: GardenColors.plantGreen.rawValue))
                         
                         VStack {
@@ -208,19 +211,19 @@ struct GardenPlantDetailView: View {
                                 TextField("Title", text: $reminder.name)
                                     .padding()
                                     .background(colorScheme == .light ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.richBlack.rawValue))
-                                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
                                     .padding(.horizontal, 10)
                                 
                                 TextField("Message", text: $reminder.subtitle)
                                     .padding()
                                     .background(colorScheme == .light ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.richBlack.rawValue))
-                                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
                                     .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
                                 
                                 DatePicker("When:", selection: $reminder.time)
                                     .padding()
                                     .background(colorScheme == .light ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.richBlack.rawValue))
-                                    .clipShape(RoundedRectangle(cornerRadius: 20 ))
+                                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
                                     .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
                                 
                                 HStack {
@@ -251,7 +254,7 @@ struct GardenPlantDetailView: View {
                                     }
                                     .padding()
                                     .background(colorScheme == .light ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.richBlack.rawValue))
-                                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
                                     .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 15))
                                 }
                                 
@@ -263,48 +266,21 @@ struct GardenPlantDetailView: View {
                                             Text("Request Permission")
                                                 .padding()
                                                 .background(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                                .clipShape(RoundedRectangle(cornerRadius: 20))
+                                                .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
                                                 .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
-                                        }
-                                        .alert("Your all set to recieve Reminders!", isPresented: $showMessage) {
-                                            Button("Thank you", role: .none) { }
                                         }
                                     }
                                     
                                     Button {
                                         guard !reminder.name.isEmpty else { return }
                                         
-                                        let newReminder = Reminder(id: UUID(), name: reminder.name, subtitle: reminder.subtitle, time: reminder.time, repeats: reminder.repeats, howOften: reminder.howOften, ownerPlant: OwnerPlant(id: plant.id, name: plant.name, addedEntry: false))
-                                        
-                                        ReminderViewModel.shared.scheduleReminder(reminder: newReminder)
-                                        
-                                        withAnimation(.bouncy) {
-                                            plant.reminders.append(newReminder)
-                                            showReminders = false
-                                            reminder.name = ""
-                                            reminder.subtitle = ""
-                                            reminder.time = Calendar.current.date(byAdding: .hour, value: 1, to: Date()) ?? Date()
-                                            reminder.repeats = false
-                                        }
-                                        
-                                        //to see all pending Notifications for debug
-                                        UNUserNotificationCenter.current().getPendingNotificationRequests { (requests) in
-                                            for request in requests {
-                                                if let timeIntervalTrigger = request.trigger as? UNTimeIntervalNotificationTrigger {
-                                                    print(Date(timeIntervalSinceNow: timeIntervalTrigger.timeInterval))
-                                                }
-                                                
-                                                if let trigger = request.trigger as? UNCalendarNotificationTrigger {
-                                                    print(trigger.dateComponents)
-                                                }
-                                            }
-                                        }
+                                        createReminder()
                                         
                                     } label: {
                                         Text("Add Reminder")
                                             .padding()
                                             .background(colorScheme == .light ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.richBlack.rawValue))
-                                            .clipShape(RoundedRectangle(cornerRadius: 20 ))
+                                            .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
                                             .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 10))
                                     }
                                 }
@@ -321,7 +297,7 @@ struct GardenPlantDetailView: View {
                     .frame(height: plant.reminders.isEmpty ? 0 : 350)
                 
                     ZStack {
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                             .fill(Color(hex: GardenColors.plantGreen.rawValue))
                         
                         VStack {
@@ -350,7 +326,7 @@ struct GardenPlantDetailView: View {
                                     .padding()
                                     .frame(height: 300)
                                     .background(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
                                     .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
                             }
                         }
@@ -358,7 +334,7 @@ struct GardenPlantDetailView: View {
                     .padding(.horizontal, 15)
                     
                     ZStack {
-                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                             .fill(Color(hex: GardenColors.plantGreen.rawValue))
                         
                         VStack {
@@ -462,6 +438,21 @@ struct GardenPlantDetailView: View {
         }
     }
     
+    func createReminder() {
+        let newReminder = Reminder(id: UUID(), name: reminder.name, subtitle: reminder.subtitle, time: reminder.time, repeats: reminder.repeats, howOften: reminder.howOften, ownerPlant: OwnerPlant(id: plant.id, name: plant.name, addedEntry: false))
+        
+        ReminderViewModel.shared.scheduleReminder(reminder: newReminder)
+        
+        withAnimation(.bouncy) {
+            plant.reminders.append(newReminder)
+            showReminders = false
+            reminder.name = ""
+            reminder.subtitle = ""
+            reminder.time = Calendar.current.date(byAdding: .hour, value: 1, to: Date()) ?? Date()
+            reminder.repeats = false
+        }
+    }
+    
     func plantPhotoView(image: String) -> some View {
         AsyncImage(url: URL(string: image)) { phase in
             switch phase {
@@ -471,7 +462,7 @@ struct GardenPlantDetailView: View {
                 image.resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(maxWidth: 380, maxHeight: 200)
-                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous), style: FillStyle())
+                    .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous), style: FillStyle())
                     .shadow(radius: 10)
             case .failure:
                 Image(systemName: "tree.fill")
