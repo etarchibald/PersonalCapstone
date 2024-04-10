@@ -5,6 +5,8 @@ struct PlantAPIView: View {
     @State private var searchText = ""
     @State private var showCancelButton = false
     
+    @State private var noResultsFound = false
+    
     private let spaceName = "scroll"
     @State private var pageNumber = 1
     @State var wholeSize: CGSize = .zero
@@ -32,6 +34,7 @@ struct PlantAPIView: View {
                     
                     Button(action: {
                         self.searchText = ""
+                        noResultsFound = false
                         plantsViewModel.plants = []
                         pageNumber = 1
                     }) {
@@ -52,6 +55,7 @@ struct PlantAPIView: View {
                         withAnimation(.bouncy) {
                             self.searchText = ""
                             plantsViewModel.plants = []
+                            noResultsFound = false
                             pageNumber = 1
                             self.showCancelButton = false
                         }
@@ -68,13 +72,23 @@ struct PlantAPIView: View {
         ZStack {
             
             if plantsViewModel.plants.isEmpty {
-                Spacer()
-                VStack {
-                    Text("Search for \(Text("Plants").foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))) to add to your garden")
+                if noResultsFound {
+                    Spacer()
+                    VStack {
+                        Text("No results found for \(Text(searchText).foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue)))")
+                    }
+                    .font(.title)
+                    .multilineTextAlignment(.center)
+                    .padding()
+                } else {
+                    Spacer()
+                    VStack {
+                        Text("Search for \(Text("Plants").foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))) to add to your garden")
+                    }
+                    .font(.title)
+                    .multilineTextAlignment(.center)
+                    .padding()
                 }
-                .font(.title)
-                .multilineTextAlignment(.center)
-                .padding()
             } else {
                 ChildSizeReader(size: $wholeSize) {
                     ScrollView {
@@ -122,6 +136,9 @@ struct PlantAPIView: View {
     func fetchPlants(for page: Int) {
         Task {
             await plantsViewModel.fetchPlants(using: searchText, pageNumber: page)
+            if plantsViewModel.plants == [] {
+                noResultsFound = true
+            }
         }
     }
 }
