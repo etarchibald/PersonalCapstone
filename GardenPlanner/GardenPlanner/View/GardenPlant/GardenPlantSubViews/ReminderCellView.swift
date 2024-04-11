@@ -19,7 +19,7 @@ struct ReminderCellView: View {
     
     var body: some View {
         
-        ScrollView {
+        VStack {
             ForEach(allReminders) { reminder in
                 ZStack {
                     RoundedRectangle(cornerRadius: 20, style: .continuous)
@@ -85,7 +85,7 @@ struct ReminderCellView: View {
                                         }
                                         .foregroundStyle(reminder.ownerPlant.addedEntry ? Color(hex: GardenColors.whiteSmoke.rawValue) : Color(hex: GardenColors.plantGreen.rawValue))
                                     }
-                                    .frame(width: 95, height: 40)
+                                    .frame(width: 110, height: 40)
                                     .shadow(radius: 1)
                                 }
                                 .padding(.horizontal)
@@ -151,7 +151,7 @@ struct ReminderCellView: View {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: YourPlant.self, configurations: config)
         
-        return ReminderCellView(allReminders: .constant([]))
+        return ReminderCellView(allReminders: .constant([Reminder(id: UUID(), name: "", subtitle: "", time: Date(), repeats: false, howOften: RepeatingNotifications.daily, ownerPlant: OwnerPlant(id: 0, name: "", addedEntry: true))]))
             .modelContainer(container)
         
     } catch {

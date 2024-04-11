@@ -16,7 +16,7 @@ struct EntryCellView: View {
     @Binding var entrys: [Entry]
     
     var body: some View {
-        ScrollView {
+        VStack {
             
             ForEach(entrys.sorted(), id: \.self) { entry in
                 
@@ -63,7 +63,7 @@ struct EntryCellView: View {
                     
                 }
             }
-            .padding()
+            .padding(.horizontal, 20)
         }
     }
 }

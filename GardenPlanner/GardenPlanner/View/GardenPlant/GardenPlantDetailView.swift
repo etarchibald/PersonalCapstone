@@ -21,6 +21,8 @@ struct GardenPlantDetailView: View {
     @State private var showCamera = false
     @State private var showReminders = false
     @State private var showMessage = false
+    @State private var showingAllEntrys = false
+    @State private var showingAllReminders = false
     
     @Bindable var plant: YourPlant
     
@@ -110,16 +112,34 @@ struct GardenPlantDetailView: View {
                                     .font(.title)
                                     .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                                 
+                                Spacer()
+                                
                                 Button {
                                     withAnimation(.bouncy) {
                                         showingAddEntry.toggle()
                                     }
                                 } label: {
                                     Image(systemName: showingAddEntry ? "minus" : "plus")
+                                        .contentTransition(.symbolEffect(.replace))
                                         .font(.title)
                                         .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                        .frame(maxWidth: .infinity, alignment: .trailing)
                                 }
+                                
+                                Spacer()
+                                
+                                if !plant.entrys.isEmpty {
+                                    Button {
+                                        withAnimation(.bouncy) {
+                                            showingAllEntrys.toggle()
+                                        }
+                                    } label: {
+                                        Image(systemName: showingAllEntrys ? "chevron.down" : "chevron.right")
+                                            .contentTransition(.symbolEffect(.replace))
+                                            .font(.title)
+                                            .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                    }
+                                }
+                                
                             }
                             .fontWeight(.light)
                             .padding(EdgeInsets(top: 20, leading: 10, bottom: 20, trailing: 15))
@@ -154,6 +174,7 @@ struct GardenPlantDetailView: View {
                                     guard !entry.title.isEmpty else { return }
                                     withAnimation(.bouncy) {
                                         showingAddEntry = false
+                                        showingAllEntrys = true
                                     }
                                     let newEntry = Entry(id: UUID(), title: entry.title, body: entry.body, date: entry.date)
                                     withAnimation(.bouncy) {
@@ -175,10 +196,14 @@ struct GardenPlantDetailView: View {
                     }
                     .padding(EdgeInsets(top: 20, leading: 15, bottom: 0, trailing: 15))
                     
+                    
                     VStack {
-                        EntryCellView(entrys: $plant.entrys)
+                        if showingAllEntrys {
+                            EntryCellView(entrys: $plant.entrys)
+                        }
                     }
-                    .frame(height: plant.entrys.isEmpty ? 0 : 350)
+                    .padding(.bottom, 10)
+//                    .frame(height: plant.entrys.isEmpty ? 0 : 350)
                     
                     
                     ZStack {
@@ -191,15 +216,32 @@ struct GardenPlantDetailView: View {
                                     .font(.title)
                                     .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                                 
+                                Spacer()
+                                
                                 Button {
                                     withAnimation(.bouncy) {
                                         showReminders.toggle()
                                     }
                                 } label: {
                                     Image(systemName: showReminders ? "minus" : "plus")
+                                        .contentTransition(.symbolEffect(.replace))
                                         .font(.title)
                                         .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                }
+                                
+                                Spacer()
+                                
+                                if !plant.reminders.isEmpty {
+                                    Button {
+                                        withAnimation(.bouncy) {
+                                            showingAllReminders.toggle()
+                                        }
+                                    } label: {
+                                        Image(systemName: showingAllEntrys ? "chevron.down" : "chevron.right")
+                                            .contentTransition(.symbolEffect(.replace))
+                                            .font(.title)
+                                            .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                    }
                                 }
                             }
                             .fontWeight(.light)
@@ -291,10 +333,12 @@ struct GardenPlantDetailView: View {
                     .padding(.horizontal)
                     
                     VStack {
-                        ReminderCellView(allReminders: $plant.reminders)
-                            .padding()
+                        if showingAllReminders {
+                            ReminderCellView(allReminders: $plant.reminders)
+                        }
                     }
-                    .frame(height: plant.reminders.isEmpty ? 0 : 350)
+                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 10, trailing: 20))
+//                    .frame(height: plant.reminders.isEmpty ? 0 : 350)
                 
                     ZStack {
                         RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
@@ -312,7 +356,7 @@ struct GardenPlantDetailView: View {
                                         showingNotes.toggle()
                                     }
                                 } label: {
-                                    Image(systemName: showingNotes ? "minus" : "plus")
+                                    Image(systemName: showingNotes ? "chevron.down" : "chevron.right")
                                         .font(.title)
                                         .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                                         .frame(maxWidth: .infinity, alignment: .trailing)
@@ -446,6 +490,7 @@ struct GardenPlantDetailView: View {
         withAnimation(.bouncy) {
             plant.reminders.append(newReminder)
             showReminders = false
+            showingAllReminders = true
             reminder.name = ""
             reminder.subtitle = ""
             reminder.time = Calendar.current.date(byAdding: .hour, value: 1, to: Date()) ?? Date()
