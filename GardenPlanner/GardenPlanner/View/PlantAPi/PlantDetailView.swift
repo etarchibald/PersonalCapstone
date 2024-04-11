@@ -194,17 +194,16 @@ struct PlantDetailView: View {
                             }
                         }
                         
-                        VStack {
+                        VStack(spacing: 10) {
                             if let sowing = plant.mainSpecies.growth.sowing {
                                 
                                 if sowing != "\"\"" {
-                                    VStack(alignment: .leading) {
+                                    HStack {
                                         Text("Sowing:")
                                             .font(.title2)
                                         
                                         Text(sowing)
                                     }
-                                    .padding(.top, 5)
                                 }
                             }
                             
@@ -214,7 +213,7 @@ struct PlantDetailView: View {
                                         .font(.title3)
                                     Text("cm: \(rowSpacing) In: \((Double(rowSpacing) * 0.39).formatted(.number.precision(.fractionLength(0...1))))")
                                 }
-                                .padding(.top, 5)
+                                .padding(.horizontal, 20)
                             }
                             
                             if let spread = plant.mainSpecies.growth.spread?.cm {
@@ -223,7 +222,6 @@ struct PlantDetailView: View {
                                         .font(.title3)
                                     Text("cm: \(spread) In: \((Double(spread) * 0.39).formatted(.number.precision(.fractionLength(0...1))))")
                                 }
-                                .padding(.top, 5)
                             }
                             
                             if let growthForm = plant.mainSpecies.specifications.growthForm {
@@ -233,8 +231,6 @@ struct PlantDetailView: View {
                                     
                                     Text(growthForm)
                                 }
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.top, 5)
                             }
                             
                             if let growthRate = plant.mainSpecies.specifications.growthRate {
@@ -244,8 +240,6 @@ struct PlantDetailView: View {
                                     
                                     Text(growthRate)
                                 }
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.top, 5)
                             }
                             
                             if let daysToHarvest = plant.mainSpecies.growth.daysToHarvest {
@@ -255,11 +249,9 @@ struct PlantDetailView: View {
                                     
                                     Text("\(daysToHarvest)")
                                 }
-                                .padding(.top, 5)
                             }
                         }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .center)
                         
                         VStack {
                             Text("Light on 0 to 10 scale: \(plant.mainSpecies.growth.light ?? 5)")
@@ -272,6 +264,7 @@ struct PlantDetailView: View {
                                 .tint(.yellow)
                         }
                         .progressViewStyle(.linear)
+                        .padding(.top, 5)
                         
                         
                         if let growthMonths = plant.mainSpecies.growth.growthMonths {
@@ -442,5 +435,5 @@ struct PlantDetailView: View {
 }
 
 #Preview {
-    PlantDetailView(plantid: 236068)
+    PlantDetailView(plantid: 204029)
 }

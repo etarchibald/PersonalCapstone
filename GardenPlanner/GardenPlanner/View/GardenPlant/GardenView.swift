@@ -37,14 +37,24 @@ struct GardenView: View {
                 VStack {
                     ScrollView {
                         if myGarden.isEmpty {
-                            Spacer(minLength: 300)
-                            VStack {
-                                Text("Looks like your garden is empty.")
-                                Text("Press the \(Text("Plus").foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))) button to add Plants")
+                            if isSearchBarFocused {
+                                Spacer(minLength: 300)
+                                VStack {
+                                    Text("You do not have \(Text(searchText).foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))) in your garden")
+                                }
+                                .font(.title)
+                                .multilineTextAlignment(.center)
+                                .padding()
+                            } else {
+                                Spacer(minLength: 300)
+                                VStack {
+                                    Text("Looks like your garden is empty.")
+                                    Text("Press the \(Text("Plus").foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))) button to add Plants")
+                                }
+                                .font(.title)
+                                .multilineTextAlignment(.center)
+                                .padding()
                             }
-                            .font(.title)
-                            .multilineTextAlignment(.center)
-                            .padding()
                         } else {
                             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], alignment: .center, spacing: 20, pinnedViews: [], content: {
                                 
@@ -146,22 +156,24 @@ struct GardenView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
                 .padding()
                 
-                HStack(alignment: .bottom) {
-
-                    NavigationLink {
-                        PlantAPIView()
-                    } label: {
-                        Image(systemName: "plus")
-                            .frame(width: 70, height: 70)
-                            .font(.largeTitle)
-                            .background(Color(hex: GardenColors.plantGreen.rawValue))
-                            .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                            .clipShape(Circle())
+                if !isSearchBarFocused {
+                    HStack(alignment: .bottom) {
+                        
+                        NavigationLink {
+                            PlantAPIView()
+                        } label: {
+                            Image(systemName: "plus")
+                                .frame(width: 70, height: 70)
+                                .font(.largeTitle)
+                                .background(Color(hex: GardenColors.plantGreen.rawValue))
+                                .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                .clipShape(Circle())
+                        }
+                        .shadow(radius: 5)
+                        
                     }
-                    .shadow(radius: 5)
-                    
+                    .frame(maxHeight: .infinity, alignment: .bottom)
                 }
-                .frame(maxHeight: .infinity, alignment: .bottom)
             }
             .onAppear(perform: {
                 myGarden = myGardenPlants
