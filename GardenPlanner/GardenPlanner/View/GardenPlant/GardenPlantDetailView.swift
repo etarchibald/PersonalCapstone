@@ -114,32 +114,31 @@ struct GardenPlantDetailView: View {
                                 
                                 Spacer()
                                 
-                                Button {
-                                    withAnimation(.bouncy) {
-                                        showingAddEntry.toggle()
-                                    }
-                                } label: {
-                                    Image(systemName: showingAddEntry ? "minus" : "plus")
-                                        .contentTransition(.symbolEffect(.replace))
-                                        .font(.title)
-                                        .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                }
-                                
-                                Spacer()
-                                
-                                if !plant.entrys.isEmpty {
+                                HStack(spacing: 30) {
                                     Button {
                                         withAnimation(.bouncy) {
-                                            showingAllEntrys.toggle()
+                                            showingAddEntry.toggle()
                                         }
                                     } label: {
-                                        Image(systemName: showingAllEntrys ? "chevron.down" : "chevron.right")
+                                        Image(systemName: showingAddEntry ? "minus" : "plus")
                                             .contentTransition(.symbolEffect(.replace))
                                             .font(.title)
                                             .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                                     }
+                                    
+                                    if !plant.entrys.isEmpty {
+                                        Button {
+                                            withAnimation(.bouncy) {
+                                                showingAllEntrys.toggle()
+                                            }
+                                        } label: {
+                                            Image(systemName: showingAllEntrys ? "chevron.down" : "chevron.right")
+                                                .contentTransition(.symbolEffect(.replace))
+                                                .font(.title)
+                                                .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                        }
+                                    }
                                 }
-                                
                             }
                             .fontWeight(.light)
                             .padding(EdgeInsets(top: 20, leading: 10, bottom: 20, trailing: 15))
@@ -218,29 +217,30 @@ struct GardenPlantDetailView: View {
                                 
                                 Spacer()
                                 
-                                Button {
-                                    withAnimation(.bouncy) {
-                                        showReminders.toggle()
-                                    }
-                                } label: {
-                                    Image(systemName: showReminders ? "minus" : "plus")
-                                        .contentTransition(.symbolEffect(.replace))
-                                        .font(.title)
-                                        .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                }
-                                
-                                Spacer()
-                                
-                                if !plant.reminders.isEmpty {
+                                HStack(spacing: 30) {
                                     Button {
                                         withAnimation(.bouncy) {
-                                            showingAllReminders.toggle()
+                                            showReminders.toggle()
                                         }
                                     } label: {
-                                        Image(systemName: showingAllEntrys ? "chevron.down" : "chevron.right")
+                                        Image(systemName: showReminders ? "minus" : "plus")
                                             .contentTransition(.symbolEffect(.replace))
                                             .font(.title)
                                             .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                    }
+                                    
+                                    
+                                    if !plant.reminders.isEmpty {
+                                        Button {
+                                            withAnimation(.bouncy) {
+                                                showingAllReminders.toggle()
+                                            }
+                                        } label: {
+                                            Image(systemName: showingAllReminders ? "chevron.down" : "chevron.right")
+                                                .contentTransition(.symbolEffect(.replace))
+                                                .font(.title)
+                                                .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+                                        }
                                     }
                                 }
                             }
@@ -338,7 +338,6 @@ struct GardenPlantDetailView: View {
                         }
                     }
                     .padding(EdgeInsets(top: 0, leading: 20, bottom: 10, trailing: 20))
-//                    .frame(height: plant.reminders.isEmpty ? 0 : 350)
                 
                     ZStack {
                         RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)

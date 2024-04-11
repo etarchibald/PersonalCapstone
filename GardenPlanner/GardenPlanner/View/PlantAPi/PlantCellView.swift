@@ -52,7 +52,9 @@ struct PlantCellView: View {
                 Spacer()
                 
                 Button {
-                    if !plantAdded {
+                    if plantAdded {
+                        removePlantFromGarden()
+                    } else {
                         Task {
                             await plantViewModel.fetchPlantDetail(using: plant.id)
                             addPlantToGarden()
@@ -114,6 +116,28 @@ struct PlantCellView: View {
         modelContext.insert(newPlant)
         withAnimation(.smooth) {
             plantAdded = true
+        }
+    }
+    
+    func removePlantFromGarden() {
+        
+        for eachPlant in gardenPlant {
+            if eachPlant.mainSpeciesId == plant.id {
+                eachPlant.entrys = []
+                eachPlant.photos = []
+                
+                for reminder in eachPlant.reminders {
+                    UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [reminder.id.uuidString])
+                }
+                
+                eachPlant.reminders = []
+                modelContext.delete(eachPlant)
+                break
+            }
+        }
+        
+        withAnimation(.smooth) {
+            plantAdded = false
         }
     }
     

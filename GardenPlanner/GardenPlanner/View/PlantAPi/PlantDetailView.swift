@@ -302,7 +302,11 @@ struct PlantDetailView: View {
                 })
                 .toolbar {
                     Button {
-                        addPlantToGaren()
+                        if plantAdded {
+                            removePlantFromGarden()
+                        } else {
+                            addPlantToGarden()
+                        }
                     } label: {
                         Text(plantAdded ? "In your garden" : "Add to garden")
                         Image(systemName: plantAdded ? "leaf.fill" : "leaf")
@@ -331,7 +335,7 @@ struct PlantDetailView: View {
         }
     }
     
-    func addPlantToGaren() {
+    func addPlantToGarden() {
         let plant = plantViewModel.plantDetail
         
         let newPlant = YourPlant(id: plant.id, imageURL: plant.imageURL ?? "image", name: plant.commonName ?? "", mainSpeciesId: plant.mainSpeciesId ?? 0, sowing: plant.mainSpecies.growth.sowing ?? "", daysToHarvest: plant.mainSpecies.growth.daysToHarvest ?? 0, rowSpacing: plant.mainSpecies.growth.rowSpacing?.cm ?? 0, spread: plant.mainSpecies.growth.spread?.cm ?? 0, growthMonths: plant.mainSpecies.growth.growthMonths ?? [], bloomMonths: plant.mainSpecies.growth.bloomMonths ?? [], fruitMonths: plant.mainSpecies.growth.growthMonths ?? [], light: plant.mainSpecies.growth.light ?? 5, growthHabit: plant.mainSpecies.specifications.growthHabit ?? "", growthRate: plant.mainSpecies.specifications.growthRate ?? "", entrys: [], notes: "", photos: [], reminders: [])
@@ -339,6 +343,29 @@ struct PlantDetailView: View {
         modelContext.insert(newPlant)
         withAnimation(.smooth) {
             plantAdded = true
+        }
+    }
+    
+    func removePlantFromGarden() {
+        let plant = plantViewModel.plantDetail
+        
+        for eachPlant in gardenPlant {
+            if eachPlant.id == plant.id {
+                eachPlant.entrys = []
+                eachPlant.photos = []
+                
+                for reminder in eachPlant.reminders {
+                    UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [reminder.id.uuidString])
+                }
+                
+                eachPlant.reminders = []
+                modelContext.delete(eachPlant)
+                break
+            }
+        }
+        
+        withAnimation(.smooth) {
+            plantAdded = false
         }
     }
     
@@ -394,8 +421,7 @@ struct PlantDetailView: View {
                     Button {
                         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
                     } label: {
-                        Text("Press \(Text("here").foregroundStyle(.tint)) to enable locations")
-                            .foregroundStyle(.black)
+                        Text("Press here to enable locations")
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
