@@ -12,6 +12,8 @@ import CoreLocation
 
 struct PlantDetailView: View {
     @Environment(\.modelContext) var modelContext
+    @Environment(\.dismiss) var dismiss
+    
     @StateObject var plantViewModel = PlantsViewModel()
     @StateObject var locationDataManager = LocationDataManager()
     
@@ -21,6 +23,7 @@ struct PlantDetailView: View {
     @State private var showIntroduced = false
     
     @State private var ableToGrowInUserLocation = false
+    @State private var isActive = false
     
     @Query var gardenPlant: [YourPlant]
     
@@ -66,6 +69,11 @@ struct PlantDetailView: View {
                     }
                     .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                     .padding(.horizontal, 10)
+                    
+                    VStack {
+                        Text("Disclaemer: The Information may not be 100% accurate")
+                            .font(.footnote)
+                    }
                     
                     
                     if let growthHabit = plant.mainSpecies.specifications.growthHabit {
@@ -306,6 +314,7 @@ struct PlantDetailView: View {
                             removePlantFromGarden()
                         } else {
                             addPlantToGarden()
+                            dismiss()
                         }
                     } label: {
                         Text(plantAdded ? "In your garden" : "Add to garden")

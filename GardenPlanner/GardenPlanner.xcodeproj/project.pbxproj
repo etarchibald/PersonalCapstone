@@ -458,11 +458,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"GardenPlanner/Preview Content\"";
 				DEVELOPMENT_TEAM = 54C6LYA456;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Plantify;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app needs to capture image to show in the app";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app would like to know location to be able to see if plants can grow there";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app would like to know location to be able to see if plants can grow there";
@@ -476,7 +477,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.PersonalCapstone.GardenPlanner;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
@@ -495,11 +496,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"GardenPlanner/Preview Content\"";
 				DEVELOPMENT_TEAM = 54C6LYA456;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Plantify;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app needs to capture image to show in the app";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app would like to know location to be able to see if plants can grow there";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app would like to know location to be able to see if plants can grow there";
@@ -513,7 +515,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.PersonalCapstone.GardenPlanner;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";

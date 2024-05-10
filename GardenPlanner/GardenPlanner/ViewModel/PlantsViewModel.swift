@@ -34,10 +34,10 @@ class PlantsViewModel: ObservableObject {
         var urlComponents = URLComponents(string: "https://trefle.io/api/v1/plants/\(plantId)")!
         let tokenQueryItem = URLQueryItem(name: "token", value: "qwV\(token)-a0")
         urlComponents.queryItems = [tokenQueryItem]
-        guard let downlaedPlantDetails: AllPlantDetails = await WebService().downloadData(fromURL: urlComponents.url!) else { return }
+        guard let downloadPlantDetails: AllPlantDetails = await WebService().downloadData(fromURL: urlComponents.url!) else { return }
         DispatchQueue.main.async {
             withAnimation(.smooth) {
-                self.plantDetail = downlaedPlantDetails.allPlantDetails
+                self.plantDetail = downloadPlantDetails.allPlantDetails
             }
         }
     }

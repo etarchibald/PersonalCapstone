@@ -11,6 +11,6 @@ Later Version Ideas:
 - User to add plant throught their own input
 - Entry's become their own View
 - Notes become more than just a TextEditor
-- Have a main view for all reminders?
+- suggested plants on the plantAPIView
 
 link to API: https://docs.trefle.io
