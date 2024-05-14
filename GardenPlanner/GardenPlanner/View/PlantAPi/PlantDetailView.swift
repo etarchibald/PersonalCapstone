@@ -29,6 +29,8 @@ struct PlantDetailView: View {
     
     var plantid: Int
     
+    @Binding var isDismissing: Bool
+    
     private let cornerRadius: CGFloat = 20
     
     var body: some View {
@@ -315,6 +317,7 @@ struct PlantDetailView: View {
                         } else {
                             addPlantToGarden()
                             dismiss()
+                            isDismissing = true
                         }
                     } label: {
                         Text(plantAdded ? "In your garden" : "Add to garden")
@@ -411,10 +414,12 @@ struct PlantDetailView: View {
                 
                 //make bool call here to display if user can plant here
                 HStack {
-                    Text(ableToGrowInUserLocation ? "You are able to grow this plant" : "Unable to grow this in your area")
-                    
-                    Image(systemName: ableToGrowInUserLocation ? "checkmark" : "")
-                        .foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))
+                    if ableToGrowInUserLocation {
+                        Text("You are able to grow this plant")
+                        
+                        Image(systemName: "checkmark")
+                            .foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))
+                    }
                 }
                 .onAppear {
                     getCityAndCountry(for: locationOfUser)
@@ -449,18 +454,20 @@ struct PlantDetailView: View {
     func getCityAndCountry(for location: CLLocation) {
         
         location.placemark { placemark, error in
+            
             if let placemark = placemark {
                 
+                print(placemark)
                 let fullNameState = locationDataManager.statesDictionary[placemark.state]
                 
                 for place in plantViewModel.plantDetail.mainSpecies.distribution?.native ?? [] {
-                    if place.lowercased() == fullNameState?.lowercased() {
+                    if place == fullNameState {
                         ableToGrowInUserLocation = true
                     }
                 }
                 
                 for place in plantViewModel.plantDetail.mainSpecies.distribution?.introduced ?? [] {
-                    if place.lowercased() == fullNameState?.lowercased() {
+                    if place == fullNameState {
                         ableToGrowInUserLocation = true
                     }
                 }
@@ -470,5 +477,5 @@ struct PlantDetailView: View {
 }
 
 #Preview {
-    PlantDetailView(plantid: 204029)
+    PlantDetailView(plantid: 204029, isDismissing: .constant(false))
 }

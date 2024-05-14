@@ -14,6 +14,7 @@ class PlantsViewModel: ObservableObject {
     
     @Published var plants = [Plant]()
     @Published var plantDetail = PlantDetail(id: 0, commonName: "", scientificName: "", mainSpeciesId: 0, imageURL: "", vegetable: false, mainSpecies: MainSpecies(edible: false, plantImages: PlantImages(fruitImages: [], flowerImages: [], habitImages: []), flower: Flower(color: []), growth: Growth(), specifications: Specifications()))
+    @Published var userSlug = "UTA"
     
     func fetchPlants(using searchTerm: String, pageNumber number: Int) async {
         var urlComponents = URLComponents(string: "https://trefle.io/api/v1/plants/search")!
@@ -26,6 +27,22 @@ class PlantsViewModel: ObservableObject {
         DispatchQueue.main.async {
             withAnimation(.smooth) {
                 self.plants.append(contentsOf: downloadedPlants.arrayOfPlants)
+            }
+        }
+    }
+    
+    func fetchPlantSuggestions(using slug: String, page number: Int) async {
+        var urlComponents = URLComponents(string: "https://trefle.io/api/v1/distributions/\(slug)/plants")!
+        let tokenQueryItem = URLQueryItem(name: "token", value: "qwV\(token)-a0")
+        let pageNumberQueryItem = URLQueryItem(name: "page", value: String(number))
+        urlComponents.queryItems = [tokenQueryItem, pageNumberQueryItem]
+        
+        if let downloadPlants: PlantArray = await WebService().downloadData(fromURL: urlComponents.url!) {
+            DispatchQueue.main.async {
+                withAnimation(.smooth) {
+                    self.userSlug = slug
+                    self.plants.append(contentsOf: downloadPlants.arrayOfPlants)
+                }
             }
         }
     }

@@ -1,11 +1,19 @@
 import SwiftUI
+import CoreLocation
 
 struct PlantAPIView: View {
     @StateObject var plantsViewModel = PlantsViewModel()
+    @StateObject var locationDataManager = LocationDataManager()
+    
+    @Environment(\.dismiss) var dismiss
+    
     @State private var searchText = ""
     @State private var showCancelButton = false
     
     @State private var noResultsFound = false
+    @State private var isDismissing = false
+    
+    @State private var isGettingPlants = false
     
     private let spaceName = "scroll"
     @State private var pageNumber = 1
@@ -70,7 +78,6 @@ struct PlantAPIView: View {
         Spacer()
         
         ZStack {
-            
             if plantsViewModel.plants.isEmpty {
                 if noResultsFound {
                     Spacer()
@@ -84,6 +91,7 @@ struct PlantAPIView: View {
                     Spacer()
                     VStack {
                         Text("Search for \(Text("Plants").foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))) to add to your garden")
+                        plantSuggestions()
                     }
                     .font(.title)
                     .multilineTextAlignment(.center)
@@ -96,7 +104,7 @@ struct PlantAPIView: View {
                             LazyVStack {
                                 ForEach(plantsViewModel.plants) { plant in
                                     NavigationLink {
-                                        PlantDetailView(plantid: plant.id)
+                                        PlantDetailView(plantid: plant.id, isDismissing: $isDismissing)
                                     } label: {
                                         PlantCellView(plant: plant)
                                     }
@@ -115,9 +123,20 @@ struct PlantAPIView: View {
                                 ViewOffsetKey.self,
                                 perform: { value in
                                     if value >= scrollViewSize.height - wholeSize.height {
-                                        pageNumber += 1
-                                        print(pageNumber)
-                                        fetchPlants(for: pageNumber)
+                                        if searchText != "" {
+                                            if !isGettingPlants {
+                                                pageNumber += 1
+                                                print(pageNumber)
+                                                fetchPlants(for: pageNumber)
+                                            }
+                                        } else {
+                                            if !isGettingPlants {
+                                                pageNumber += 1
+                                                print(pageNumber)
+                                                // fetch suggesting based on slug
+                                                fetchPlantSuggestions(for: nil, or: plantsViewModel.userSlug, on: pageNumber)
+                                            }
+                                        }
                                     }
                                 }
                             )
@@ -129,15 +148,89 @@ struct PlantAPIView: View {
             }
             Spacer()
         }
+        .onAppear {
+            if isDismissing {
+                dismiss()
+            }
+        }
         
         Spacer()
     }
     
     func fetchPlants(for page: Int) {
+        isGettingPlants = true
         Task {
             await plantsViewModel.fetchPlants(using: searchText, pageNumber: page)
             if plantsViewModel.plants == [] {
                 noResultsFound = true
+            }
+            isGettingPlants = false
+        }
+    }
+    
+    func plantSuggestions() -> some View {
+        VStack {
+            switch locationDataManager.locationManager.authorizationStatus {
+            case .authorizedWhenInUse:  // Location services are available.
+                // Insert code here of what should happen when Location services are authorized
+                
+                let locationOfUser = CLLocation(latitude: Double(locationDataManager.locationManager.location?.coordinate.latitude ?? 0.0), longitude: Double(locationDataManager.locationManager.location?.coordinate.longitude ?? 0.0))
+                
+                //make bool call here to display if user can plant here
+                HStack {
+                    
+                }
+                .onAppear {
+                    //get plant suggestions
+                    fetchPlantSuggestions(for: locationOfUser, or: nil, on: pageNumber)
+                }
+                
+                
+            case .restricted, .denied:  // Location services currently unavailable.
+                // Insert code here of what should happen when Location services are NOT authorize
+                
+                VStack {
+                    Button {
+                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                    } label: {
+                        Text("Press here to enable locations and get plant suggestions")
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
+                
+            case .notDetermined:        // Authorization not determined yet.
+                Text("Finding your location...")
+                ProgressView()
+                
+            default:
+                ProgressView()
+            }
+        }
+    }
+    
+    func fetchPlantSuggestions(for location: CLLocation?, or slug: String?, on page: Int) {
+        
+        if let userLocation = location {
+            userLocation.placemark { placemark, error in
+                if let placemark = placemark {
+                    
+                    if let slug = locationDataManager.slugDictionary[placemark.state] {
+                        isGettingPlants = true
+                        Task{
+                            await plantsViewModel.fetchPlantSuggestions(using: slug, page: page)
+                            isGettingPlants = false
+                        }
+                    }
+                }
+            }
+        }
+        
+        if let userSlug = slug {
+            isGettingPlants = true
+            Task {
+                await plantsViewModel.fetchPlantSuggestions(using: userSlug, page: page)
+                isGettingPlants = false
             }
         }
     }

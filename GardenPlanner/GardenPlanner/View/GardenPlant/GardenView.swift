@@ -37,6 +37,27 @@ struct GardenView: View {
                 VStack {
                     ScrollView {
                         HStack {
+                            if !showingSearchBar {
+                                
+                                HStack(spacing: 30) {
+                                    
+                                    NavigationLink {
+                                        PlantAPIView()
+                                    } label: {
+//                                        Text("\(Image(systemName: "plus")) Add Plant")
+                                        Image(systemName: "plus")
+                                            .font(.title3)
+                                            .padding()
+                                            .foregroundStyle(.white)
+                                            .background(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous).fill(Color(hex: GardenColors.plantGreen.rawValue)))
+                                    }
+                                    
+                                }
+                                
+                            }
+                            
+                            Spacer()
+                            
                             ZStack {
                                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                                     .fill(Color(hex: GardenColors.plantGreen.rawValue))
@@ -126,6 +147,7 @@ struct GardenView: View {
                                 Spacer(minLength: 300)
                                 VStack {
                                     Text("You do not have \(Text(searchText).foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))) in your garden")
+                                        .padding()
                                 }
                                 .font(.title)
                                 .multilineTextAlignment(.center)
@@ -156,24 +178,24 @@ struct GardenView: View {
                     }
                 }
                 
-                if !isSearchBarFocused {
-                    HStack(alignment: .bottom) {
-                        
-                        NavigationLink {
-                            PlantAPIView()
-                        } label: {
-                            Image(systemName: "plus")
-                                .frame(width: 70, height: 70)
-                                .font(.largeTitle)
-                                .background(Color(hex: GardenColors.plantGreen.rawValue))
-                                .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
-                                .clipShape(Circle())
-                        }
-                        .shadow(radius: 5)
-                        
-                    }
-                    .frame(maxHeight: .infinity, alignment: .bottom)
-                }
+//                if !isSearchBarFocused {
+//                    HStack(alignment: .bottom) {
+//                        
+//                        NavigationLink {
+//                            PlantAPIView()
+//                        } label: {
+//                            Image(systemName: "plus")
+//                                .frame(width: 70, height: 70)
+//                                .font(.largeTitle)
+//                                .background(Color(hex: GardenColors.plantGreen.rawValue))
+//                                .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
+//                                .clipShape(Circle())
+//                        }
+//                        .shadow(radius: 5)
+//                        
+//                    }
+//                    .frame(maxHeight: .infinity, alignment: .bottom)
+//                }
             }
             .onAppear(perform: {
                 myGarden = myGardenPlants
