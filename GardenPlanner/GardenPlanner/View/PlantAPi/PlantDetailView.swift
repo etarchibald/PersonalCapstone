@@ -95,6 +95,7 @@ struct PlantDetailView: View {
                                     Text(vegetable ? "Vegetable" : "Fruit")
                                         .font(.title2)
                                         .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(.vertical, 10)
                                 }
                             }
                             

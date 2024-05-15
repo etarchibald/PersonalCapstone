@@ -90,8 +90,8 @@ struct PlantCellView: View {
                     .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous), style: FillStyle())
                     .shadow(radius: 5)
             case .failure:
-                Image(systemName: "carrot.fill")
-                    .foregroundStyle(.orange)
+                Image(systemName: "tree.fill")
+                    .foregroundStyle(.white)
                     .aspectRatio(contentMode: .fill)
                     .frame(width: imageWidth, height: imageHeight)
             @unknown default:

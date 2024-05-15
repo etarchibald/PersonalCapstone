@@ -42,7 +42,6 @@ struct PlantAPIView: View {
                     Button(action: {
                         self.searchText = ""
                         noResultsFound = false
-                        plantsViewModel.plants = []
                         pageNumber = 1
                     }) {
                         withAnimation {
@@ -86,15 +85,9 @@ struct PlantAPIView: View {
                     .font(.title)
                     .multilineTextAlignment(.center)
                     .padding()
-                } else {
-                    Spacer()
-                    VStack {
-                        Text("Search for \(Text("Plants").foregroundStyle(Color(hex: GardenColors.plantGreen.rawValue))) to add to your garden")
-                        plantSuggestions()
-                    }
-                    .font(.title)
-                    .multilineTextAlignment(.center)
-                    .padding()
+                } 
+                else {
+                    plantSuggestions()
                 }
             } else {
                 ChildSizeReader(size: $wholeSize) {
@@ -148,9 +141,6 @@ struct PlantAPIView: View {
                 }
             }
             Spacer()
-        }
-        .onAppear {
-            
         }
         
         Spacer()
