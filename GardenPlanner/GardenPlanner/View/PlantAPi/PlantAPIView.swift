@@ -5,13 +5,12 @@ struct PlantAPIView: View {
     @StateObject var plantsViewModel = PlantsViewModel()
     @StateObject var locationDataManager = LocationDataManager()
     
-    @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var navigation: Navigation
     
     @State private var searchText = ""
     @State private var showCancelButton = false
     
     @State private var noResultsFound = false
-    @State private var isDismissing = false
     
     @State private var isGettingPlants = false
     
@@ -103,11 +102,13 @@ struct PlantAPIView: View {
                         ChildSizeReader(size: $scrollViewSize) {
                             LazyVStack {
                                 ForEach(plantsViewModel.plants) { plant in
+                                    
                                     NavigationLink {
-                                        PlantDetailView(plantid: plant.id, isDismissing: $isDismissing)
+                                        PlantDetailView(plantid: plant.id)
                                     } label: {
                                         PlantCellView(plant: plant)
                                     }
+
                                 }
                             }
                             .padding()
@@ -149,9 +150,7 @@ struct PlantAPIView: View {
             Spacer()
         }
         .onAppear {
-            if isDismissing {
-                dismiss()
-            }
+            
         }
         
         Spacer()

@@ -35,6 +35,8 @@
 		4A6BBB9F2BBF4F4900ACE001 /* LocationDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A6BBB9E2BBF4F4900ACE001 /* LocationDataManager.swift */; };
 		4A6BBBA12BC58CBA00ACE001 /* ChildSizeReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A6BBBA02BC58CBA00ACE001 /* ChildSizeReader.swift */; };
 		4A6BBBA32BC58DB600ACE001 /* KeyBoardOnDragGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A6BBBA22BC58DB600ACE001 /* KeyBoardOnDragGesture.swift */; };
+		4A893BF32BF539FB00CCDE0B /* Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A893BF22BF539FB00CCDE0B /* Navigation.swift */; };
+		4A893BF52BF5433000CCDE0B /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A893BF42BF5433000CCDE0B /* RootView.swift */; };
 		4A962E7B2BA224A600F6CB32 /* EntryCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A962E7A2BA224A600F6CB32 /* EntryCellView.swift */; };
 		4A9A6F792BADC6F70039E0D9 /* Vortex in Frameworks */ = {isa = PBXBuildFile; productRef = 4A9A6F782BADC6F70039E0D9 /* Vortex */; };
 		4A9A6F7B2BADCA810039E0D9 /* CustomRain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9A6F7A2BADCA810039E0D9 /* CustomRain.swift */; };
@@ -71,6 +73,8 @@
 		4A6BBB9E2BBF4F4900ACE001 /* LocationDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDataManager.swift; sourceTree = SOURCE_ROOT; };
 		4A6BBBA02BC58CBA00ACE001 /* ChildSizeReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ChildSizeReader.swift; path = GardenPlanner/View/PlantAPi/ChildSizeReader.swift; sourceTree = SOURCE_ROOT; };
 		4A6BBBA22BC58DB600ACE001 /* KeyBoardOnDragGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = KeyBoardOnDragGesture.swift; path = GardenPlanner/View/PlantAPi/KeyBoardOnDragGesture.swift; sourceTree = SOURCE_ROOT; };
+		4A893BF22BF539FB00CCDE0B /* Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Navigation.swift; path = GardenPlanner/View/GardenPlant/Navigation.swift; sourceTree = SOURCE_ROOT; };
+		4A893BF42BF5433000CCDE0B /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RootView.swift; path = GardenPlant/RootView.swift; sourceTree = "<group>"; };
 		4A962E7A2BA224A600F6CB32 /* EntryCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryCellView.swift; sourceTree = "<group>"; };
 		4A9A6F7A2BADCA810039E0D9 /* CustomRain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRain.swift; sourceTree = "<group>"; };
 		4AFFD29E2BA88BF8008A7F5C /* PicturesSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicturesSectionView.swift; sourceTree = "<group>"; };
@@ -91,6 +95,7 @@
 		4A2F9F152B879C8A004B9014 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				4A893BF42BF5433000CCDE0B /* RootView.swift */,
 				4A6BBB8A2BB3543700ACE001 /* PlantAPi */,
 				4A6BBB8C2BB3546100ACE001 /* GardenPlant */,
 				4A6BBB8D2BB354B100ACE001 /* rReminders */,
@@ -101,6 +106,7 @@
 		4A2F9F1A2B879E0F004B9014 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4A893BF22BF539FB00CCDE0B /* Navigation.swift */,
 				4A6BBBA22BC58DB600ACE001 /* KeyBoardOnDragGesture.swift */,
 				4A6BBBA02BC58CBA00ACE001 /* ChildSizeReader.swift */,
 				4A2F27FC2B976E5F00C066D6 /* Colors.swift */,
@@ -322,9 +328,11 @@
 				4A634AFE2B9B64BD00A683FD /* NotifyCellView.swift in Sources */,
 				4A6BBB892BB30DB800ACE001 /* GardenPlantDetailPicturesView.swift in Sources */,
 				4A6BBBA12BC58CBA00ACE001 /* ChildSizeReader.swift in Sources */,
+				4A893BF52BF5433000CCDE0B /* RootView.swift in Sources */,
 				4A2F9F332B890216004B9014 /* PlantDetail.swift in Sources */,
 				4A6BBB9B2BBC5AAB00ACE001 /* ReminderViewModel.swift in Sources */,
 				4A2F9F352B8D46B6004B9014 /* PlantPictureScrollView.swift in Sources */,
+				4A893BF32BF539FB00CCDE0B /* Navigation.swift in Sources */,
 				4A6BBB9F2BBF4F4900ACE001 /* LocationDataManager.swift in Sources */,
 				4A2F9F2C2B87FE81004B9014 /* PlantCellView.swift in Sources */,
 			);
@@ -477,7 +485,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.PersonalCapstone.GardenPlanner;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
@@ -515,7 +523,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.PersonalCapstone.GardenPlanner;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";

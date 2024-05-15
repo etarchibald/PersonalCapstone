@@ -14,6 +14,8 @@ struct PlantDetailView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     
+    @EnvironmentObject var navigation: Navigation
+    
     @StateObject var plantViewModel = PlantsViewModel()
     @StateObject var locationDataManager = LocationDataManager()
     
@@ -28,8 +30,6 @@ struct PlantDetailView: View {
     @Query var gardenPlant: [YourPlant]
     
     var plantid: Int
-    
-    @Binding var isDismissing: Bool
     
     private let cornerRadius: CGFloat = 20
     
@@ -316,8 +316,7 @@ struct PlantDetailView: View {
                             removePlantFromGarden()
                         } else {
                             addPlantToGarden()
-                            dismiss()
-                            isDismissing = true
+                            navigation.popToRoot()
                         }
                     } label: {
                         Text(plantAdded ? "In your garden" : "Add to garden")
@@ -477,5 +476,5 @@ struct PlantDetailView: View {
 }
 
 #Preview {
-    PlantDetailView(plantid: 204029, isDismissing: .constant(false))
+    PlantDetailView(plantid: 204029)
 }

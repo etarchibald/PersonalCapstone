@@ -24,7 +24,7 @@ struct GardenPlannerApp: App {
     
     var body: some Scene {
         WindowGroup {
-            GardenView()
+            RootView()
                 .modelContainer(for: YourPlant.self)
         }
     }
