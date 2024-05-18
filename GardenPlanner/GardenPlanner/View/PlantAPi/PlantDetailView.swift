@@ -72,12 +72,6 @@ struct PlantDetailView: View {
                     .foregroundStyle(Color(hex: GardenColors.whiteSmoke.rawValue))
                     .padding(.horizontal, 10)
                     
-                    VStack {
-                        Text("Disclaemer: The Information may not be 100% accurate")
-                            .font(.footnote)
-                    }
-                    
-                    
                     if let growthHabit = plant.mainSpecies.specifications.growthHabit {
                         Text(growthHabit)
                             .font(.title2)
