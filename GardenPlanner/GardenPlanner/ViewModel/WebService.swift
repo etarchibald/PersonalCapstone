@@ -15,28 +15,45 @@ enum NetworkError: Error {
     case failedToDecodeResponse
 }
 
-class WebService: Codable {
+class WebService {
+    
     func downloadData<T: Codable>(fromURL url: URL) async -> T? {
-            do {
-//                guard let url = url else { throw NetworkError.badUrl }
-                let (data, response) = try await URLSession.shared.data(from: url)
-                guard let response = response as? HTTPURLResponse else { throw NetworkError.badResponse }
-                guard response.statusCode >= 200 && response.statusCode < 300 else { throw NetworkError.badStatus }
-                guard let decodedResponse = try? JSONDecoder().decode(T.self, from: data) else { throw NetworkError.failedToDecodeResponse }
-                
-                return decodedResponse
-            } catch NetworkError.badUrl {
-                print("There was an error creating the URL")
-            } catch NetworkError.badResponse {
-                print("Did not get a valid response")
-            } catch NetworkError.badStatus {
-                print("Did not get a 2xx status code from the response")
-            } catch NetworkError.failedToDecodeResponse {
-                print("Failed to decode response into the given type")
-            } catch {
-                print("An error occured downloading the data")
+        do {
+            let session = URLSession(configuration: .default, delegate: URLSessionDelegateHandler(), delegateQueue: nil)
+            
+            let (data, response) = try await session.data(from: url)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                throw NetworkError.badResponse
             }
             
+            guard (200..<300).contains(httpResponse.statusCode) else {
+                throw NetworkError.badStatus
+            }
+            
+            do {
+                let decodedResponse = try JSONDecoder().decode(T.self, from: data)
+                return decodedResponse
+            } catch {
+                throw NetworkError.failedToDecodeResponse
+            }
+        } catch {
+            print(error)
             return nil
         }
+    }
+}
+
+class URLSessionDelegateHandler: NSObject, URLSessionDelegate {
+    
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        
+        guard let serverTrust = challenge.protectionSpace.serverTrust else {
+            completionHandler(.performDefaultHandling, nil)
+            return
+        }
+        
+        let credential = URLCredential(trust: serverTrust)
+        completionHandler(.useCredential, credential)
+    }
 }
