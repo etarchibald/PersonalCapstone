@@ -15,6 +15,7 @@ class PlantsViewModel: ObservableObject {
     @Published var plants = [Plant]()
     @Published var plantDetail = PlantDetail(id: 0, commonName: "", scientificName: "", mainSpeciesId: 0, imageURL: "", vegetable: false, mainSpecies: MainSpecies(edible: false, plantImages: PlantImages(fruitImages: [], flowerImages: [], habitImages: []), flower: Flower(color: []), growth: Growth(), specifications: Specifications()))
     @Published var userSlug = "UTA"
+    @Environment(\.modelContext) var modelContext
     
     func fetchPlants(using searchTerm: String, pageNumber number: Int) async {
         var urlComponents = URLComponents(string: "https://trefle.io/api/v1/plants/search")!
@@ -55,6 +56,33 @@ class PlantsViewModel: ObservableObject {
         DispatchQueue.main.async {
             withAnimation(.smooth) {
                 self.plantDetail = downloadPlantDetails.allPlantDetails
+            }
+        }
+    }
+    
+    func addPlantToGarden() {
+        let plant = self.plantDetail
+        
+        let newPlant = YourPlant(id: plant.id, imageURL: plant.imageURL ?? "image", name: plant.commonName ?? "", mainSpeciesId: plant.mainSpeciesId ?? 0, sowing: plant.mainSpecies.growth.sowing ?? "", daysToHarvest: plant.mainSpecies.growth.daysToHarvest ?? 0, rowSpacing: plant.mainSpecies.growth.rowSpacing?.cm ?? 0, spread: plant.mainSpecies.growth.spread?.cm ?? 0, growthMonths: plant.mainSpecies.growth.growthMonths ?? [], bloomMonths: plant.mainSpecies.growth.bloomMonths ?? [], fruitMonths: plant.mainSpecies.growth.growthMonths ?? [], light: plant.mainSpecies.growth.light ?? 5, growthHabit: plant.mainSpecies.specifications.growthHabit ?? "", growthRate: plant.mainSpecies.specifications.growthRate ?? "", entrys: [], notes: "", photos: [], reminders: [])
+        
+        modelContext.insert(newPlant)
+    }
+    
+    func removePlantFromGarden(plants: [YourPlant]) {
+        let plant = self.plantDetail
+        
+        for eachPlant in plants {
+            if eachPlant.id == plant.id {
+                eachPlant.entrys = []
+                eachPlant.photos = []
+                
+                for reminder in eachPlant.reminders {
+                    UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [reminder.id.uuidString])
+                }
+                
+                eachPlant.reminders = []
+                modelContext.delete(eachPlant)
+                break
             }
         }
     }

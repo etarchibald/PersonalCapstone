@@ -53,11 +53,17 @@ struct PlantCellView: View {
                 
                 Button {
                     if plantAdded {
-                        removePlantFromGarden()
+                        plantViewModel.removePlantFromGarden(plants: gardenPlant)
+                        withAnimation(.smooth) {
+                            plantAdded = false
+                        }
                     } else {
                         Task {
                             await plantViewModel.fetchPlantDetail(using: plant.id)
-                            addPlantToGarden()
+                            plantViewModel.addPlantToGarden()
+                            withAnimation(.smooth) {
+                                plantAdded = true
+                            }
                         }
                     }
                     
@@ -105,39 +111,6 @@ struct PlantCellView: View {
             if plant.mainSpeciesId == self.plant.id {
                 self.plantAdded = true
             }
-        }
-    }
-    
-    func addPlantToGarden() {
-        let plant = plantViewModel.plantDetail
-        
-        let newPlant = YourPlant(id: plant.id, imageURL: plant.imageURL ?? "image", name: plant.commonName ?? "", mainSpeciesId: plant.mainSpeciesId ?? 0, sowing: plant.mainSpecies.growth.sowing ?? "", daysToHarvest: plant.mainSpecies.growth.daysToHarvest ?? 0, rowSpacing: plant.mainSpecies.growth.rowSpacing?.cm ?? 0, spread: plant.mainSpecies.growth.spread?.cm ?? 0, growthMonths: plant.mainSpecies.growth.growthMonths ?? [], bloomMonths: plant.mainSpecies.growth.bloomMonths ?? [], fruitMonths: plant.mainSpecies.growth.growthMonths ?? [], light: plant.mainSpecies.growth.light ?? 5, growthHabit: plant.mainSpecies.specifications.growthHabit ?? "", growthRate: plant.mainSpecies.specifications.growthRate ?? "", entrys: [], notes: "", photos: [], reminders: [])
-        
-        modelContext.insert(newPlant)
-        withAnimation(.smooth) {
-            plantAdded = true
-        }
-    }
-    
-    func removePlantFromGarden() {
-        
-        for eachPlant in gardenPlant {
-            if eachPlant.mainSpeciesId == plant.id {
-                eachPlant.entrys = []
-                eachPlant.photos = []
-                
-                for reminder in eachPlant.reminders {
-                    UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [reminder.id.uuidString])
-                }
-                
-                eachPlant.reminders = []
-                modelContext.delete(eachPlant)
-                break
-            }
-        }
-        
-        withAnimation(.smooth) {
-            plantAdded = false
         }
     }
     
